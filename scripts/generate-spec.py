@@ -142,6 +142,11 @@ def parse_package_xml(path: Path) -> dict:
     pkg["depends"] = collect("depend")
     pkg["exec_depends"] = collect("exec_depend")
     pkg["test_depends"] = collect("test_depend")
+    # build_export_depend / buildtool_export_depend propagate to downstream
+    # consumers at find_package() time. For RPM purposes that means runtime
+    # Requires: when something consumes our binary RPM.
+    pkg["build_export_depends"] = collect("build_export_depend")
+    pkg["buildtool_export_depends"] = collect("buildtool_export_depend")
 
     return pkg
 
@@ -176,7 +181,12 @@ def build_requires(pkg: dict, build_type: str, distro: str, os_version: str) -> 
 
 
 def runtime_requires(pkg: dict, build_type: str, distro: str, os_version: str) -> list[str]:
-    keys: list[str] = pkg["depends"] + pkg["exec_depends"]
+    keys: list[str] = (
+        pkg["depends"]
+        + pkg["exec_depends"]
+        + pkg["build_export_depends"]
+        + pkg["buildtool_export_depends"]
+    )
     base = resolve_deps(keys, distro, os_version)
     if build_type == "ament_python":
         return sorted(set(base + ["python3"]))
@@ -306,6 +316,29 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     cmake_test_flag = " -DBUILD_TESTING=OFF" if disable_tests else ""
     check_body = "echo 'tests skipped — see CLAUDE.md / packages.yaml'" if disable_tests else f"{push}%ctest\n{pop}"
 
+    # Some ament_cmake packages also install a Python module via
+    # `ament_python_install_package(...)`. Detect this so %files picks up
+    # /opt/ros/<distro>/lib/python<X>/site-packages/<pkg>/ and the generated
+    # egg-info directory.
+    ships_python = False
+    cmakelists = None
+    src_root = pkg.get("_source_dir")
+    if src_root is not None:
+        cml = src_root / "CMakeLists.txt"
+        if cml.is_file():
+            try:
+                cmakelists = cml.read_text()
+            except Exception:
+                cmakelists = None
+    if cmakelists and "ament_python_install_package" in cmakelists:
+        ships_python = True
+    extra_python_files = ""
+    if ships_python:
+        extra_python_files = (
+            f"%{{install_prefix}}/lib/python%{{python3_version}}/site-packages/%{{pkg_name}}/\n"
+            f"%{{install_prefix}}/lib/python%{{python3_version}}/site-packages/%{{pkg_name}}-%{{version}}-py%{{python3_version}}.egg-info/\n"
+        )
+
     return f"""%global ros_distro       {distro}
 %global pkg_name         {name}
 %global install_prefix   {install_prefix}
@@ -364,6 +397,7 @@ export PYTHONPATH=%{{install_prefix}}/lib/python%{{python3_version}}/site-packag
 %{{install_prefix}}/share/ament_index/resource_index/packages/%{{pkg_name}}
 %{{install_prefix}}/share/ament_index/resource_index/package_run_dependencies/%{{pkg_name}}
 %{{install_prefix}}/share/ament_index/resource_index/parent_prefix_path/%{{pkg_name}}
+{extra_python_files}
 
 %changelog
 * {_today_rpm()} {DEFAULT_PACKAGER_NAME} <{DEFAULT_PACKAGER_EMAIL}> - {version}-1
@@ -392,6 +426,7 @@ def main():
         sys.exit(1)
 
     pkg = parse_package_xml(pkg_xml)
+    pkg["_source_dir"] = args.source_dir
 
     config_path = args.config or Path(__file__).parent / "packages.yaml"
     with config_path.open() as f:
