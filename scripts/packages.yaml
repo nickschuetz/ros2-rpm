@@ -68,6 +68,9 @@ ament_cmake_gen_version_h:
   source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
   source_dir: ament_cmake-{version}
   build_subdir: ament_cmake_gen_version_h
+  # Tests require ament_cmake_gtest which is not yet packaged; skip until the
+  # test stack is in place.
+  disable_tests: true
 
 ament_cmake_include_directories:
   source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
@@ -100,7 +103,55 @@ ament_cmake_version:
   build_subdir: ament_cmake_version
 
 # Message packages
+#
+# rcl_interfaces uses bloom-release tags (the upstream monorepo's master is
+# always ahead of the jazzy pin). Use the release-repo tarball to track the
+# rosdistro pin exactly.
 builtin_interfaces:
-  source_url: https://github.com/ros2/rcl_interfaces/archive/refs/tags/{version}.tar.gz
-  source_dir: rcl_interfaces-{version}
-  build_subdir: builtin_interfaces
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/builtin_interfaces/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-jazzy-builtin_interfaces-{version}-1
+  noarch: false  # generates compiled type-support libraries
+
+# rosidl monorepo (https://github.com/ros2/rosidl, tag 5.3.0 for jazzy).
+# Pure-Python packages stay noarch by default; the C/C++ ones flip the flag.
+rosidl_adapter:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_adapter
+
+rosidl_cli:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_cli
+
+rosidl_parser:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_parser
+
+rosidl_pycommon:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_pycommon
+
+rosidl_typesupport_interface:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_typesupport_interface
+
+rosidl_runtime_c:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_runtime_c
+  noarch: false
+
+rosidl_runtime_cpp:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_runtime_cpp
+  noarch: false
+
+rosidl_runtime_py:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_runtime_py
