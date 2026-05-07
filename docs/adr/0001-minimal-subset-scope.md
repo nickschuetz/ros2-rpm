@@ -1,6 +1,6 @@
 # ADR 0001: Minimal subset scope
 
-- **Status**: Accepted
+- **Status**: Accepted as Phase 1 scope; superseded in part by ADR 0006 which makes this the first phase of a phased path to full `ros-jazzy-desktop`.
 - **Date**: 2026-05-07
 
 ## Context
