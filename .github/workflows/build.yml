@@ -61,7 +61,7 @@ jobs:
             python3-pip git make cmake \
             redhat-rpm-config
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Lint specs
         run: |
