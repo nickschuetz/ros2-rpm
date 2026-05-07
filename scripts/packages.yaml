@@ -1,0 +1,106 @@
+# Per-package configuration for scripts/generate-spec.py.
+#
+# Each entry tells the generator how to fetch and unpack the upstream source.
+# package.xml metadata (version, license, deps) is read from the source itself.
+# Add a new entry every time a new package enters the build tree.
+#
+# Fields:
+#   source_url:    Source0 URL. {version} substitutes the version from package.xml.
+#   source_dir:    Top-level dir name after tarball extraction (for %autosetup -n).
+#                  {version} substitutes here too.
+#   build_subdir:  Optional. If the source tarball is a monorepo, the package's
+#                  subdirectory inside it. Generator wraps build/install/check
+#                  with `pushd <build_subdir>` ... `popd`.
+#   release_tag:   Optional. Override the version string for the source URL when
+#                  upstream uses a different tag scheme (e.g. release-repo tags).
+
+ament_package:
+  source_url: https://github.com/ament/ament_package/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_package-{version}
+
+ament_cmake_core:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_core
+
+# ament_cmake family — all share the same monorepo and tag.
+ament_cmake:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake
+
+ament_cmake_export_definitions:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_definitions
+
+ament_cmake_export_dependencies:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_dependencies
+
+ament_cmake_export_include_directories:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_include_directories
+
+ament_cmake_export_interfaces:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_interfaces
+
+ament_cmake_export_libraries:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_libraries
+
+ament_cmake_export_link_flags:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_link_flags
+
+ament_cmake_export_targets:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_targets
+
+ament_cmake_gen_version_h:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_gen_version_h
+
+ament_cmake_include_directories:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_include_directories
+
+ament_cmake_libraries:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_libraries
+
+ament_cmake_python:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_python
+
+ament_cmake_target_dependencies:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_target_dependencies
+
+ament_cmake_test:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_test
+
+ament_cmake_version:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_version
+
+# Message packages
+builtin_interfaces:
+  source_url: https://github.com/ros2/rcl_interfaces/archive/refs/tags/{version}.tar.gz
+  source_dir: rcl_interfaces-{version}
+  build_subdir: builtin_interfaces
