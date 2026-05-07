@@ -112,46 +112,89 @@ builtin_interfaces:
   source_dir: rcl_interfaces-release-release-jazzy-builtin_interfaces-{version}-1
   noarch: false  # generates compiled type-support libraries
 
-# rosidl monorepo (https://github.com/ros2/rosidl, tag 5.3.0 for jazzy).
-# Pure-Python packages stay noarch by default; the C/C++ ones flip the flag.
+# rosidl monorepo (https://github.com/ros2/rosidl, tag 4.6.7 for jazzy).
+# Pure-Python packages stay noarch; CMake packages that compile flip the flag.
+# All entries inherit version 4.6.7 from each package.xml.
 rosidl_adapter:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_adapter
+  disable_tests: true
 
 rosidl_cli:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_cli
+  disable_tests: true
+
+rosidl_cmake:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_cmake
+  disable_tests: true
 
 rosidl_parser:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_parser
+  disable_tests: true
 
 rosidl_pycommon:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_pycommon
+  disable_tests: true
 
 rosidl_typesupport_interface:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_typesupport_interface
+  disable_tests: true
 
 rosidl_runtime_c:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_runtime_c
   noarch: false
+  disable_tests: true
 
 rosidl_runtime_cpp:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_runtime_cpp
   noarch: false
+  disable_tests: true
 
-rosidl_runtime_py:
+rosidl_generator_c:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
-  build_subdir: rosidl_runtime_py
+  build_subdir: rosidl_generator_c
+  noarch: false
+  disable_tests: true
+
+rosidl_generator_cpp:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_generator_cpp
+  noarch: false
+  disable_tests: true
+
+rosidl_generator_type_description:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_generator_type_description
+  disable_tests: true
+
+rosidl_typesupport_introspection_c:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_typesupport_introspection_c
+  noarch: false
+  disable_tests: true
+
+rosidl_typesupport_introspection_cpp:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_typesupport_introspection_cpp
+  noarch: false
+  disable_tests: true

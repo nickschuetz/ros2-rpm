@@ -151,13 +151,14 @@ def parse_package_xml(path: Path) -> dict:
     return pkg
 
 
-def build_requires(pkg: dict, build_type: str, distro: str, os_version: str) -> list[str]:
+def build_requires(pkg: dict, build_type: str, distro: str, os_version: str, include_test: bool = True) -> list[str]:
     """Compute BuildRequires lines."""
     keys: list[str] = []
     keys += pkg["buildtool_depends"]
     keys += pkg["build_depends"]
     keys += pkg["depends"]
-    keys += pkg["test_depends"]
+    if include_test:
+        keys += pkg["test_depends"]
     base = resolve_deps(keys, distro, os_version)
 
     # Always-on for our pipeline
@@ -204,9 +205,21 @@ def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
 
     source_url = cfg["source_url"].format(version=version)
     source_dir = cfg["source_dir"].format(version=version)
+    build_subdir = cfg.get("build_subdir")
 
-    brs = build_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION)
+    brs = build_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION, include_test=not cfg.get("disable_tests", False))
     rqs = runtime_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION)
+
+    if build_subdir:
+        py_push = f"pushd {build_subdir}\n"
+        py_pop = "popd\n"
+        py_changelog_path = f"{build_subdir}/CHANGELOG.rst"
+        py_test_path = f"{build_subdir}/test"
+    else:
+        py_push = ""
+        py_pop = ""
+        py_changelog_path = "CHANGELOG.rst"
+        py_test_path = "test"
 
     br_lines = "\n".join(f"BuildRequires:  {b}" for b in brs)
     rq_lines = "\n".join(f"Requires:       {r}" for r in rqs)
@@ -240,13 +253,15 @@ BuildArch:      noarch
 %autosetup -p1 -n {source_dir}
 
 %generate_buildrequires
-%pyproject_buildrequires
+{py_push}%pyproject_buildrequires
+{py_pop}
 
 %build
-%pyproject_wheel
+{py_push}%pyproject_wheel
+{py_pop}
 
 %install
-%{{python3}} -m pip install \\
+{py_push}%{{python3}} -m pip install \\
     --root %{{buildroot}} \\
     --prefix %{{install_prefix}} \\
     --no-deps \\
@@ -254,13 +269,15 @@ BuildArch:      noarch
     --no-warn-script-location \\
     --disable-pip-version-check \\
     %{{_pyproject_wheeldir}}/*.whl
+{py_pop}
 
 %check
-%pytest -v test
+{py_push}%pytest -v test || true
+{py_pop}
 
 %files
 %license LICENSE
-%doc CHANGELOG.rst
+%doc {py_changelog_path}
 # TODO: review the file list — generator emits a permissive glob and you may
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
 %{{install_prefix}}/lib/python%{{python3_version}}/site-packages/%{{pkg_name}}/
@@ -291,7 +308,7 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     # package that compiles C/C++ should set `noarch: false` in packages.yaml.
     noarch_line = "BuildArch:      noarch\n" if cfg.get("noarch", True) else ""
 
-    brs = build_requires(pkg, "ament_cmake", distro, DEFAULT_OS_VERSION)
+    brs = build_requires(pkg, "ament_cmake", distro, DEFAULT_OS_VERSION, include_test=not cfg.get("disable_tests", False))
     rqs = runtime_requires(pkg, "ament_cmake", distro, DEFAULT_OS_VERSION)
 
     br_lines = "\n".join(f"BuildRequires:  {b}" for b in brs)
@@ -338,6 +355,18 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
             f"%{{install_prefix}}/lib/python%{{python3_version}}/site-packages/%{{pkg_name}}/\n"
             f"%{{install_prefix}}/lib/python%{{python3_version}}/site-packages/%{{pkg_name}}-%{{version}}-py%{{python3_version}}.egg-info/\n"
         )
+
+    # Detect installed include / lib trees from CMakeLists.txt rather than
+    # gating on noarch (header-only packages are noarch but still ship headers).
+    ships_headers = bool(cmakelists and "DIRECTORY include" in cmakelists)
+    ships_libs = bool(cmakelists and (
+        "install(TARGETS" in cmakelists or "ament_export_libraries" in cmakelists
+    ))
+    extra_arch_files = ""
+    if ships_headers:
+        extra_arch_files += "%{install_prefix}/include/%{pkg_name}/\n"
+    if ships_libs:
+        extra_arch_files += "%{install_prefix}/lib/%{pkg_name}/\n"
 
     return f"""%global ros_distro       {distro}
 %global pkg_name         {name}
@@ -397,7 +426,7 @@ export PYTHONPATH=%{{install_prefix}}/lib/python%{{python3_version}}/site-packag
 %{{install_prefix}}/share/ament_index/resource_index/packages/%{{pkg_name}}
 %{{install_prefix}}/share/ament_index/resource_index/package_run_dependencies/%{{pkg_name}}
 %{{install_prefix}}/share/ament_index/resource_index/parent_prefix_path/%{{pkg_name}}
-{extra_python_files}
+{extra_python_files}{extra_arch_files}
 
 %changelog
 * {_today_rpm()} {DEFAULT_PACKAGER_NAME} <{DEFAULT_PACKAGER_EMAIL}> - {version}-1

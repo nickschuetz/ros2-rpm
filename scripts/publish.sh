@@ -26,6 +26,7 @@ SPEC="$REPO/specs/${SPEC_NAME}.spec"
 if [ -z "$SOURCE_PATH" ]; then
     candidates=(
         "$REPO/build/ament_cmake_full/ament_cmake-"*/"$PKG"
+        "$REPO/build/rosidl_pkgsrc/rosidl-"*/"$PKG"
         "$REPO/build/$PKG"
         "$REPO/build/${PKG}_pkg"
     )
@@ -51,8 +52,11 @@ fi
 
 # Ensure the source tarball exists in build/SOURCES/ for rpmbuild.
 VERSION=$(grep -E '^Version:' "$SPEC" | head -1 | awk '{print $2}')
+PKGNAME_RAW=$(grep -E '^%global pkg_name' "$SPEC" | head -1 | awk '{print $3}')
 SOURCE_URL=$(grep -E '^Source0:' "$SPEC" | head -1 | awk '{print $2}' | cut -d'#' -f1)
-SOURCE_FILE="$REPO/build/SOURCES/$(grep -E '^Source0:' "$SPEC" | head -1 | awk '{print $2}' | sed 's|.*#/||')"
+RAW_SOURCE_NAME=$(grep -E '^Source0:' "$SPEC" | head -1 | awk '{print $2}' | sed 's|.*#/||')
+SOURCE_FILE="$REPO/build/SOURCES/${RAW_SOURCE_NAME//%\{version\}/$VERSION}"
+SOURCE_FILE="${SOURCE_FILE//%\{pkg_name\}/$PKGNAME_RAW}"
 if [ ! -f "$SOURCE_FILE" ]; then
     echo "==> Fetching source: $SOURCE_URL"
     mkdir -p "$REPO/build/SOURCES"
