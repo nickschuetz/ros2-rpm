@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Email **security@hellaenergy.example** with details. _(Replace with a real address before flipping the repo public.)_ Please do not open a public issue for unpatched vulnerabilities.
+Email **security@hellaenergy.studio** with details. Please do not open a public issue for unpatched vulnerabilities.
 
 We will acknowledge receipt within 5 business days and aim to issue a fixed build within:
 - **48 hours** for critical CVEs (CVSS ≥ 9.0).
