@@ -1,0 +1,14 @@
+# rpmlint configuration for the ros2-rpm COPR.
+#
+# We intentionally install to /opt/ros/<distro> per upstream ROS 2 convention
+# (see ADR 0007). Fedora's main-repo policy forbids /opt; rpmlint flags every
+# file under /opt/ros/* with `dir-or-file-in-opt`. Suppress that one error
+# class — but no others — so genuine packaging mistakes still surface.
+
+addFilter(r"^.*: E: dir-or-file-in-opt /opt/ros/")
+
+# ament_index sentinel files are deliberately zero-length — their presence
+# under /opt/ros/<distro>/share/ament_index/resource_index/packages/<pkg>
+# signals that the named package is installed. Suppress the rpmlint warning.
+addFilter(r"^.*: E: zero-length /opt/ros/[^/]+/share/ament_index/")
+

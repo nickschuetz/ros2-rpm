@@ -21,7 +21,7 @@ jobs:
       - name: Run rpmlint
         run: |
           if compgen -G "specs/*.spec" > /dev/null; then
-            rpmlint specs/*.spec
+            rpmlint --rpmlintrc .rpmlintrc specs/*.spec
           else
             echo "No specs to lint."
           fi
