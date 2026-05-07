@@ -2,7 +2,7 @@
 
 ROS 2 Jazzy RPMs for **Fedora 44+** and **CentOS Stream 10**, built on **x86_64** and **aarch64**, distributed via the Fedora COPR [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2).
 
-The end state is a `ros-jazzy-desktop`-equivalent install path — filling the gap that no current Fedora-native ROS 2 distribution covers. (Upstream `packages.ros.org` ships RHEL 9 RPMs that don't run on Fedora's Python 3.13; existing community Fedora COPRs are partial / unmaintained.)
+The end state is a `ros-jazzy-desktop`-equivalent install path — filling the gap that no current Fedora-native ROS 2 distribution covers. (Upstream `packages.ros.org` ships RHEL 9 RPMs that don't run on Fedora's Python 3.14; existing community Fedora COPRs are partial / unmaintained.)
 
 ## Phased delivery
 
@@ -10,7 +10,7 @@ Delivered in two phases. Phase 1 is the current shipping scope; Phase 2 expands 
 
 ### Phase 1 — current scope (~70 packages)
 
-Pipeline proving ground: `rclcpp`, common message packages, `rmw_fastrtps_cpp` + Fast DDS, transitive deps. License-clean (`Apache-2.0 AND BSD-3-Clause`). Validates the bloom + rosdep + Python-3.13 patch chain on a small surface. Ships first.
+Pipeline proving ground: `rclcpp`, common message packages, `rmw_fastrtps_cpp` + Fast DDS, transitive deps. License-clean (`Apache-2.0 AND BSD-3-Clause`). Validates the bloom + rosdep + Python-3.14 patch chain on a small surface. Ships first.
 
 ### Phase 2 — `ros-jazzy-desktop` equivalent (~320 packages)
 

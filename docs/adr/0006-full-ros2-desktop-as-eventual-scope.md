@@ -9,7 +9,7 @@
 ADR 0001 scoped this COPR to ~70 packages — what the O3DE ROS 2 Gem directly consumes — for maintenance reasons. Reconsidering against the broader Fedora community: a typical Fedora robotics developer wants to write nodes, visualize with `rviz2`, debug with `rqt_*`, run launch files, and simulate via Gazebo bridges. The minimal subset serves only embedded message-passing use cases.
 
 State of ROS 2 on Fedora as of 2026-05:
-- `packages.ros.org` ships RHEL 9 RPMs only; the Python 3.9/3.11 binaries do not work on Fedora 44's Python 3.13.
+- `packages.ros.org` ships RHEL 9 RPMs only; the Python 3.9/3.11 binaries do not work on Fedora 44's Python 3.14.
 - `tavie/ros2` and similar community COPRs are single-maintainer hobby projects with partial coverage that trails Fedora releases.
 - `morxa/rosfed` was archived 2024-11-01 (ROS 1 only).
 - Fedora's main repos ship no ROS 2.
@@ -24,7 +24,7 @@ The "where do I get ROS 2 on Fedora" question has no good answer today. Whoever 
 
 ### Phase 1 — pipeline proving ground
 
-~70 packages (the original ADR 0001 scope). Ships first. Validates the bloom + rosdep + Python-3.13 patch chain on a small surface where licensing stays clean (`Apache-2.0 AND BSD-3-Clause`) and time-to-first-build is short.
+~70 packages (the original ADR 0001 scope). Ships first. Validates the bloom + rosdep + Python-3.14 patch chain on a small surface where licensing stays clean (`Apache-2.0 AND BSD-3-Clause`) and time-to-first-build is short.
 
 ### Phase 2 — `ros-jazzy-desktop` equivalent
 
