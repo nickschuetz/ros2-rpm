@@ -12,6 +12,16 @@ addFilter(r"^.*: E: dir-or-file-in-opt /opt/ros/")
 # signals that the named package is installed. Suppress the rpmlint warning.
 addFilter(r"^.*: E: zero-length /opt/ros/[^/]+/share/ament_index/")
 
+# Several ament_cmake support scripts under /opt/ros/<distro>/share/ament_cmake_*/
+# carry a python shebang but are invoked via `execute_process(/usr/bin/python3 ...)`
+# from CMake. They don't need executable bits and rpmlint flags this as an error.
+addFilter(r"^.*: E: non-executable-script /opt/ros/.*\.py 644 /usr/bin/env python3$")
+
+# ament_cmake's CMakeLists copies environment hook files into both share/<pkg>/
+# and share/<pkg>/cmake/environment_hooks/ — by upstream design, not a packaging
+# bug. Suppress the duplicate-file warning for this specific layout.
+addFilter(r"^.*: W: files-duplicate /opt/ros/.*/share/.*/environment/.*\.sh /opt/ros/.*/share/.*/cmake/environment_hooks/environment/.*\.sh$")
+
 # When linting specs alone (no built RPMs), the file-level filters above don't
 # match anything and rpmlint treats them as "unused" errors. The filters are
 # load-bearing when linting built RPMs, so keep them at full effect; lower the

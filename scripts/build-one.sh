@@ -46,8 +46,13 @@ rpmbuild -bs \
 SRPM=$(ls -t "$SRPMS"/${SPEC_NAME}-*.src.rpm | head -1)
 echo "==> SRPM: $SRPM"
 
-echo "==> mock --rebuild on $CHROOT"
-sg mock -c "mock -r '$CHROOT' --resultdir='$RESULTS' '$SRPM'"
+COPR_REPO="https://download.copr.fedorainfracloud.org/results/hellaenergy/ros2/$CHROOT/"
+
+echo "==> mock --rebuild on $CHROOT (with hellaenergy/ros2 COPR enabled)"
+sg mock -c "mock -r '$CHROOT' \
+    --addrepo='$COPR_REPO' \
+    --resultdir='$RESULTS' \
+    '$SRPM'"
 
 echo "==> rpmlint with project filter"
 rpmlint --rpmlintrc "$REPO_ROOT/.rpmlintrc" "$RESULTS"/*.rpm
