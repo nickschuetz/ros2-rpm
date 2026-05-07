@@ -12,3 +12,9 @@ addFilter(r"^.*: E: dir-or-file-in-opt /opt/ros/")
 # signals that the named package is installed. Suppress the rpmlint warning.
 addFilter(r"^.*: E: zero-length /opt/ros/[^/]+/share/ament_index/")
 
+# When linting specs alone (no built RPMs), the file-level filters above don't
+# match anything and rpmlint treats them as "unused" errors. The filters are
+# load-bearing when linting built RPMs, so keep them at full effect; lower the
+# badness of the unused-filter complaint to zero so it doesn't fail CI.
+setBadness("unused-rpmlintrc-filter", 0)
+
