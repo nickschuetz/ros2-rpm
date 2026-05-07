@@ -1,0 +1,38 @@
+# Build outputs
+/build/
+/buildroot/
+/result/
+/results/
+/SRPMS/
+/RPMS/
+/sources/
+*.rpm
+*.src.rpm
+
+# Generated specs (regenerate from manifest.yaml + bloom)
+/specs/generated/
+
+# bloom / rosdep caches
+.bloom_cache/
+.rosdep_cache/
+
+# SBOMs are generated per-build, not committed
+/sbom/
+
+# Editor / OS
+*.swp
+*~
+.DS_Store
+.idea/
+.vscode/
+
+# Local-only project notes; never publish.
+CLAUDE.md
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/

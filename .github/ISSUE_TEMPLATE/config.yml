@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/nickschuetz/ros2-rpm/security/policy
+    about: Do not open a public issue for unpatched vulnerabilities. Email security@hellaenergy.example or use the GitHub Security Advisory flow per SECURITY.md.
+  - name: ROS 2 upstream support
+    url: https://discourse.ros.org/
+    about: Questions about ROS 2 itself (not its RPM packaging) belong on ROS Discourse.

@@ -1,0 +1,46 @@
+name: Bug report
+description: Report a defect in a packaged component or in the build pipeline
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where is the bug?
+      options:
+        - A packaged ROS 2 component (built RPM behaves wrong)
+        - The build pipeline (bloom-rpm / Makefile / CI)
+        - COPR project metadata
+        - Documentation
+    validations:
+      required: true
+  - type: input
+    id: distro
+    attributes:
+      label: Distro and version
+      description: e.g. Fedora 44, CentOS Stream 10
+    validations:
+      required: true
+  - type: input
+    id: arch
+    attributes:
+      label: Architecture
+      placeholder: x86_64 or aarch64
+    validations:
+      required: true
+  - type: input
+    id: package
+    attributes:
+      label: Affected package(s) and version
+      placeholder: ros-jazzy-rclcpp-X.Y.Z-N.fc44
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: Exact commands and expected vs. actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      render: shell

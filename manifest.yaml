@@ -1,0 +1,107 @@
+# manifest.yaml — source pins for the ROS 2 Jazzy minimal subset.
+#
+# Each entry pins a package to a specific git tag or commit SHA. Never use
+# moving branches. Pin format is the value upstream advertises in
+# `rosdistro/jazzy/distribution.yaml` for the same package.
+#
+# The TBD entries below are placeholders. Run `make manifest-fetch` (once the
+# fetcher is implemented) to populate real pins from rosdistro. Until then,
+# treat this file as the structural template, not a source of truth.
+
+distro: jazzy
+generated_from: rosdistro/jazzy/distribution.yaml
+generated_at: TBD
+
+# Direct consumers (per docs/SCOPE.md).
+direct:
+  - name: rclcpp
+    repo: https://github.com/ros2/rclcpp
+    version: TBD
+    license: Apache-2.0
+  - name: builtin_interfaces
+    repo: https://github.com/ros2/rcl_interfaces
+    version: TBD
+    license: Apache-2.0
+  - name: std_msgs
+    repo: https://github.com/ros2/common_interfaces
+    version: TBD
+    license: Apache-2.0
+  - name: sensor_msgs
+    repo: https://github.com/ros2/common_interfaces
+    version: TBD
+    license: Apache-2.0
+  - name: nav_msgs
+    repo: https://github.com/ros2/common_interfaces
+    version: TBD
+    license: Apache-2.0
+  - name: geometry_msgs
+    repo: https://github.com/ros2/common_interfaces
+    version: TBD
+    license: Apache-2.0
+  - name: tf2_ros
+    repo: https://github.com/ros2/geometry2
+    version: TBD
+    license: Apache-2.0
+  - name: ackermann_msgs
+    repo: https://github.com/ros-drivers/ackermann_msgs
+    version: TBD
+    license: BSD-3-Clause
+  - name: vision_msgs
+    repo: https://github.com/ros-perception/vision_msgs
+    version: TBD
+    license: Apache-2.0
+  - name: control_msgs
+    repo: https://github.com/ros-controls/control_msgs
+    version: TBD
+    license: Apache-2.0
+
+# Transitive deps. Populated by `make manifest-fetch` from rosdep + the upstream
+# packages above; the entries here are the ones we know we need at minimum.
+transitive:
+  - name: rcl
+    repo: https://github.com/ros2/rcl
+    version: TBD
+    license: Apache-2.0
+  - name: rmw
+    repo: https://github.com/ros2/rmw
+    version: TBD
+    license: Apache-2.0
+  - name: rmw_fastrtps_cpp
+    repo: https://github.com/ros2/rmw_fastrtps
+    version: TBD
+    license: Apache-2.0
+  - name: fastdds
+    repo: https://github.com/eProsima/Fast-DDS
+    version: TBD
+    license: Apache-2.0
+  - name: fastcdr
+    repo: https://github.com/eProsima/Fast-CDR
+    version: TBD
+    license: Apache-2.0
+  - name: foonathan_memory
+    repo: https://github.com/foonathan/memory
+    version: TBD
+    license: Zlib
+
+# Metapackages (composed locally; not fetched).
+metapackages:
+  - name: ros-jazzy-ros-core
+    license: Apache-2.0 AND BSD-3-Clause
+    requires:
+      - rclcpp
+      - rcl
+      - rmw
+      - rmw_fastrtps_cpp
+      - builtin_interfaces
+  - name: ros-jazzy-ros-base
+    license: Apache-2.0 AND BSD-3-Clause
+    requires:
+      - ros-jazzy-ros-core
+      - std_msgs
+      - sensor_msgs
+      - nav_msgs
+      - geometry_msgs
+      - tf2_ros
+      - ackermann_msgs
+      - vision_msgs
+      - control_msgs

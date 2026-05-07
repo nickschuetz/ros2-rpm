@@ -1,0 +1,32 @@
+name: Feature / package request
+description: Request a new packaged component, chroot, or pipeline feature
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What are you requesting?
+      options:
+        - New ROS 2 package added to the COPR
+        - New chroot (distro/arch) added
+        - New ROS 2 distro tracked
+        - Pipeline / tooling improvement
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Concrete use case
+      description: Real demand only — not "would be nice." Per `docs/SCOPE.md` and ADR 0003 we explicitly resist speculative scope expansion.
+    validations:
+      required: true
+  - type: textarea
+    id: license
+    attributes:
+      label: License of the requested package(s)
+      description: If non-permissive (EPL/LGPL/MPL), reference ADR 0003. An ADR will be required.
+  - type: textarea
+    id: deps
+    attributes:
+      label: Transitive dependencies
+      description: List any new transitive deps this would pull in. >5 new transitive deps triggers an ADR per docs/SCOPE.md.

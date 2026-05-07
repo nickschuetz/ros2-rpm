@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: "ros2-rpm: ROS 2 Jazzy RPMs for Fedora and CentOS Stream"
+message: >-
+  If you use these packages in academic or technical work,
+  please cite this software using the metadata below.
+type: software
+authors:
+  - family-names: Schuetz
+    given-names: Nick
+    affiliation: Hellaenergy
+repository-code: "https://github.com/nickschuetz/ros2-rpm"
+url: "https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2"
+abstract: >-
+  Minimal ROS 2 Jazzy package set (rclcpp, common messages,
+  rmw_fastrtps_cpp + Fast DDS, transitive dependencies) packaged
+  as RPMs for Fedora 44+ and CentOS Stream 10 on x86_64 and
+  aarch64. Scoped to Open 3D Engine and embedded robotics use.
+keywords:
+  - ros2
+  - ros-jazzy
+  - rpm
+  - fedora
+  - centos-stream
+  - copr
+  - robotics
+  - o3de
+license: Apache-2.0

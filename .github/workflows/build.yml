@@ -1,0 +1,74 @@
+name: build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# TODO: this is a scaffold. The real pipeline needs to:
+#   1. Resolve the manifest.yaml -> list of upstream sources + version pins.
+#   2. Run `bloom-generate rosrpm` for each package to produce specs.
+#   3. Build SRPMs (rpmbuild -bs) from the generated specs.
+#   4. mock build each SRPM against the matrix chroot.
+#   5. Collect rpmlint output as an artifact.
+# Until bloom-rpm + rosdep keys for Fedora 44 are wired, this workflow only
+# validates spec syntax and runs rpmlint on any specs already in the repo.
+
+jobs:
+  matrix-build:
+    name: ${{ matrix.distro }} ${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distro: fedora-44
+            arch: x86_64
+            container: registry.fedoraproject.org/fedora:44
+            runner: ubuntu-24.04
+          - distro: fedora-44
+            arch: aarch64
+            container: registry.fedoraproject.org/fedora:44
+            runner: ubuntu-24.04-arm
+          - distro: fedora-rawhide
+            arch: x86_64
+            container: registry.fedoraproject.org/fedora:rawhide
+            runner: ubuntu-24.04
+          - distro: fedora-rawhide
+            arch: aarch64
+            container: registry.fedoraproject.org/fedora:rawhide
+            runner: ubuntu-24.04-arm
+          - distro: centos-stream-10
+            arch: x86_64
+            container: quay.io/centos/centos:stream10
+            runner: ubuntu-24.04
+          - distro: centos-stream-10
+            arch: aarch64
+            container: quay.io/centos/centos:stream10
+            runner: ubuntu-24.04-arm
+    container:
+      image: ${{ matrix.container }}
+    steps:
+      - name: Install build tooling
+        run: |
+          dnf install -y --setopt=install_weak_deps=False \
+            rpm-build rpmlint mock \
+            python3-pip git make cmake \
+            redhat-rpm-config
+
+      - uses: actions/checkout@v4
+
+      - name: Lint specs
+        run: |
+          if compgen -G "specs/*.spec" > /dev/null; then
+            rpmlint specs/*.spec
+          else
+            echo "No specs yet — pipeline scaffold only."
+          fi
+
+      # TODO: wire bloom + rosdep + the manifest -> SRPM -> mock build flow here.

@@ -1,0 +1,64 @@
+name: lint
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  rpmlint:
+    runs-on: ubuntu-24.04
+    container:
+      image: registry.fedoraproject.org/fedora:44
+    steps:
+      - name: Install rpmlint
+        run: dnf install -y --setopt=install_weak_deps=False rpmlint
+      - uses: actions/checkout@v4
+      - name: Run rpmlint
+        run: |
+          if compgen -G "specs/*.spec" > /dev/null; then
+            rpmlint specs/*.spec
+          else
+            echo "No specs to lint."
+          fi
+
+  license-check:
+    runs-on: ubuntu-24.04
+    container:
+      image: registry.fedoraproject.org/fedora:44
+    steps:
+      - name: Install tooling
+        run: dnf install -y --setopt=install_weak_deps=False licensecheck git
+      - uses: actions/checkout@v4
+      - name: Verify SPDX expressions in specs
+        run: |
+          if compgen -G "specs/*.spec" > /dev/null; then
+            for spec in specs/*.spec; do
+              # Reject legacy Fedora license shortnames per ADR 0005.
+              if grep -E '^License:.*(ASL 2.0|BSD( |$)|MIT( |$))' "$spec"; then
+                echo "ERROR: $spec uses legacy license shortname; use SPDX." >&2
+                exit 1
+              fi
+            done
+          fi
+
+  forbidden-patterns:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reject obsolete spec patterns
+        run: |
+          if compgen -G "specs/*.spec" > /dev/null; then
+            FAIL=0
+            for pat in '^Group:' '^BuildRoot:' '^%clean' '^%defattr' '^%py3_build' '^%py3_install' '%setup -q' '%{__cmake}' '%pyproject_buildrequires -w'; do
+              if grep -RnE "$pat" specs/; then
+                echo "ERROR: forbidden pattern '$pat' found (see ADR 0005)." >&2
+                FAIL=1
+              fi
+            done
+            exit $FAIL
+          fi

@@ -1,0 +1,14 @@
+# Default reviewer for everything in the repo.
+*       @nickschuetz
+
+# Spec-file changes invite a stricter review pass — same owner today,
+# but split out so future maintainer additions are explicit.
+/specs/                 @nickschuetz
+/manifest.yaml          @nickschuetz
+
+# Anything in docs/adr/ records a binding decision; keep ownership tight.
+/docs/adr/              @nickschuetz
+
+# CI changes alter what gets published; review carefully.
+/.github/workflows/     @nickschuetz
+/.copr/                 @nickschuetz
