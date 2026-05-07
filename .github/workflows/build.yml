@@ -54,10 +54,16 @@ jobs:
     container:
       image: ${{ matrix.container }}
     steps:
+      - name: Enable EPEL and CRB on CentOS Stream
+        if: contains(matrix.distro, 'centos-stream')
+        run: |
+          dnf install -y dnf-plugins-core epel-release
+          dnf config-manager --set-enabled crb
+
       - name: Install build tooling
         run: |
           dnf install -y --setopt=install_weak_deps=False \
-            rpm-build rpmlint mock \
+            rpm-build rpmlint \
             python3-pip git make cmake \
             redhat-rpm-config
 
