@@ -90,7 +90,12 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# demo_nodes_cpp installs per-demo component libraries lib<demo>_library.so
+# (talker_library, listener_library, set_parameters_library, etc.) and the
+# corresponding executables under lib/demo_nodes_cpp/.
+%{install_prefix}/lib/lib*_library.so*
+%{install_prefix}/lib/%{pkg_name}/
+%{install_prefix}/bin/*
 
 
 %changelog

@@ -38,6 +38,10 @@ ExternalProject build of assimp.
 # Make our previously-installed ROS Python packages discoverable to CMake's
 # execute_process invocations of python3.
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
+# Strip -Werror — assimp's internal source emits new GCC 14/15 warnings
+# that are treated as errors with Fedora's default hardening flags.
+export CFLAGS="${CFLAGS} -Wno-error"
+export CXXFLAGS="${CXXFLAGS} -Wno-error"
 %cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
