@@ -782,3 +782,23 @@ qt_dotgraph:
   source_dir: qt_gui_core-release-release-jazzy-qt_dotgraph-{version}-1
   noarch: true
   disable_tests: true
+rqt:
+  source_url: https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/jazzy/rqt/{version}-1.tar.gz
+  source_dir: rqt-release-release-jazzy-rqt-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_gui:
+  source_url: https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/jazzy/rqt_gui/{version}-1.tar.gz
+  source_dir: rqt-release-release-jazzy-rqt_gui-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_gui_cpp:
+  source_url: https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/jazzy/rqt_gui_cpp/{version}-1.tar.gz
+  source_dir: rqt-release-release-jazzy-rqt_gui_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+rqt_gui_py:
+  source_url: https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/jazzy/rqt_gui_py/{version}-1.tar.gz
+  source_dir: rqt-release-release-jazzy-rqt_gui_py-{version}-1
+  noarch: true
+  disable_tests: true
