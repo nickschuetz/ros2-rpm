@@ -230,6 +230,22 @@ else
 fi
 
 #-----------------------------------------------------------------------
+# Section 7 — O3DE Gem optional dep (gazebo_msgs)
+#-----------------------------------------------------------------------
+section "O3DE Gem optional dep (gazebo_msgs)"
+
+if rpm -q ros-jazzy-gazebo-msgs >/dev/null 2>&1; then
+    check "import gazebo_msgs.msg.ContactState" \
+        bash -c 'source /opt/ros/jazzy/setup.bash && \
+                 python3 -c "import gazebo_msgs.msg; gazebo_msgs.msg.ContactState()"'
+    check "import gazebo_msgs.srv.SpawnEntity" \
+        bash -c 'source /opt/ros/jazzy/setup.bash && \
+                 python3 -c "import gazebo_msgs.srv; gazebo_msgs.srv.SpawnEntity.Request()"'
+else
+    skip "gazebo_msgs checks" "ros-jazzy-gazebo-msgs not installed (optional, gates O3DE Gem ContactSensor + Spawner)"
+fi
+
+#-----------------------------------------------------------------------
 # Summary
 #-----------------------------------------------------------------------
 echo

@@ -46,7 +46,8 @@ jobs:
             ros-jazzy-ros2cli \
             ros-jazzy-ros2node \
             ros-jazzy-ros2topic \
-            ros-jazzy-demo-nodes-cpp
+            ros-jazzy-demo-nodes-cpp \
+            ros-jazzy-gazebo-msgs
 
       - name: Run smoke test
         run: bash scripts/smoke-test.sh -v
