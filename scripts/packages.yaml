@@ -622,3 +622,38 @@ rosidl_typesupport_introspection_cpp:
   build_subdir: rosidl_typesupport_introspection_cpp
   noarch: false  # compiles librosidl_typesupport_introspection_cpp.so
   disable_tests: true
+cyclonedds:
+  source_url: https://github.com/ros2-gbp/cyclonedds-release/archive/refs/tags/release/jazzy/cyclonedds/{version}-1.tar.gz
+  source_dir: cyclonedds-release-release-jazzy-cyclonedds-{version}-1
+  noarch: false
+  disable_tests: true
+rmw_cyclonedds_cpp:
+  source_url: https://github.com/ros2-gbp/rmw_cyclonedds-release/archive/refs/tags/release/jazzy/rmw_cyclonedds_cpp/{version}-1.tar.gz
+  source_dir: rmw_cyclonedds-release-release-jazzy-rmw_cyclonedds_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+osrf_pycommon:
+  source_url: https://github.com/ros2-gbp/osrf_pycommon-release/archive/refs/tags/release/jazzy/osrf_pycommon/{version}-1.tar.gz
+  source_dir: osrf_pycommon-release-release-jazzy-osrf_pycommon-{version}-1
+  noarch: true
+  disable_tests: true
+launch:
+  source_url: https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch/{version}-1.tar.gz
+  source_dir: launch-release-release-jazzy-launch-{version}-1
+  noarch: true
+  disable_tests: true
+launch_xml:
+  source_url: https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch_xml/{version}-1.tar.gz
+  source_dir: launch-release-release-jazzy-launch_xml-{version}-1
+  noarch: true
+  disable_tests: true
+launch_yaml:
+  source_url: https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch_yaml/{version}-1.tar.gz
+  source_dir: launch-release-release-jazzy-launch_yaml-{version}-1
+  noarch: true
+  disable_tests: true
+launch_testing:
+  source_url: https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch_testing/{version}-1.tar.gz
+  source_dir: launch-release-release-jazzy-launch_testing-{version}-1
+  noarch: true
+  disable_tests: true

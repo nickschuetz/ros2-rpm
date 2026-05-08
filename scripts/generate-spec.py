@@ -48,6 +48,14 @@ LICENSE_MAP = {
     "BSD": "BSD-3-Clause",
     "BSD 3-Clause": "BSD-3-Clause",
     "MIT-License": "MIT",
+    "Eclipse Public License 2.0": "EPL-2.0",
+    "Eclipse Public License v2.0": "EPL-2.0",
+    "EPL 2.0": "EPL-2.0",
+    "Eclipse Distribution License 1.0": "BSD-3-Clause",
+    "LGPL 3.0": "LGPL-3.0-only",
+    "LGPL-3": "LGPL-3.0-only",
+    "GNU Lesser General Public License v3.0": "LGPL-3.0-only",
+    "Mozilla Public License Version 2.0": "MPL-2.0",
 }
 
 
@@ -95,6 +103,13 @@ def rosdep_resolve(key: str, distro: str, os_version: str) -> Optional[list[str]
     return out_lines or None
 
 
+DEP_REWRITES = {
+    # Upstream rosdep python.yaml maps python3-lark-parser to itself; Fedora
+    # ships the package as python3-lark.
+    "python3-lark-parser": "python3-lark",
+}
+
+
 def resolve_deps(keys: list[str], distro: str, os_version: str) -> list[str]:
     """Resolve rosdep keys to deduplicated, sorted Fedora package names."""
     resolved = set()
@@ -103,7 +118,8 @@ def resolve_deps(keys: list[str], distro: str, os_version: str) -> list[str]:
         if names is None:
             sys.stderr.write(f"WARNING: rosdep could not resolve '{key}' on fedora:{os_version}\n")
             continue
-        resolved.update(names)
+        for n in names:
+            resolved.add(DEP_REWRITES.get(n, n))
     return sorted(resolved)
 
 
