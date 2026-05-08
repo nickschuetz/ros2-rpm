@@ -15,7 +15,7 @@ A fix may follow if the maintainer has bandwidth. If you need guaranteed turnaro
 
 ## Supported versions
 
-Each ROS 2 distro is supported in this COPR while upstream Open Robotics supports it. When upstream EOLs a distro, this COPR drops it within 30 days (see `docs/UPGRADING.md` → "Sunsetting an EOL distro").
+Each ROS 2 distro is supported in this COPR while upstream Open Robotics supports it. Past upstream EOL, the COPR's posture is **undecided** — could be sunset, frozen as an archive, or extended on dev-only terms. Decision deferred to a follow-up ADR closer to the date; see [README → "Long-term posture"](../README.md#long-term-posture).
 
 | ROS 2 distro | Upstream EOL | Our support |
 |---|---|---|

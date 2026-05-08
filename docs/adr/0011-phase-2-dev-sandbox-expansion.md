@@ -23,7 +23,7 @@ Concretely:
 
 1. **Disclaimer is unchanged.** Every public surface (README, COPR description + instructions, GitHub repo description, CITATION.cff, per-package `%description`) continues to carry the **"Not the official ROS 2 packages for Fedora"** banner and the pointer to Open Robotics's upcoming Lyrical packages.
 2. **Production claims still forbidden.** No CVE SLA, no STIG-adjacent posture, no vendor-support framing. Phase 2 packages are subject to the same engineering-hygiene-not-SLA rule as Phase 1.
-3. **Open Robotics is still the production path.** Phase 2 dev-sandbox does not compete with their official Lyrical packages — when those ship, users move to them. This COPR sunsets when Jazzy EOLs.
+3. **Open Robotics is still the production path.** Phase 2 dev-sandbox does not compete with their official Lyrical packages — when those ship, users move to them. The COPR's long-term lifecycle past Jazzy EOL is undecided (see ADR 0010, Consequences); not constrained by this ADR.
 
 ### Phase 2 dev-sandbox scope
 

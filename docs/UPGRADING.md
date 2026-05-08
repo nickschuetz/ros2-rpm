@@ -18,14 +18,22 @@ Gated by the readiness checklist tracked in the pinned GitHub issue (see `CLAUDE
 6. Update README's "Supported targets" table.
 7. Announce in the COPR project description.
 
-### Sunsetting an EOL distro
+### Approaching upstream EOL
 
-When upstream EOLs a distro (e.g., Jazzy → May 2029):
+Upstream Open Robotics EOLs Jazzy in May 2029. The COPR's posture past that date is **not yet decided** — see [README → "Long-term posture"](../README.md#long-term-posture). Three credible options when the time comes:
 
-1. Open a tracking issue 90 days before EOL.
-2. README banner: "Jazzy will be removed from this COPR on YYYY-MM-DD."
-3. On EOL day: drop the distro's chroots from `copr-cli modify`, archive the branch.
-4. Do not carry past EOL — security posture depends on Fedora's CVE pipeline still covering deps that the EOL'd distro pinned.
+- **Sunset entirely.** Drop chroots, archive the branch, README banner pointing users to Open Robotics's then-current distro. Cleanest for users, but loses any historical-reproducibility value.
+- **Freeze as a historical archive.** Stop publishing new builds, leave the existing RPMs reachable for users who need a known-good Jazzy snapshot for reproducing past development work.
+- **Pivot to a later development distro.** If a near-future ROS 2 distro is on similar Fedora-on-Fedora footing and the maintainer is willing to do the work, replay this COPR's pipeline against that distro on dev-only terms.
+
+The choice will be made via a follow-up ADR ~90 days before EOL based on usage telemetry, Open Robotics's published Fedora roadmap at that time, and maintainer bandwidth. Whichever path is chosen, security posture beyond EOL is **not** part of the commitment — Fedora's CVE pipeline only covers deps while the underlying Fedora release is in support.
+
+Concrete mechanics regardless of path:
+
+1. Open a tracking issue 90 days before upstream EOL with the decision questions above.
+2. Update the README "Long-term posture" section with the chosen path and target date.
+3. Sync the COPR description and instructions with the same wording (per the CLAUDE.md sync rule).
+4. Execute the chosen path on/near EOL day.
 
 ## Fedora N → N+1 rebuild
 

@@ -33,7 +33,7 @@ This changes the role of this repo entirely. We are no longer filling a multi-ye
 4. **Per-package install messaging**: `%description` blocks should not promise long-term support. Spec-file changes for this are not retroactive — new specs and any spec touched in a future PR pick up the reframe.
 5. **Distro lifecycle policy**:
    - Adding a Lyrical chroot here is **no longer a goal**. When the official Open Robotics Lyrical packages ship, users should switch to those. This COPR's chroots stay frozen at the Phase 1 build matrix (Fedora 44 / Fedora rawhide / CentOS Stream 10 × x86_64 + aarch64) for Jazzy only.
-   - When upstream EOLs Jazzy (May 2029) this COPR sunsets. No distro succession.
+   - The COPR's lifetime past Jazzy EOL (May 2029) is **left open** — could be retired entirely, frozen as a historical archive, or extended to track a later development distro. To be decided closer to the date in a follow-up ADR. No commitment today.
 
 ## What stays the same
 

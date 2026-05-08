@@ -32,9 +32,9 @@ Explicitly **not** in Phase 2 dev-sandbox: full `nav2_*` navigation, `ros2contro
 
 Full scope and per-package status in [`docs/SCOPE.md`](docs/SCOPE.md). Dependency-ordered build pipeline in [`docs/build-order.md`](docs/build-order.md).
 
-### Sunset
+### Long-term posture
 
-When upstream Open Robotics EOLs Jazzy (May 2029), this COPR sunsets. By then, users should already be on Open Robotics's official Lyrical (or later) Fedora packages.
+Upstream Open Robotics EOLs Jazzy in May 2029. By then, users running production workloads should be on Open Robotics's official Lyrical (or later) Fedora packages. **Whether this development COPR continues past Jazzy EOL is an open decision** — kept around as a frozen historical archive, retired entirely, or extended to track a later distro on dev-only terms — that will be revisited closer to the date and tracked via a future ADR. No commitment either way today.
 
 ## Quickstart
 
