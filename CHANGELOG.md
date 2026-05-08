@@ -28,10 +28,10 @@ Phase 2 GUI surface (qt_gui_core, python_qt_binding, rqt + plugins) builds succe
 
 ### Deferred (will revisit when blockers clear or upstream patches land)
 
-- **rviz2 chain**: `rviz_ogre_vendor`, `rviz_assimp_vendor`, `rviz_rendering`, `rviz_common`, `rviz_default_plugins`, `rviz2`. Two upstream blockers:
-  - `rviz_ogre_vendor`: Ogre's bundled CMake config has `cmake_minimum_required` below 3.5, which CMake 4.x (Fedora 44+) rejects. Workaround `-DCMAKE_POLICY_VERSION_MINIMUM=3.5` is in the spec but build still in progress at end of session.
-  - `rviz_assimp_vendor`: Assimp's CMake adds `-Werror` to the build flags via its own `target_compile_options`, ordered after our `-Wno-error` override. Without patching the assimp CMake source, Fedora's stricter GCC warnings (e.g. `-Wunused-but-set-variable`) fail the build. Likely needs a small upstream patch or a switch to system `assimp-devel` rather than the vendored ExternalProject.
-- `rcl_action_lifecycle`, `rclcpp_lifecycle_interface`, navigation stacks, simulation bridges — all out of scope per ADR 0011.
+- **rviz2 chain**: `rviz_ogre_vendor`, `rviz_assimp_vendor`, `rviz_rendering`, `rviz_common`, `rviz_default_plugins`, `rviz2`. Two upstream blockers, both now tracked in [`docs/UPSTREAM-ISSUES.md`](docs/UPSTREAM-ISSUES.md):
+  - `rviz_ogre_vendor`: Ogre's bundled CMake config has `cmake_minimum_required` below 3.5, which CMake 4.x (Fedora 44+) rejects. Fix is in flight upstream as [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708) (awaiting merge); we [confirmed the workaround on Fedora 44](https://github.com/ros2/rviz/pull/1708#issuecomment-4408710231).
+  - `rviz_assimp_vendor`: Assimp's CMake adds `-Werror` to the build flags via its own `target_compile_options`, ordered after our `-Wno-error` override. Filed as [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730) with a proposed `ASSIMP_CXX_FLAGS` extension; awaiting maintainer direction before sending the PR.
+- `rcl_action_lifecycle`, `rclcpp_lifecycle_interface`, navigation stacks, simulation bridges: all out of scope per ADR 0011.
 
 ### Out of scope (per ADR 0011)
 

@@ -120,6 +120,7 @@ Full documentation: [`docs/SMOKE-TEST.md`](docs/SMOKE-TEST.md).
 - [`docs/UPGRADING.md`](docs/UPGRADING.md) — upgrade procedures across ROS 2 distros and Fedora releases.
 - [`docs/SECURITY.md`](docs/SECURITY.md) — vulnerability handling, watchlist, disclosure.
 - [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md) — the broader Fedora-ROS packaging ecosystem.
+- [`docs/UPSTREAM-ISSUES.md`](docs/UPSTREAM-ISSUES.md) — live tracking of upstream issues / PRs that block deferred work.
 - [`docs/adr/`](docs/adr/) — architecture decision records (read these before opening scope-changing PRs).
 
 ## License

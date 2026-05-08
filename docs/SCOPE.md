@@ -92,7 +92,9 @@ System library substitution doesn't help: Fedora's `ogre-devel` is **1.9.x**, no
 
 **When this deferral closes:**
 
-When upstream `rviz_ogre_vendor` / `rviz_assimp_vendor` accept patches for the CMake 4.x and `-Werror` issues — or when this repo gains the bandwidth to carry those patches locally — the rviz2 chain rebuilds against the existing P-3 foundation in days. Tracked but not committed; the dev-only positioning means waiting is acceptable.
+When upstream `rviz_ogre_vendor` and `rviz_assimp_vendor` accept patches for the CMake 4.x and `-Werror` issues (or when this repo gains the bandwidth to carry those patches locally), the rviz2 chain rebuilds against the existing P-3 foundation in days. Tracked but not committed; the dev-only positioning means waiting is acceptable.
+
+The two upstream tickets we're watching are listed in [`docs/UPSTREAM-ISSUES.md`](UPSTREAM-ISSUES.md): the Ogre fix is in flight as [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708), and the Assimp blocker was filed as [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730).
 
 ### Phase 2 explicitly out of scope (per ADR 0011)
 

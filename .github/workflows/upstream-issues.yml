@@ -1,0 +1,81 @@
+name: upstream-issues
+
+# Nightly check of the upstream issues / PRs we're tracking in
+# docs/UPSTREAM-ISSUES.md. When something we were waiting on closes,
+# post a comment on (or open) a tracking issue in this repo so the
+# corresponding deferral can be revisited.
+
+on:
+  schedule:
+    # Daily at 08:00 UTC (one hour after upstream-drift, two after smoke-test).
+    - cron: '0 8 * * *'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - 'docs/UPSTREAM-ISSUES.md'
+      - 'scripts/check-upstream-issues.py'
+      - '.github/workflows/upstream-issues.yml'
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: upstream-issues-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run tracker
+        id: tracker
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 scripts/check-upstream-issues.py --json > /tmp/upstream-state.json
+          python3 scripts/check-upstream-issues.py > /tmp/upstream-state.txt
+          cat /tmp/upstream-state.txt
+          {
+            echo '## Upstream issue tracker'
+            echo
+            echo '```'
+            cat /tmp/upstream-state.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          # Output the number of items that closed since we last checked.
+          # On every run we overwrite a sticky comment (or open one) on a
+          # canonical tracking issue rather than spamming.
+          CLOSED=$(python3 -c '
+          import json
+          with open("/tmp/upstream-state.json") as f:
+              d = json.load(f)
+          closed = [r for r in d if r.get("state") == "closed"]
+          print(len(closed))
+          ')
+          echo "closed=$CLOSED" >> "$GITHUB_OUTPUT"
+
+      - name: Open / update upstream tracker issue when something closed
+        if: steps.tracker.outputs.closed != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          TITLE="Upstream tracker: ${{ steps.tracker.outputs.closed }} watched item(s) have closed"
+
+          EXISTING=$(gh issue list --repo "$REPO" --state open --label upstream-tracker \
+                       --json number --jq '.[0].number' || echo "")
+
+          if [ -n "$EXISTING" ]; then
+            gh issue edit "$EXISTING" --repo "$REPO" --title "$TITLE" \
+              --body-file /tmp/upstream-state.txt
+          else
+            gh issue create --repo "$REPO" --title "$TITLE" \
+              --label upstream-tracker,maintenance \
+              --body-file /tmp/upstream-state.txt
+          fi
