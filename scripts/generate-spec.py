@@ -298,6 +298,21 @@ BuildArch:      noarch
 %prep
 %autosetup -p1 -n {source_dir}
 
+# Reduce setup.py's install_requires to ['setuptools'] before the
+# auto-generated buildrequires step runs. The full list typically references
+# ROS Python packages (launch, ament_index_python, etc.) that live under
+# /opt/ros/jazzy and don't register python3dist(...) Provides; leaving
+# those in setup.py causes pyproject buildrequires to emit BRs that Fedora
+# can't resolve. The runtime Requires: above already enforces these.
+{py_push}python3 << 'PYEOF' || true
+import re
+p = "setup.py"
+s = open(p).read()
+s = re.sub(r"install_requires\s*=\s*\[[^\]]*\]", "install_requires=['setuptools']", s, flags=re.S)
+open(p, "w").write(s)
+PYEOF
+{py_pop}
+
 %generate_buildrequires
 {py_push}%pyproject_buildrequires
 {py_pop}

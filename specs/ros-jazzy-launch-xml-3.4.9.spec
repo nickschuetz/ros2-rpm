@@ -1,49 +1,36 @@
 %global ros_distro       jazzy
-%global pkg_name         launch_ros
+%global pkg_name         launch_xml
 %global install_prefix   /opt/ros/jazzy
 
-Name:           ros-%{ros_distro}-launch-ros
-Version:        0.26.9
+Name:           ros-%{ros_distro}-launch-xml
+Version:        3.4.9
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy launch_ros
+Summary:        ROS 2 Jazzy launch_xml
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/launch_ros-release
-Source0:        https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/jazzy/launch_ros/0.26.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2-gbp/launch-release
+Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch_xml/3.4.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
 BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3
-BuildRequires:  python3-PyYAML
 BuildRequires:  python3-devel
 BuildRequires:  python3-pip
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-wheel
-BuildRequires:  ros-jazzy-ament-index-python
-BuildRequires:  ros-jazzy-composition-interfaces
 BuildRequires:  ros-jazzy-launch
-BuildRequires:  ros-jazzy-lifecycle-msgs
-BuildRequires:  ros-jazzy-osrf-pycommon
-BuildRequires:  ros-jazzy-rclpy
 
 Requires:       python3
-Requires:       python3-PyYAML
-Requires:       ros-jazzy-ament-index-python
-Requires:       ros-jazzy-composition-interfaces
 Requires:       ros-jazzy-launch
-Requires:       ros-jazzy-lifecycle-msgs
-Requires:       ros-jazzy-osrf-pycommon
-Requires:       ros-jazzy-rclpy
 
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 
 %description
-ROS specific extensions to the launch tool.
+XML frontend for the launch package.
 
 %prep
-%autosetup -p1 -n launch_ros-release-release-jazzy-launch_ros-0.26.9-1
+%autosetup -p1 -n launch-release-release-jazzy-launch_xml-3.4.9-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -95,5 +82,5 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.26.9-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 3.4.9-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

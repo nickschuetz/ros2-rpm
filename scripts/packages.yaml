@@ -692,3 +692,53 @@ ros2cli:
   source_dir: ros2cli-release-release-jazzy-ros2cli-{version}-1
   noarch: true
   disable_tests: true
+ros2pkg:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2pkg/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2pkg-{version}-1
+  noarch: true
+  disable_tests: true
+ros2run:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2run/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2run-{version}-1
+  noarch: true
+  disable_tests: true
+ros2node:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2node/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2node-{version}-1
+  noarch: true
+  disable_tests: true
+ros2topic:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2topic/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2topic-{version}-1
+  noarch: true
+  disable_tests: true
+ros2service:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2service/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2service-{version}-1
+  noarch: true
+  disable_tests: true
+ros2interface:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2interface/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2interface-{version}-1
+  noarch: true
+  disable_tests: true
+ros2action:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2action/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2action-{version}-1
+  noarch: true
+  disable_tests: true
+ros2lifecycle:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2lifecycle/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2lifecycle-{version}-1
+  noarch: true
+  disable_tests: true
+ros2param:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2param/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2param-{version}-1
+  noarch: true
+  disable_tests: true
+ros2component:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2component/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2component-{version}-1
+  noarch: true
+  disable_tests: true

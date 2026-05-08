@@ -1,15 +1,15 @@
 %global ros_distro       jazzy
-%global pkg_name         launch
+%global pkg_name         ros2component
 %global install_prefix   /opt/ros/jazzy
 
-Name:           ros-%{ros_distro}-launch
-Version:        3.4.9
+Name:           ros-%{ros_distro}-ros2component
+Version:        0.32.9
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy launch
+Summary:        ROS 2 Jazzy ros2component
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/launch-release
-Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch/3.4.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2-gbp/ros2cli-release
+Source0:        https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2component/0.32.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -18,22 +18,26 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-pip
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-wheel
-BuildRequires:  ros-jazzy-osrf-pycommon
 
 Requires:       python3
-Requires:       python3-PyYAML
-Requires:       python3-lark
 Requires:       ros-jazzy-ament-index-python
-Requires:       ros-jazzy-osrf-pycommon
+Requires:       ros-jazzy-composition-interfaces
+Requires:       ros-jazzy-rcl-interfaces
+Requires:       ros-jazzy-rclcpp-components
+Requires:       ros-jazzy-rclpy
+Requires:       ros-jazzy-ros2cli
+Requires:       ros-jazzy-ros2node
+Requires:       ros-jazzy-ros2param
+Requires:       ros-jazzy-ros2pkg
 
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 
 %description
-The ROS launch tool.
+The component command for ROS 2 command line tools.
 
 %prep
-%autosetup -p1 -n launch-release-release-jazzy-launch-3.4.9-1
+%autosetup -p1 -n ros2cli-release-release-jazzy-ros2component-0.32.9-1
 
 # %pyproject_buildrequires would re-read setup.py's install_requires and emit
 # python3dist(<name>) BRs for every entry. For ROS Python packages whose deps
@@ -72,5 +76,5 @@ The ROS launch tool.
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 3.4.9-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.32.9-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

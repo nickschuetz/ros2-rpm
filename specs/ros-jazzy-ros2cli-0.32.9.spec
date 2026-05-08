@@ -1,49 +1,39 @@
 %global ros_distro       jazzy
-%global pkg_name         launch_ros
+%global pkg_name         ros2cli
 %global install_prefix   /opt/ros/jazzy
 
-Name:           ros-%{ros_distro}-launch-ros
-Version:        0.26.9
+Name:           ros-%{ros_distro}-ros2cli
+Version:        0.32.9
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy launch_ros
+Summary:        ROS 2 Jazzy ros2cli
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/launch_ros-release
-Source0:        https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/jazzy/launch_ros/0.26.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2-gbp/ros2cli-release
+Source0:        https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2cli/0.32.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
 BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3
-BuildRequires:  python3-PyYAML
 BuildRequires:  python3-devel
 BuildRequires:  python3-pip
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-wheel
-BuildRequires:  ros-jazzy-ament-index-python
-BuildRequires:  ros-jazzy-composition-interfaces
-BuildRequires:  ros-jazzy-launch
-BuildRequires:  ros-jazzy-lifecycle-msgs
-BuildRequires:  ros-jazzy-osrf-pycommon
-BuildRequires:  ros-jazzy-rclpy
 
 Requires:       python3
-Requires:       python3-PyYAML
-Requires:       ros-jazzy-ament-index-python
-Requires:       ros-jazzy-composition-interfaces
-Requires:       ros-jazzy-launch
-Requires:       ros-jazzy-lifecycle-msgs
-Requires:       ros-jazzy-osrf-pycommon
+Requires:       python3-argcomplete
+Requires:       python3-packaging
+Requires:       python3-psutil
+Requires:       python3-setuptools
 Requires:       ros-jazzy-rclpy
 
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 
 %description
-ROS specific extensions to the launch tool.
+Framework for ROS 2 command line tools.
 
 %prep
-%autosetup -p1 -n launch_ros-release-release-jazzy-launch_ros-0.26.9-1
+%autosetup -p1 -n ros2cli-release-release-jazzy-ros2cli-0.32.9-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -86,6 +76,7 @@ PYEOF
 %files
 # (no LICENSE file in source tree — see package.xml <license>)
 %doc CHANGELOG.rst
+%{install_prefix}/bin/*
 
 # TODO: review the file list — generator emits a permissive glob and you may
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
@@ -95,5 +86,5 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.26.9-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.32.9-1
 - Initial Fedora COPR build for ROS 2 Jazzy.
