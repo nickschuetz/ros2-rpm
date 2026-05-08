@@ -134,6 +134,82 @@ rcutils:
   noarch: false
   disable_tests: true
 
+# C++ utilities, compiled library.
+rcpputils:
+  source_url: https://github.com/ros2-gbp/rcpputils-release/archive/refs/tags/release/jazzy/rcpputils/{version}-1.tar.gz
+  source_dir: rcpputils-release-release-jazzy-rcpputils-{version}-1
+  noarch: false
+  disable_tests: true
+
+# ament_index_python (Python bindings for the ament resource index).
+ament_index_python:
+  source_url: https://github.com/ros2-gbp/ament_index-release/archive/refs/tags/release/jazzy/ament_index_python/{version}-1.tar.gz
+  source_dir: ament_index-release-release-jazzy-ament_index_python-{version}-1
+  disable_tests: true
+
+# rosidl_python — only rosidl_generator_py lives here (jazzy branch).
+rosidl_generator_py:
+  source_url: https://github.com/ros2-gbp/rosidl_python-release/archive/refs/tags/release/jazzy/rosidl_generator_py/{version}-1.tar.gz
+  source_dir: rosidl_python-release-release-jazzy-rosidl_generator_py-{version}-1
+  # No native code — pure-Python generator + cmake macros.
+  disable_tests: true
+
+# rosidl_typesupport — generates per-language bindings, separate repo.
+rosidl_typesupport_c:
+  source_url: https://github.com/ros2-gbp/rosidl_typesupport-release/archive/refs/tags/release/jazzy/rosidl_typesupport_c/{version}-1.tar.gz
+  source_dir: rosidl_typesupport-release-release-jazzy-rosidl_typesupport_c-{version}-1
+  noarch: false  # ships librosidl_typesupport_c.so
+  disable_tests: true
+
+rosidl_typesupport_cpp:
+  source_url: https://github.com/ros2-gbp/rosidl_typesupport-release/archive/refs/tags/release/jazzy/rosidl_typesupport_cpp/{version}-1.tar.gz
+  source_dir: rosidl_typesupport-release-release-jazzy-rosidl_typesupport_cpp-{version}-1
+  noarch: false  # ships librosidl_typesupport_cpp.so
+  disable_tests: true
+
+# Fast DDS chain — eProsima's DDS implementation. Multiple compiled C++ libs.
+foonathan_memory_vendor:
+  source_url: https://github.com/ros2-gbp/foonathan_memory_vendor-release/archive/refs/tags/release/jazzy/foonathan_memory_vendor/{version}-3.tar.gz
+  source_dir: foonathan_memory_vendor-release-release-jazzy-foonathan_memory_vendor-{version}-3
+  noarch: false
+  disable_tests: true
+
+fastcdr:
+  source_url: https://github.com/ros2-gbp/fastcdr-release/archive/refs/tags/release/jazzy/fastcdr/{version}-1.tar.gz
+  source_dir: fastcdr-release-release-jazzy-fastcdr-{version}-1
+  noarch: false
+  disable_tests: true
+
+fastrtps:
+  source_url: https://github.com/ros2-gbp/fastrtps-release/archive/refs/tags/release/jazzy/fastrtps/{version}-1.tar.gz
+  # Inside dir is named fastdds-release (upstream's actual name).
+  source_dir: fastdds-release-release-jazzy-fastrtps-{version}-1
+  noarch: false
+  disable_tests: true
+
+rosidl_typesupport_fastrtps_c:
+  source_url: https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/release/jazzy/rosidl_typesupport_fastrtps_c/{version}-1.tar.gz
+  source_dir: rosidl_typesupport_fastrtps-release-release-jazzy-rosidl_typesupport_fastrtps_c-{version}-1
+  noarch: false
+  disable_tests: true
+
+rosidl_typesupport_fastrtps_cpp:
+  source_url: https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/release/jazzy/rosidl_typesupport_fastrtps_cpp/{version}-1.tar.gz
+  source_dir: rosidl_typesupport_fastrtps-release-release-jazzy-rosidl_typesupport_fastrtps_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+# rosidl_core umbrellas — pull in the whole generation/runtime stack.
+rosidl_core_generators:
+  source_url: https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/release/jazzy/rosidl_core_generators/{version}-1.tar.gz
+  source_dir: rosidl_core-release-release-jazzy-rosidl_core_generators-{version}-1
+  disable_tests: true
+
+rosidl_core_runtime:
+  source_url: https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/release/jazzy/rosidl_core_runtime/{version}-1.tar.gz
+  source_dir: rosidl_core-release-release-jazzy-rosidl_core_runtime-{version}-1
+  disable_tests: true
+
 # Message packages
 #
 # rcl_interfaces uses bloom-release tags (the upstream monorepo's master is

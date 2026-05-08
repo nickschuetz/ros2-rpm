@@ -245,6 +245,12 @@ def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
         f"%{{install_prefix}}/bin/*\n" if py_has_console_scripts else ""
     )
 
+    # Skip %license LICENSE if the source tree doesn't have one (bloom-release
+    # branches sometimes strip LICENSE from per-package subtrees).
+    py_license_search = py_src_root.parent if (py_src_root and build_subdir) else py_src_root
+    py_has_license = bool(py_license_search and (py_license_search / "LICENSE").is_file())
+    py_license_line = "%license LICENSE" if py_has_license else "# (no LICENSE file in source tree — see package.xml <license>)"
+
     br_lines = "\n".join(f"BuildRequires:  {b}" for b in brs)
     rq_lines = "\n".join(f"Requires:       {r}" for r in rqs)
 
@@ -300,7 +306,7 @@ BuildArch:      noarch
 {py_pop}
 
 %files
-%license LICENSE
+{py_license_line}
 %doc {py_changelog_path}
 {py_extra_files}
 # TODO: review the file list — generator emits a permissive glob and you may
@@ -361,6 +367,12 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     has_license = bool(license_search_dir and (license_search_dir / "LICENSE").is_file())
     license_line = "%license LICENSE" if has_license else "# (no LICENSE file in source tree — see package.xml <license>)"
 
+    # CHANGELOG.rst is not always present (some upstream packages put it
+    # elsewhere or omit it). Skip %doc when missing rather than fail the build.
+    changelog_check_path = src_root / (build_subdir or "") / "CHANGELOG.rst" if src_root else None
+    has_changelog = bool(changelog_check_path and changelog_check_path.is_file())
+    doc_line = f"%doc {changelog_path}" if has_changelog else "# (no CHANGELOG.rst in source tree)"
+
     # Per ADR 0005 %check is mandatory, but some packages reference test-only
     # dependencies (ament_cmake_gtest, ament_lint_*, etc.) that haven't yet been
     # built into the COPR. Skip the test phase entirely on those by setting
@@ -414,6 +426,19 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     if ships_lib_scripts:
         extra_arch_files += "%{install_prefix}/lib/%{pkg_name}/\n"
 
+    # Only ament_cmake packages (which call ament_package()) install
+    # /opt/ros/<distro>/share/ament_index/resource_index/<group>/<pkg>
+    # sentinel files. Plain 'cmake' build_type (vendor packages, etc.) doesn't.
+    if pkg.get("build_type") == "ament_cmake":
+        ament_index_files = (
+            "# Sentinels: ament_index/resource_index/<index>/<pkg>. Glob covers\n"
+            "# packages/, package_run_dependencies/, parent_prefix_path/, and any\n"
+            "# member_of_group entries (rosidl_runtime_packages, etc.).\n"
+            "%{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}\n"
+        )
+    else:
+        ament_index_files = ""
+
     return f"""%global ros_distro       {distro}
 %global pkg_name         {name}
 %global install_prefix   {install_prefix}
@@ -425,7 +450,7 @@ Summary:        {summary}
 
 License:        {license_spdx}
 {('URL:            ' + pkg['url']) if pkg['url'] else 'URL:            ' + cfg['source_url'].split('/archive/')[0]}
-Source0:        {source_url}#/{cfg['source_dir'].split('-')[0] if '-' in cfg['source_dir'] else name}-%{{version}}.tar.gz
+Source0:        {source_url}#/%{{pkg_name}}-%{{version}}.tar.gz
 
 {noarch_line}
 {br_lines}
@@ -449,6 +474,15 @@ export PYTHONPATH=%{{install_prefix}}/lib/python%{{python3_version}}/site-packag
     -DCMAKE_INSTALL_PREFIX=%{{install_prefix}} \\
     -DAMENT_PREFIX_PATH=%{{install_prefix}} \\
     -DCMAKE_PREFIX_PATH=%{{install_prefix}} \\
+    -DCMAKE_INSTALL_INCLUDEDIR=include \\
+    -DCMAKE_INSTALL_LIBDIR=lib \\
+    -DCMAKE_INSTALL_BINDIR=bin \\
+    -DCMAKE_INSTALL_DATADIR=share \\
+    -DCMAKE_INSTALL_SYSCONFDIR=etc \\
+    -DINCLUDE_INSTALL_DIR=%{{install_prefix}}/include \\
+    -DLIB_INSTALL_DIR=%{{install_prefix}}/lib \\
+    -DSYSCONF_INSTALL_DIR=%{{install_prefix}}/etc \\
+    -DSHARE_INSTALL_PREFIX=%{{install_prefix}}/share \\
     -DSETUPTOOLS_DEB_LAYOUT=OFF{cmake_test_flag}
 %cmake_build
 {pop}
@@ -464,17 +498,12 @@ export PYTHONPATH=%{{install_prefix}}/lib/python%{{python3_version}}/site-packag
 
 %files
 {license_line}
-%doc {changelog_path}
+{doc_line}
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
 # need additions or trimming.
 %{{install_prefix}}/share/%{{pkg_name}}/
-# Sentinels: ament_index/resource_index/<index>/<pkg>. Standard ones include
-# packages/, package_run_dependencies/, parent_prefix_path/, and any group the
-# package is member_of (rosidl_runtime_packages, rosidl_interface_packages, etc.).
-# A glob covers all of them in one line.
-%{{install_prefix}}/share/ament_index/resource_index/*/%{{pkg_name}}
-{extra_python_files}{extra_arch_files}
+{ament_index_files}{extra_python_files}{extra_arch_files}
 
 %changelog
 * {_today_rpm()} {DEFAULT_PACKAGER_NAME} <{DEFAULT_PACKAGER_EMAIL}> - {version}-1
@@ -518,7 +547,11 @@ def main():
 
     if pkg["build_type"] == "ament_python":
         spec = render_python_spec(pkg, cfg, args.distro, args.prefix)
-    elif pkg["build_type"] == "ament_cmake":
+    elif pkg["build_type"] in ("ament_cmake", "cmake"):
+        # 'cmake' build_type (used by vendor packages and the occasional
+        # standalone library) is a strict subset of 'ament_cmake' for spec-
+        # generation purposes — no ament_index sentinels but otherwise the
+        # same %prep/%build/%install/%check shape.
         spec = render_cmake_spec(pkg, cfg, args.distro, args.prefix)
     else:
         sys.stderr.write(f"ERROR: unsupported build_type '{pkg['build_type']}'\n")
