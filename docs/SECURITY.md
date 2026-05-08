@@ -1,13 +1,17 @@
 # Security
 
+> **Development-only COPR.** Per [ADR 0010](adr/0010-project-pivot-to-development-only.md), this is not a production-grade package set. For production deployments with a vendor-supported security SLA, use Open Robotics's official Fedora packages (starting with Lyrical Luth) when those land. Do not deploy this COPR to any environment where you need timely CVE response.
+
 ## Reporting a vulnerability
 
 Email **security@hellaenergy.studio** with details. Please do not open a public issue for unpatched vulnerabilities.
 
-We will acknowledge receipt within 5 business days and aim to issue a fixed build within:
-- **48 hours** for critical CVEs (CVSS ≥ 9.0).
-- **7 days** for high-severity CVEs (CVSS 7.0–8.9).
-- **30 days** for medium / low.
+This is a best-effort development project — there is no committed SLA. Triage cadence is approximately:
+- **48 hours** for critical CVEs (CVSS ≥ 9.0): acknowledged.
+- **7 days** for high-severity CVEs (CVSS 7.0–8.9): acknowledged.
+- **30 days** for medium / low: acknowledged.
+
+A fix may follow if the maintainer has bandwidth. If you need guaranteed turnaround, you are on the wrong package set — see Open Robotics's official Fedora packages.
 
 ## Supported versions
 
@@ -30,10 +34,11 @@ Each ROS 2 distro is supported in this COPR while upstream Open Robotics support
 
 ## What this COPR does NOT claim
 
-- **DISA STIG compliance.** There is no STIG for ROS 2; STIGs target full OS deployments. Users needing a STIG-attested chain should layer this COPR on RHEL 10 with the appropriate RHEL 10 STIG profile applied.
-- **CERT, OWASP, or DSPM compliance.** Those frameworks address application code, web-application architecture, and data-security posture respectively — none describes RPM packaging.
+- **Production readiness.** Per ADR 0010, this is a development-only sandbox.
+- **Vendor support, SLA, or guaranteed CVE turnaround.** Use Open Robotics's official Fedora packages for that.
+- **DISA STIG / CERT / OWASP / DSPM compliance.** None of those frameworks describe RPM packaging meaningfully, and this COPR makes no posture claim against any of them.
 
-For a STIG-adjacent posture, the recommended path is the **CentOS Stream 10** builds from this COPR plus standard RHEL 10 hardening on the host.
+The CentOS Stream 10 chroots are convenient build targets for development testing — **not** a production-deployment pitch.
 
 ## Watchlist
 

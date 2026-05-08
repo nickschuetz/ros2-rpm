@@ -1,22 +1,26 @@
 # ros2-rpm
 
-ROS 2 Jazzy RPMs for **Fedora 44+** and **CentOS Stream 10**, built on **x86_64** and **aarch64**, distributed via the Fedora COPR [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2).
+> **Not the official ROS 2 packages for Fedora.**
+>
+> This is a **development-only** package set. Open Robotics is taking on official Fedora support starting with **Lyrical Luth** (the 2026 LTS). For production deployments, robotics fleets, or any work that needs vendor-supported, CVE-tracked, official ROS 2 builds, use Open Robotics's official Fedora packages when those land.
+>
+> This COPR exists for developers who want to compile and experiment against ROS 2 Jazzy on Fedora 44+ today, before the official Lyrical packages ship. See [ADR 0010](docs/adr/0010-project-pivot-to-development-only.md) and [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md).
 
-The end state is a `ros-jazzy-desktop`-equivalent install path — filling the gap that no current Fedora-native ROS 2 distribution covers. (Upstream `packages.ros.org` ships RHEL 9 RPMs that don't run on Fedora's Python 3.14; existing community Fedora COPRs are partial / unmaintained.)
+Development-only ROS 2 Jazzy minimal subset (~85 packages — `rclcpp`, `tf2_ros`, common message packages, `rmw_fastrtps_cpp` + Fast DDS, transitive deps), built for **Fedora 44+** and **CentOS Stream 10** on **x86_64** and **aarch64**, distributed via the Fedora COPR [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2).
 
-## Phased delivery
+## Scope (final, post-pivot)
 
-Delivered in two phases. Phase 1 is the current shipping scope; Phase 2 expands to full desktop.
+Phase 1 minimal subset is the **final scope** of this repo. Phase 2 (full `ros-jazzy-desktop` equivalent) is **cancelled** — Open Robotics will deliver that for Lyrical. See [ADR 0010](docs/adr/0010-project-pivot-to-development-only.md) for the full rationale.
 
-### Phase 1 — minimal subset (~85 packages, all live)
+### Shipping today (~85 packages, all live across all 6 chroot/arch pairs)
 
-Pipeline proving ground: `rclcpp`, common message packages (`std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `ackermann_msgs`, `vision_msgs`, `control_msgs`, `trajectory_msgs`), `rmw_fastrtps_cpp` + Fast DDS, `tf2_ros`, transitive deps. License-clean (`Apache-2.0 AND BSD-3-Clause`). Validates the bloom + rosdep + Python-3.14 patch chain on a small surface.
+Direct consumers: `rclcpp`, `tf2_ros`, common message packages (`std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `trajectory_msgs`, `ackermann_msgs`, `vision_msgs`, `control_msgs`), plus the metapackages `ros-jazzy-ros-core` and `ros-jazzy-ros-base`. Built on `fedora-44`, `fedora-rawhide`, `centos-stream-10` × `x86_64` + `aarch64`.
 
-**Status (snapshot, 2026-05-08)**: Phase 1 minimal subset complete across `fedora-44`, `fedora-rawhide`, `centos-stream-10` × `x86_64` + `aarch64`. All ten direct consumers (`rclcpp`, `tf2_ros`, all eight message packages above) plus their transitive closure are published. See [`docs/build-order.md`](docs/build-order.md) for the dependency-ordered pipeline and [`docs/SCOPE.md`](docs/SCOPE.md) for the full list with build-status markers.
+Full list with build-status markers in [`docs/SCOPE.md`](docs/SCOPE.md). Dependency-ordered build pipeline in [`docs/build-order.md`](docs/build-order.md). License-clean: every package in default metapackages carries only `Apache-2.0` or `BSD-3-Clause`.
 
-### Phase 2 — `ros-jazzy-desktop` equivalent (~320 packages)
+### Sunset
 
-Full ROS 2 desktop: `rviz2`, `rqt_*`, navigation stacks, alternative RMW implementations. Adds heterogeneous license aggregate (Qt is LGPL-3.0; Cyclone DDS is EPL-2.0 if shipped). Ships once Phase 1 is stable across all 8 chroot/arch pairs for 30+ days. See [ADR 0006](docs/adr/0006-full-ros2-desktop-as-eventual-scope.md).
+When upstream Open Robotics EOLs Jazzy (May 2029), this COPR sunsets. By then, users should already be on Open Robotics's official Lyrical (or later) Fedora packages.
 
 ## Quickstart
 
@@ -40,21 +44,17 @@ sudo dnf install ros-jazzy-rclcpp
 | Fedora rawhide | x86_64, aarch64 |
 | CentOS Stream 10 | x86_64, aarch64 |
 
-Fedora 45 will be added when it ships (planned October 2026).
+Stream 10 chroots additionally pull EPEL 10 for ROS build deps not in Stream 10's base / AppStream / CRB. The Stream 10 chroots are convenient build targets — **not** a production-deployment pitch.
 
 ## Install location
 
-Packages install to `/opt/ros/jazzy/` per upstream ROS 2 convention. Setup environment via `source /opt/ros/jazzy/setup.bash` (or enable `/etc/profile.d/ros-jazzy.sh` for opt-in shell-wide loading).
+Packages install to `/opt/ros/jazzy/` per upstream ROS 2 convention. Setup environment via `source /opt/ros/jazzy/setup.bash` (or enable `/etc/profile.d/ros-jazzy.sh` for opt-in shell-wide loading). See [ADR 0007](docs/adr/0007-install-location-opt-ros-jazzy.md).
 
-This is the same layout used by `packages.ros.org`, Ubuntu, and every existing community Fedora COPR. It supports clean side-by-side multi-distro installs (e.g., Jazzy + Lyrical when Lyrical is added). Fedora main-repo inclusion would require FHS layout — that's tracked as a separate Phase 3 effort and is not pursued in this repo today. See [ADR 0007](docs/adr/0007-install-location-opt-ros-jazzy.md).
+## License posture
 
-## Scope and license posture
+Default metapackages (`ros-jazzy-ros-core`, `ros-jazzy-ros-base`) contain only **Apache-2.0** and **BSD-3-Clause** content. Installing a metapackage never pulls in non-permissive code.
 
-In Phase 1, default metapackages (`ros-jazzy-ros-core`, `ros-jazzy-ros-base`) contain only **Apache-2.0** and **BSD-3-Clause** content. Installing a metapackage never pulls in non-permissive code.
-
-Individual packages may carry other open-source-compatible licenses (EPL-2.0, LGPL-3.0, MPL-2.0). When such packages exist, they're standalone — install them explicitly and accept the corresponding obligations. See each package's `License:` field.
-
-In Phase 2, metapackages will match upstream ROS 2 composition honestly — the aggregate license becomes `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (Qt via rviz2) and possibly `AND EPL-2.0` (Cyclone DDS as alt RMW). All non-permissive components ship dynamically linked.
+Individual packages may carry other Fedora-allowed licenses (EPL-2.0, LGPL-3.0, MPL-2.0); none are currently in the package set. If any are added later, they ship as standalones — install them explicitly and accept the corresponding obligations.
 
 Full scope and policy: [`docs/SCOPE.md`](docs/SCOPE.md).
 
@@ -68,18 +68,22 @@ Every library package produces:
 
 Pure-Python packages use `python3-<pkg>` instead of the runtime/devel split. Message-only packages still produce `-devel` subpackages for the generated headers and CMake config.
 
-## Security
+## Engineering hygiene
 
-- Built with Fedora's hardening flags (`_FORTIFY_SOURCE=3`, full RELRO, PIE, stack-clash protection, CFI).
-- System libraries linked rather than vendored — Fedora's CVE pipeline covers transitive deps.
+These are practices applied because they are good engineering, not because this COPR is making production-grade SLA claims (it isn't — see the disclaimer at the top):
+
+- Built with Fedora's hardening flags (`_FORTIFY_SOURCE=3`, full RELRO, PIE, stack-clash protection, CFI) inherited from `redhat-rpm-config`.
+- System libraries linked rather than vendored.
 - CycloneDX SBOM published per build at `%{_datadir}/doc/<package>/sbom.cdx.json`.
 - COPR repo metadata and packages are signed by the COPR project key. Fingerprint: _to be filled in after first build_.
+
+For production deployments, do not rely on this COPR — use Open Robotics's official Fedora Lyrical packages once they ship.
 
 Vulnerability disclosure: [`docs/SECURITY.md`](docs/SECURITY.md).
 
 ## Related work
 
-This repo is one of several ROS-on-Fedora packaging efforts. The [Fedora Robotics SIG](https://gitlab.com/fedora/sigs/robotics) is the official long-term home for ROS in Fedora's main repositories; their `fedros`/`rosfed` projects use a similar bloom-spec approach. This COPR is intentionally narrower and ships sooner via `/opt/ros/jazzy/`. See [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md) for the full landscape and how the two efforts complement each other.
+The [Open Robotics official Fedora packages](https://docs.ros.org/) (starting with Lyrical, the 2026 LTS) are the production-grade path for ROS 2 on Fedora. The [Fedora Robotics SIG](https://gitlab.com/fedora/sigs/robotics) (whose `fedros` / `rosfed` projects use a similar bloom-spec approach) is working separately on Fedora-main-repo inclusion on a longer timeline. This COPR is narrower than either: a development-only sandbox for Jazzy on Fedora until the official Lyrical packages arrive. See [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md) for the full landscape.
 
 ## Documentation
 

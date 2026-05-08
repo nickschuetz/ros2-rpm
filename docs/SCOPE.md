@@ -37,21 +37,13 @@ For the realized dependency-ordered build pipeline (ament_cmake stack → utilit
 - `ros-jazzy-ros-core` — core libraries and runtime, mirrors upstream's `ros_core`.
 - `ros-jazzy-ros-base` — `ros_core` plus the ten direct consumers above. Recommended default install during Phase 1.
 
-## Phase 2 — `ros-jazzy-desktop` equivalent (eventual)
+## Phase 2 — cancelled (ADR 0010)
 
-Approximately 320 packages — full upstream `ros-jazzy-desktop` composition: `rviz2` (visualization), `rqt_*` (debugger and tooling suite), navigation stacks, alternative RMW implementations, common visualization deps. License aggregate becomes heterogeneous (`Apache-2.0 AND BSD-3-Clause AND LGPL-3.0`, plus `EPL-2.0` if Cyclone DDS is shipped).
+Originally planned: ~320-package full `ros-jazzy-desktop` equivalent. **Cancelled on 2026-05-08.** Open Robotics is taking on official Fedora support starting with Lyrical Luth, which will deliver this surface as part of the production-grade vendor packages. Continuing to build it here would duplicate that effort. The Phase 2 entry-gate criteria are kept in the historical ADR (0006) as context but are not active.
 
-Phase 2 entry gate (all must hold):
+## Phase 3 — dropped (ADR 0010)
 
-1. Phase 1 has shipped at least one stable build of every package across all 8 chroot/arch pairs.
-2. Phase 1 build matrix has been green for 30+ continuous days.
-3. CVE-feed pipeline has demonstrably triggered at least one rebuild for a Fedora-system-dep CVE without manual intervention.
-4. Source pin sync from rosdistro is automated.
-5. Maintainer bandwidth confirmed for ~1 day/week steady-state.
-
-## Phase 3 — Fedora main-repo inclusion (aspirational, separate effort)
-
-FHS install layout (`/usr/lib64/ros2-jazzy/...`) and submission to Fedora main. Pursued only after upstream ROS 2 itself supports `CMAKE_INSTALL_PREFIX`-driven installs without hardcoded `/opt/ros/$DISTRO`. Not undertaken via local patches in this repo. See ADR 0007.
+Originally aspirational: Fedora-main-repo inclusion via FHS layout. **Dropped on 2026-05-08.** Production distribution is now Open Robotics's lane. The Fedora Robotics SIG continues a separate FHS-rebasing effort on its own timeline; see [`RELATED-WORK.md`](RELATED-WORK.md).
 
 ## Out of scope (across all phases)
 
@@ -62,16 +54,16 @@ FHS install layout (`/usr/lib64/ros2-jazzy/...`) and submission to Fedora main. 
 
 ## Boundary rules
 
-These hold in every phase:
-
 1. **Each spec accurately declares its license.** No aggregation hiding.
-2. **Phase 1 metapackages stay permissive-only.** During Phase 1, no LGPL/EPL/MPL package is `Requires:`-pulled by `ros-jazzy-ros-core` or `ros-jazzy-ros-base`. Phase 2 relaxes this to match upstream metapackage composition honestly.
+2. **Metapackages stay permissive-only.** No LGPL/EPL/MPL package is `Requires:`-pulled by `ros-jazzy-ros-core` or `ros-jazzy-ros-base`.
 3. **No bundled forks of system libraries.** Fedora-shipped libs are linked, never vendored.
 4. **Any package adding a license type not previously seen in the COPR triggers an ADR.**
-5. **Any addition of >5 transitive deps in a single PR triggers an ADR** (full-desktop-creep guard during Phase 1).
+5. **Any addition of >5 transitive deps in a single PR triggers an ADR** (scope-creep guard).
+6. **No expansion beyond Phase 1.** ADR 0010 closed Phase 2 / Phase 3. Adding packages outside the minimal subset requires either a new ADR overturning 0010 or a clear bugfix justification (e.g. an existing Phase 1 package needs a missing transitive dep packaged).
 
 ## Consumers
 
-- **Primary**: [`o3de-rpm`](https://github.com/nickschuetz/o3de-rpm) via its runtime-deps COPR [`hellaenergy/o3de-dependencies`](https://copr.fedorainfracloud.org/coprs/hellaenergy/o3de-dependencies), which lists `hellaenergy/ros2` as a runtime External Repository.
-- **Phase 1 secondary**: any Fedora 44+ or CentOS Stream 10 user wanting a permissive ROS 2 Jazzy core install without enabling the RHEL-targeted upstream RPMs.
-- **Phase 2 secondary**: any Fedora 44+ or Stream 10 user wanting a complete ROS 2 desktop install on Fedora-family without using a RHEL container.
+- **Primary**: developers compiling and experimenting against ROS 2 Jazzy on Fedora 44+ or CentOS Stream 10 today, ahead of Open Robotics's official Lyrical Fedora packages.
+- **Secondary**: [`o3de-rpm`](https://github.com/nickschuetz/o3de-rpm) via its runtime-deps COPR [`hellaenergy/o3de-dependencies`](https://copr.fedorainfracloud.org/coprs/hellaenergy/o3de-dependencies), which lists `hellaenergy/ros2` as a runtime External Repository for development integration testing.
+
+**Not a consumer**: any production deployment, robotics fleet, or regulated environment. Those users belong on Open Robotics's official Fedora packages once they ship.

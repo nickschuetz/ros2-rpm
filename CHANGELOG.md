@@ -2,7 +2,29 @@
 
 All user-visible changes to the COPR packages live here. Per-spec `%changelog` entries are the audit trail for individual builds; this file summarizes the COPR-level "release" picture for humans.
 
-The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning here tracks the COPR's Phase boundaries, not any single package's upstream version.
+The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+## [Project pivot — development-only] — 2026-05-08
+
+After Phase 1 minimal subset shipped, the project was repositioned as **development-only**. Open Robotics is taking on official Fedora support starting with Lyrical Luth (the 2026 LTS); this COPR is no longer attempting to be the long-term Fedora ROS 2 distribution.
+
+### Changed
+
+- README, COPR description + instructions, GitHub repo description, CITATION.cff abstract, and `docs/RELATED-WORK.md` all updated to carry the **"Not the official ROS 2 packages for Fedora"** disclaimer and to point users at Open Robotics's upcoming Lyrical packages for production.
+- `docs/SCOPE.md` — Phase 2 (full `ros-jazzy-desktop` equivalent) marked **cancelled**; Phase 3 (Fedora main repo) marked **dropped**. Phase 1 minimal subset is the final scope.
+- `CLAUDE.md` — production-grade compliance language stripped; "STIG-adjacent" pitch removed; CVE-feed automation downgraded from required to optional. Added a **mandatory sync rule** that COPR description + instructions must be updated in the same change-window as any README / SCOPE / RELATED-WORK update.
+- Added [ADR 0010](docs/adr/0010-project-pivot-to-development-only.md) capturing the full pivot rationale. ADR 0001 and ADR 0006 carry retroactive notes.
+
+### Why
+
+- Open Robotics will deliver the production-grade equivalent for Lyrical, with vendor support and CVE tracking. Continuing to expand this COPR would duplicate that effort.
+- Without the disclaimer, users were at risk of deploying a development-grade COPR to production.
+
+### Unchanged
+
+- Phase 1 packages keep shipping — they are appropriate for development workflows.
+- Build hardening, license cleanliness, SBOM emission per build all retained because they are good engineering hygiene.
+- All 6 chroot/arch pairs (Fedora 44 / rawhide / CentOS Stream 10 × x86_64 + aarch64) continue to build on every change.
 
 ## [Phase 1 minimal subset] — 2026-05-08
 
@@ -45,7 +67,7 @@ Full rosidl message-generation chain: `rosidl_typesupport_interface`, `rosidl_py
 
 ### Build matrix
 
-All packages build on the full 8 chroot/arch matrix:
+All packages build on the full 6 chroot/arch matrix:
 
 | Distro | x86_64 | aarch64 |
 |---|---|---|
@@ -61,10 +83,6 @@ All packages build on the full 8 chroot/arch matrix:
 
 ### Known limitations
 
-- `ros-jazzy-rcl-lifecycle`, `ros-jazzy-rclcpp-lifecycle` deferred. Both depend on `lifecycle_msgs` which is not yet packaged. Tracked for a Phase 1.5 follow-up.
-- `rmw_cyclonedds_cpp` and `rmw_connextdds` (the other two RMW implementations in the upstream `rmw_implementation_packages` group) are not packaged; `rmw_implementation`'s Requires is patched to depend only on `rmw_fastrtps_cpp`. Phase 2 will add Cyclone DDS (EPL-2.0).
+- `ros-jazzy-rcl-lifecycle`, `ros-jazzy-rclcpp-lifecycle` deferred. Both depend on `lifecycle_msgs` which is not yet packaged. May be filled in if a development user needs them; otherwise Open Robotics's Lyrical packages will cover this surface.
+- `rmw_cyclonedds_cpp` and `rmw_connextdds` (the other two RMW implementations in the upstream `rmw_implementation_packages` group) are not packaged; `rmw_implementation`'s Requires is patched to depend only on `rmw_fastrtps_cpp`. Will not be added — those belong on Open Robotics's official packages.
 - COPR signing fingerprint placeholder in README — to be replaced with the real fingerprint after the first signed build.
-
-## [Unreleased] — Phase 2 → `ros-jazzy-desktop` equivalent
-
-See [ADR 0006](docs/adr/0006-full-ros2-desktop-as-eventual-scope.md) for the entry gate. Packages will be added in dependency-ordered batches and each batch noted here on landing.

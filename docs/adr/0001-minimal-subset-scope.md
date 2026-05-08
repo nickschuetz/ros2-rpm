@@ -1,8 +1,9 @@
 # ADR 0001: Minimal subset scope
 
-- **Status**: Accepted as Phase 1 scope; superseded in part by ADR 0006 which makes this the first phase of a phased path to full `ros-jazzy-desktop`.
+- **Status**: Accepted as the project's final scope (after the 2026-05-08 development-only pivot — see ADR 0010). Originally framed as Phase 1 of a phased plan; ADR 0006 (Phase 2 expansion) is now cancelled and ADR 0010 makes this minimal subset the project's permanent scope.
 - **Date**: 2026-05-07
-- **Realization note (2026-05-08)**: Phase 1 build is in progress. The "~70 packages" estimate held — current count is ~50+ live with ~20 more in the message-tier and rcl/rclcpp/tf2 layers to reach full Phase 1. See [`docs/build-order.md`](../build-order.md) for the realized dependency tiers, which surfaced ~10 additional supporting packages (rcutils, rcpputils, rmw, fastdds chain, ament_index_python, python_cmake_module, rpyutils, rosidl_dynamic_typesupport, unique_identifier_msgs, rosidl_default_generators/runtime) that the original ADR didn't enumerate by name.
+- **Realization note (2026-05-08)**: Phase 1 minimal subset shipped — ~85 packages live across all 6 chroot/arch pairs. The "~70 packages" estimate undercounted by ~15 due to the rosidl chain expanding more than expected. See [`docs/build-order.md`](../build-order.md) for the realized dependency tiers.
+- **Pivot note (2026-05-08)**: Open Robotics is taking on official Fedora support starting with Lyrical Luth. ADR 0010 makes this minimal subset the project's final scope (no Phase 2, no Phase 3) and reframes the entire repo as development-only.
 
 ## Context
 
