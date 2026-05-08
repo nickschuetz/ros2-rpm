@@ -69,29 +69,24 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
 # need additions or trimming.
-%{install_prefix}/share/%{pkg_name}/
-# Cyclone DDS is upstream Eclipse, not a bloom-shaped ROS package — install
-# layout is its own. List explicitly rather than glob to keep ownership
-# scoped to this package only.
+# Cyclone DDS is upstream Eclipse, not a bloom-shaped ROS package. The
+# %files list below was derived from a local mock build's "-- Installing:"
+# log — list explicitly rather than glob to keep ownership scoped to this
+# package only.
 %{install_prefix}/include/dds/
+%{install_prefix}/include/ddsc/
 %{install_prefix}/include/idl/
 %{install_prefix}/include/idlc/
-%{install_prefix}/include/ddsc/
-%{install_prefix}/include/iceoryx/
-%{install_prefix}/include/CUnit/
 %{install_prefix}/lib/libddsc.so*
-%{install_prefix}/lib/libcdds.so*
-%{install_prefix}/lib/libddsrt.so*
-%{install_prefix}/lib/libcunit.so*
-%{install_prefix}/lib/libidl.so*
-%{install_prefix}/lib/libidlc.so*
-%{install_prefix}/lib/libdds_security_*.so*
+%{install_prefix}/lib/libcycloneddsidl.so*
+%{install_prefix}/lib/libdds_security_ac.so
+%{install_prefix}/lib/libdds_security_auth.so
+%{install_prefix}/lib/libdds_security_crypto.so
 %{install_prefix}/lib/cmake/CycloneDDS/
 %{install_prefix}/lib/pkgconfig/CycloneDDS.pc
 %{install_prefix}/bin/idlc
 %{install_prefix}/bin/ddsperf
-%{install_prefix}/bin/cunit
-%{install_prefix}/etc/CycloneDDS/
+%doc %{install_prefix}/share/doc
 
 
 %changelog
