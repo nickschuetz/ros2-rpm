@@ -1,0 +1,77 @@
+name: upstream-drift
+
+# Compare scripts/packages.yaml versions against upstream
+# rosdistro/jazzy/distribution.yaml and post (or update) a tracking issue
+# when drift is detected. Runs nightly + on demand.
+
+on:
+  schedule:
+    # Daily at 07:00 UTC (one hour after smoke-test workflow).
+    - cron: '0 7 * * *'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - 'scripts/packages.yaml'
+      - 'scripts/check-upstream.py'
+      - '.github/workflows/upstream-drift.yml'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Run drift check
+        id: drift
+        run: |
+          set -euo pipefail
+          python3 scripts/check-upstream.py > /tmp/drift-report.md
+          # Number of packages behind = grep `| status: behind |` count.
+          # Fast and accurate enough; we use the JSON output as the source of truth.
+          python3 scripts/check-upstream.py --json > /tmp/drift-report.json
+          BEHIND=$(python3 -c '
+          import json
+          with open("/tmp/drift-report.json") as f:
+              d = json.load(f)
+          print(sum(1 for r in d if r["status"] == "behind"))
+          ')
+          echo "behind=$BEHIND" >> $GITHUB_OUTPUT
+          cat /tmp/drift-report.md
+          {
+            echo '## Drift report'
+            echo
+            cat /tmp/drift-report.md
+          } >> $GITHUB_STEP_SUMMARY
+
+      - name: Open / update drift tracking issue
+        if: steps.drift.outputs.behind != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          TITLE="Upstream drift: ${{ steps.drift.outputs.behind }} package(s) behind rosdistro/jazzy"
+
+          # Find an existing open drift tracking issue (we keep one
+          # canonical issue rather than spawning a new one daily).
+          EXISTING=$(gh issue list --repo "$REPO" --state open --label drift \
+                       --json number --jq '.[0].number' || echo "")
+
+          if [ -n "$EXISTING" ]; then
+            gh issue edit "$EXISTING" --repo "$REPO" --title "$TITLE" \
+              --body-file /tmp/drift-report.md
+            echo "Updated #$EXISTING"
+          else
+            gh issue create --repo "$REPO" --title "$TITLE" \
+              --label drift,maintenance \
+              --body-file /tmp/drift-report.md
+          fi
