@@ -69,6 +69,9 @@ processes.
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}.dist-info/
+# launch_testing's setup.py installs example_processes/ to lib/launch_testing/
+# (not site-packages) for use as test fixtures.
+%{install_prefix}/lib/%{pkg_name}/
 %{install_prefix}/share/ament_index/resource_index/packages/%{pkg_name}
 %{install_prefix}/share/%{pkg_name}/
 

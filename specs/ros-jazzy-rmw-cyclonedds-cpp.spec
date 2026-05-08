@@ -1,7 +1,3 @@
-WARNING: rosdep could not resolve 'cyclonedds' on fedora:44
-WARNING: rosdep could not resolve 'iceoryx_binding_c' on fedora:44
-WARNING: rosdep could not resolve 'cyclonedds' on fedora:44
-WARNING: rosdep could not resolve 'iceoryx_binding_c' on fedora:44
 %global ros_distro       jazzy
 %global pkg_name         rmw_cyclonedds_cpp
 %global install_prefix   /opt/ros/jazzy
@@ -21,6 +17,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-jazzy-ament-cmake-ros
+BuildRequires:  ros-jazzy-cyclonedds
 BuildRequires:  ros-jazzy-rcpputils
 BuildRequires:  ros-jazzy-rcutils
 BuildRequires:  ros-jazzy-rmw
@@ -30,6 +27,7 @@ BuildRequires:  ros-jazzy-rosidl-typesupport-introspection-c
 BuildRequires:  ros-jazzy-rosidl-typesupport-introspection-cpp
 BuildRequires:  ros-jazzy-tracetools
 
+Requires:       ros-jazzy-cyclonedds
 Requires:       ros-jazzy-rcpputils
 Requires:       ros-jazzy-rcutils
 Requires:       ros-jazzy-rmw
