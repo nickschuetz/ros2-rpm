@@ -120,6 +120,12 @@ ament_cmake_pytest:
   build_subdir: ament_cmake_pytest
   disable_tests: true
 
+ament_cmake_vendor_package:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_vendor_package
+  disable_tests: true
+
 # ROS 2 core build extension on top of ament_cmake. Single-package repo.
 # Jazzy is at 0.12.0; upstream master is 0.9.x — use the bloom release tag.
 ament_cmake_ros:
@@ -333,6 +339,200 @@ vision_msgs:
 control_msgs:
   source_url: https://github.com/ros2-gbp/control_msgs-release/archive/refs/tags/release/jazzy/control_msgs/{version}-1.tar.gz
   source_dir: control_msgs-release-release-jazzy-control_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+# rclcpp + tf2_ros chain — final layer of Phase 1 minimal subset.
+ament_index_cpp:
+  source_url: https://github.com/ros2-gbp/ament_index-release/archive/refs/tags/release/jazzy/ament_index_cpp/{version}-1.tar.gz
+  source_dir: ament_index-release-release-jazzy-ament_index_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+type_description_interfaces:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/type_description_interfaces/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-jazzy-type_description_interfaces-{version}-1
+  noarch: false
+  disable_tests: true
+
+rcl_interfaces:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/rcl_interfaces/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-jazzy-rcl_interfaces-{version}-1
+  noarch: false
+  disable_tests: true
+
+rosgraph_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/rosgraph_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-jazzy-rosgraph_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+composition_interfaces:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/composition_interfaces/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-jazzy-composition_interfaces-{version}-1
+  noarch: false
+  disable_tests: true
+
+statistics_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/statistics_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-jazzy-statistics_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+libyaml_vendor:
+  source_url: https://github.com/ros2-gbp/libyaml_vendor-release/archive/refs/tags/release/jazzy/libyaml_vendor/{version}-2.tar.gz
+  source_dir: libyaml_vendor-release-release-jazzy-libyaml_vendor-{version}-2
+  noarch: false
+  disable_tests: true
+
+libstatistics_collector:
+  source_url: https://github.com/ros2-gbp/libstatistics_collector-release/archive/refs/tags/release/jazzy/libstatistics_collector/{version}-1.tar.gz
+  source_dir: libstatistics_collector-release-release-jazzy-libstatistics_collector-{version}-1
+  noarch: false
+  disable_tests: true
+
+tracetools:
+  source_url: https://github.com/ros2-gbp/ros2_tracing-release/archive/refs/tags/release/jazzy/tracetools/{version}-1.tar.gz
+  source_dir: ros2_tracing-release-release-jazzy-tracetools-{version}-1
+  noarch: false
+  disable_tests: true
+
+rcl_logging_interface:
+  source_url: https://github.com/ros2-gbp/rcl_logging-release/archive/refs/tags/release/jazzy/rcl_logging_interface/{version}-1.tar.gz
+  source_dir: rcl_logging-release-release-jazzy-rcl_logging_interface-{version}-1
+  noarch: false
+  disable_tests: true
+
+rcl_logging_spdlog:
+  source_url: https://github.com/ros2-gbp/rcl_logging-release/archive/refs/tags/release/jazzy/rcl_logging_spdlog/{version}-1.tar.gz
+  source_dir: rcl_logging-release-release-jazzy-rcl_logging_spdlog-{version}-1
+  noarch: false
+  disable_tests: true
+
+rmw_dds_common:
+  source_url: https://github.com/ros2-gbp/rmw_dds_common-release/archive/refs/tags/release/jazzy/rmw_dds_common/{version}-1.tar.gz
+  source_dir: rmw_dds_common-release-release-jazzy-rmw_dds_common-{version}-1
+  noarch: false
+  disable_tests: true
+
+rmw_fastrtps_shared_cpp:
+  source_url: https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/jazzy/rmw_fastrtps_shared_cpp/{version}-1.tar.gz
+  source_dir: rmw_fastrtps-release-release-jazzy-rmw_fastrtps_shared_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+rmw_fastrtps_cpp:
+  source_url: https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/jazzy/rmw_fastrtps_cpp/{version}-1.tar.gz
+  source_dir: rmw_fastrtps-release-release-jazzy-rmw_fastrtps_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+rmw_fastrtps_dynamic_cpp:
+  source_url: https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/jazzy/rmw_fastrtps_dynamic_cpp/{version}-1.tar.gz
+  source_dir: rmw_fastrtps-release-release-jazzy-rmw_fastrtps_dynamic_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+rmw_implementation:
+  source_url: https://github.com/ros2-gbp/rmw_implementation-release/archive/refs/tags/release/jazzy/rmw_implementation/{version}-1.tar.gz
+  source_dir: rmw_implementation-release-release-jazzy-rmw_implementation-{version}-1
+  noarch: false
+  disable_tests: true
+
+rcl_yaml_param_parser:
+  source_url: https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/jazzy/rcl_yaml_param_parser/{version}-2.tar.gz
+  source_dir: rcl-release-release-jazzy-rcl_yaml_param_parser-{version}-2
+  noarch: false
+  disable_tests: true
+
+rcl:
+  source_url: https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/jazzy/rcl/{version}-2.tar.gz
+  source_dir: rcl-release-release-jazzy-rcl-{version}-2
+  noarch: false
+  disable_tests: true
+
+rcl_action:
+  source_url: https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/jazzy/rcl_action/{version}-2.tar.gz
+  source_dir: rcl-release-release-jazzy-rcl_action-{version}-2
+  noarch: false
+  disable_tests: true
+
+rcl_lifecycle:
+  source_url: https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/jazzy/rcl_lifecycle/{version}-2.tar.gz
+  source_dir: rcl-release-release-jazzy-rcl_lifecycle-{version}-2
+  noarch: false
+  disable_tests: true
+
+message_filters:
+  source_url: https://github.com/ros2-gbp/ros2_message_filters-release/archive/refs/tags/release/jazzy/message_filters/{version}-1.tar.gz
+  source_dir: ros2_message_filters-release-release-jazzy-message_filters-{version}-1
+  noarch: false
+  disable_tests: true
+
+rclcpp:
+  source_url: https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp/{version}-1.tar.gz
+  source_dir: rclcpp-release-release-jazzy-rclcpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+rclcpp_action:
+  source_url: https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp_action/{version}-1.tar.gz
+  source_dir: rclcpp-release-release-jazzy-rclcpp_action-{version}-1
+  noarch: false
+  disable_tests: true
+
+rclcpp_components:
+  source_url: https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp_components/{version}-1.tar.gz
+  source_dir: rclcpp-release-release-jazzy-rclcpp_components-{version}-1
+  noarch: false
+  disable_tests: true
+
+# tf2 chain.
+tf2:
+  source_url: https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/jazzy/tf2/{version}-1.tar.gz
+  source_dir: geometry2-release-release-jazzy-tf2-{version}-1
+  noarch: false
+  disable_tests: true
+
+tf2_msgs:
+  source_url: https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/jazzy/tf2_msgs/{version}-1.tar.gz
+  source_dir: geometry2-release-release-jazzy-tf2_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+tf2_ros:
+  source_url: https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/jazzy/tf2_ros/{version}-1.tar.gz
+  source_dir: geometry2-release-release-jazzy-tf2_ros-{version}-1
+  noarch: false
+  disable_tests: true
+
+# Additional deps surfaced by the rclcpp/tf2_ros research:
+rmw_implementation_cmake:
+  source_url: https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/jazzy/rmw_implementation_cmake/{version}-1.tar.gz
+  source_dir: rmw-release-release-jazzy-rmw_implementation_cmake-{version}-1
+  disable_tests: true
+
+rosidl_dynamic_typesupport_fastrtps:
+  source_url: https://github.com/ros2-gbp/rosidl_dynamic_typesupport_fastrtps-release/archive/refs/tags/release/jazzy/rosidl_dynamic_typesupport_fastrtps/{version}-3.tar.gz
+  source_dir: rosidl_dynamic_typesupport_fastrtps-release-release-jazzy-rosidl_dynamic_typesupport_fastrtps-{version}-3
+  noarch: false
+  disable_tests: true
+
+class_loader:
+  source_url: https://github.com/ros2-gbp/class_loader-release/archive/refs/tags/release/jazzy/class_loader/{version}-3.tar.gz
+  source_dir: class_loader-release-release-jazzy-class_loader-{version}-3
+  noarch: false
+  disable_tests: true
+
+console_bridge_vendor:
+  source_url: https://github.com/ros2-gbp/console_bridge_vendor-release/archive/refs/tags/release/jazzy/console_bridge_vendor/{version}-3.tar.gz
+  source_dir: console_bridge_vendor-release-release-jazzy-console_bridge_vendor-{version}-3
+  noarch: false
+  disable_tests: true
+
+spdlog_vendor:
+  source_url: https://github.com/ros2-gbp/spdlog_vendor-release/archive/refs/tags/release/jazzy/spdlog_vendor/{version}-1.tar.gz
+  source_dir: spdlog_vendor-release-release-jazzy-spdlog_vendor-{version}-1
   noarch: false
   disable_tests: true
 
