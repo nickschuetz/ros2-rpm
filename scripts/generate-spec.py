@@ -194,6 +194,17 @@ def runtime_requires(pkg: dict, build_type: str, distro: str, os_version: str) -
     return sorted(set(base))
 
 
+def has_console_scripts(setup_py_path: Path) -> bool:
+    """Detect entry_points console_scripts in a setup.py — those land in /bin."""
+    if not setup_py_path.is_file():
+        return False
+    try:
+        text = setup_py_path.read_text()
+    except Exception:
+        return False
+    return "console_scripts" in text
+
+
 def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     name = pkg["name"]
     version = pkg["version"]
@@ -210,6 +221,7 @@ def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     brs = build_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION, include_test=not cfg.get("disable_tests", False))
     rqs = runtime_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION)
 
+    py_src_root = pkg.get("_source_dir")
     if build_subdir:
         # Silence pushd/popd: their default output is the directory stack,
         # which RPM captures as buildrequires tokens during
@@ -224,6 +236,14 @@ def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
         py_pop = ""
         py_changelog_path = "CHANGELOG.rst"
         py_test_path = "test"
+
+    # Detect entry_points / console_scripts in setup.py — those land in
+    # /opt/ros/<distro>/bin/<name> and must be added to %files.
+    setup_py = py_src_root / "setup.py" if py_src_root else None
+    py_has_console_scripts = bool(setup_py and has_console_scripts(setup_py))
+    py_extra_files = (
+        f"%{{install_prefix}}/bin/*\n" if py_has_console_scripts else ""
+    )
 
     br_lines = "\n".join(f"BuildRequires:  {b}" for b in brs)
     rq_lines = "\n".join(f"Requires:       {r}" for r in rqs)
@@ -282,6 +302,7 @@ BuildArch:      noarch
 %files
 %license LICENSE
 %doc {py_changelog_path}
+{py_extra_files}
 # TODO: review the file list — generator emits a permissive glob and you may
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
 %{{install_prefix}}/lib/python%{{python3_version}}/site-packages/%{{pkg_name}}/
@@ -372,15 +393,19 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
 
     # Detect installed include / lib trees from CMakeLists.txt rather than
     # gating on noarch (header-only packages are noarch but still ship headers).
-    ships_headers = bool(cmakelists and "DIRECTORY include" in cmakelists)
+    # Use regex to tolerate the install(\n  KEYWORD ...) multiline pattern that
+    # CMake authors commonly use.
+    import re as _re
+    cml = cmakelists or ""
+    ships_headers = bool(_re.search(r"install\s*\(\s*[^)]*DIRECTORY\s+include", cml, _re.S))
     # Distinguish two `lib/...` install patterns:
     #   - install(TARGETS ...) puts compiled .so files at lib/lib<name>.so*
     #   - install(PROGRAMS ...) puts helper scripts at lib/<pkg>/<script>
-    # The two %files entries differ.
-    ships_compiled_lib = bool(cmakelists and (
-        "install(TARGETS" in cmakelists or "ament_export_libraries" in cmakelists
-    ))
-    ships_lib_scripts = bool(cmakelists and "install(PROGRAMS" in cmakelists)
+    ships_compiled_lib = bool(
+        _re.search(r"install\s*\(\s*TARGETS\b", cml, _re.S)
+        or "ament_export_libraries" in cml
+    )
+    ships_lib_scripts = bool(_re.search(r"install\s*\(\s*PROGRAMS\b", cml, _re.S))
     extra_arch_files = ""
     if ships_headers:
         extra_arch_files += "%{install_prefix}/include/%{pkg_name}/\n"

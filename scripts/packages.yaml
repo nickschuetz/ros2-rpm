@@ -194,21 +194,21 @@ rosidl_runtime_cpp:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_runtime_cpp
-  noarch: false
+  # Header-only C++ library — no .so produced.
   disable_tests: true
 
 rosidl_generator_c:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_generator_c
-  noarch: false
+  # Python-based code generator (emits C, doesn't compile any).
   disable_tests: true
 
 rosidl_generator_cpp:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_generator_cpp
-  noarch: false
+  # Python-based code generator (emits C++, doesn't compile any).
   disable_tests: true
 
 rosidl_generator_type_description:
@@ -221,12 +221,12 @@ rosidl_typesupport_introspection_c:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_typesupport_introspection_c
-  noarch: false
+  noarch: false  # compiles librosidl_typesupport_introspection_c.so
   disable_tests: true
 
 rosidl_typesupport_introspection_cpp:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_typesupport_introspection_cpp
-  noarch: false
+  noarch: false  # compiles librosidl_typesupport_introspection_cpp.so
   disable_tests: true
