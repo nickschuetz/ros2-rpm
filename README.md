@@ -8,15 +8,29 @@
 
 Development-only ROS 2 Jazzy minimal subset (~85 packages — `rclcpp`, `tf2_ros`, common message packages, `rmw_fastrtps_cpp` + Fast DDS, transitive deps), built for **Fedora 44+** and **CentOS Stream 10** on **x86_64** and **aarch64**, distributed via the Fedora COPR [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2).
 
-## Scope (final, post-pivot)
+## Scope
 
-Phase 1 minimal subset is the **final scope** of this repo. Phase 2 (full `ros-jazzy-desktop` equivalent) is **cancelled** — Open Robotics will deliver that for Lyrical. See [ADR 0010](docs/adr/0010-project-pivot-to-development-only.md) for the full rationale.
+Two phases, both development-only. The disclaimer at the top of this README applies to both.
 
-### Shipping today (~85 packages, all live across all 6 chroot/arch pairs)
+### Phase 1 — minimal subset (live)
 
-Direct consumers: `rclcpp`, `tf2_ros`, common message packages (`std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `trajectory_msgs`, `ackermann_msgs`, `vision_msgs`, `control_msgs`), plus the metapackages `ros-jazzy-ros-core` and `ros-jazzy-ros-base`. Built on `fedora-44`, `fedora-rawhide`, `centos-stream-10` × `x86_64` + `aarch64`.
+~85 packages: `rclcpp`, `tf2_ros`, common message packages (`std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `trajectory_msgs`, `ackermann_msgs`, `vision_msgs`, `control_msgs`), `rmw_fastrtps_cpp` + Fast DDS, plus the metapackages `ros-jazzy-ros-core` and `ros-jazzy-ros-base`. Built on `fedora-44`, `fedora-rawhide`, `centos-stream-10` × `x86_64` + `aarch64`. License-clean: only `Apache-2.0` and `BSD-3-Clause`.
 
-Full list with build-status markers in [`docs/SCOPE.md`](docs/SCOPE.md). Dependency-ordered build pipeline in [`docs/build-order.md`](docs/build-order.md). License-clean: every package in default metapackages carries only `Apache-2.0` or `BSD-3-Clause`.
+### Phase 2 — dev-sandbox expansion (in progress)
+
+Per [ADR 0011](docs/adr/0011-phase-2-dev-sandbox-expansion.md), Phase 2 expands the development sandbox so developers can visualize, debug, and test their code locally on Fedora — without forcing a hop to a RHEL container. Phase 2 is **smaller than the originally-planned ~320-package full desktop** (the originally-cancelled Phase 2 in [ADR 0010](docs/adr/0010-project-pivot-to-development-only.md)) — only the developer-tooling slice. Adds the `ros-jazzy-ros-desktop` metapackage with a heterogeneous license aggregate honestly disclosed.
+
+Included:
+- `rviz2` + plugin chain (visualization).
+- `rqt` + key plugins (`rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_service_caller`, `rqt_action`, `rqt_plot`).
+- `ros2cli` and per-domain CLI tools (`ros2pkg`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`, `ros2run`).
+- `rmw_cyclonedds_cpp` + `cyclonedds` as alternate RMW (adds `EPL-2.0`).
+- `launch` family (`launch`, `launch_ros`, `launch_xml`, `launch_yaml`).
+- `demo_nodes_cpp` and `demo_nodes_py` for end-to-end environment verification.
+
+Explicitly **not** in Phase 2 dev-sandbox: full `nav2_*` navigation, `ros2control`, simulation bridges, deployment tooling. Those are production-shaped surfaces and belong on Open Robotics's official Lyrical packages.
+
+Full scope and per-package status in [`docs/SCOPE.md`](docs/SCOPE.md). Dependency-ordered build pipeline in [`docs/build-order.md`](docs/build-order.md).
 
 ### Sunset
 
@@ -52,11 +66,11 @@ Packages install to `/opt/ros/jazzy/` per upstream ROS 2 convention. Setup envir
 
 ## License posture
 
-Default metapackages (`ros-jazzy-ros-core`, `ros-jazzy-ros-base`) contain only **Apache-2.0** and **BSD-3-Clause** content. Installing a metapackage never pulls in non-permissive code.
+Default metapackages `ros-jazzy-ros-core` and `ros-jazzy-ros-base` contain only **Apache-2.0** and **BSD-3-Clause** content. Installing either never pulls in non-permissive code — that path stays clean by design.
 
-Individual packages may carry other Fedora-allowed licenses (EPL-2.0, LGPL-3.0, MPL-2.0); none are currently in the package set. If any are added later, they ship as standalones — install them explicitly and accept the corresponding obligations.
+`ros-jazzy-ros-desktop` (the Phase 2 dev-sandbox metapackage) declares its actual aggregate honestly: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (Qt via `rviz2`/rqt) and `AND EPL-2.0` if Cyclone DDS is included. Installing it is an explicit opt-in to the heterogeneous license aggregate.
 
-Full scope and policy: [`docs/SCOPE.md`](docs/SCOPE.md).
+All non-permissive packages link dynamically against system libraries (LGPL-3.0 / EPL-2.0 obligations). Full scope and per-license-type policy: [`docs/SCOPE.md`](docs/SCOPE.md).
 
 ## Subpackages
 

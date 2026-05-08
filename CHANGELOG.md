@@ -4,6 +4,28 @@ All user-visible changes to the COPR packages live here. Per-spec `%changelog` e
 
 The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Phase 2 reopened — dev-sandbox expansion] — 2026-05-08
+
+Same day as the development-only pivot, [ADR 0011](docs/adr/0011-phase-2-dev-sandbox-expansion.md) reopened a smaller Phase 2 — the developer-tooling slice of `ros-jazzy-desktop` so visualization and debugging UX is reasonable on Fedora during the wait for Open Robotics's official Lyrical packages. Production positioning unchanged: still development-only, disclaimer banner unchanged.
+
+### Planned Phase 2 additions
+
+- `rviz2` + plugin chain (visualization). Adds **LGPL-3.0** to the COPR aggregate (Qt).
+- `rqt` + key plugins (`rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_service_caller`, `rqt_action`, `rqt_plot`).
+- `ros2cli` suite (`ros2pkg`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`, `ros2run`).
+- `rmw_cyclonedds_cpp` + `cyclonedds` as alternate RMW. Adds **EPL-2.0** to the COPR aggregate.
+- `launch` family + `launch_testing`.
+- `demo_nodes_cpp`, `demo_nodes_py` for environment verification.
+
+### Metapackage
+
+- **New**: `ros-jazzy-ros-desktop` with heterogeneous License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (and `AND EPL-2.0` if Cyclone DDS is shipped).
+- `ros-jazzy-ros-core` and `ros-jazzy-ros-base` stay **permissive-only**. Users who run `dnf install ros-jazzy-ros-base` continue to get only Apache-2.0 / BSD-3-Clause content.
+
+### Out of scope (per ADR 0011)
+
+`nav2_*`, `ros2control`, simulation bridges, deployment tooling. Production-shaped surfaces; users belong on Open Robotics's official Lyrical packages.
+
 ## [Project pivot — development-only] — 2026-05-08
 
 After Phase 1 minimal subset shipped, the project was repositioned as **development-only**. Open Robotics is taking on official Fedora support starting with Lyrical Luth (the 2026 LTS); this COPR is no longer attempting to be the long-term Fedora ROS 2 distribution.

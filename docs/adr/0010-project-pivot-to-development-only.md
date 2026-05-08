@@ -1,6 +1,6 @@
 # ADR 0010 — Project pivot to development-only; Lyrical official is OR's responsibility
 
-**Status:** Accepted (2026-05-08)
+**Status:** Accepted (2026-05-08). Amended same day by **ADR 0011** which reopens Phase 2 in a narrower form (dev-sandbox expansion of `ros-jazzy-desktop`, not the original ~320-package full desktop). The development-only positioning, the disclaimer-everywhere rule, and the production-deferral to Open Robotics all remain in force. Only the "Phase 2 cancelled" portion of this ADR is narrowed.
 
 ## Context
 
