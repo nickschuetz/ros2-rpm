@@ -762,3 +762,23 @@ tango_icons_vendor:
   source_dir: tango_icons_vendor-release-release-jazzy-tango_icons_vendor-{version}-1
   noarch: false
   disable_tests: true
+qt_gui:
+  source_url: https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/jazzy/qt_gui/{version}-1.tar.gz
+  source_dir: qt_gui_core-release-release-jazzy-qt_gui-{version}-1
+  noarch: true
+  disable_tests: true
+qt_gui_cpp:
+  source_url: https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/jazzy/qt_gui_cpp/{version}-1.tar.gz
+  source_dir: qt_gui_core-release-release-jazzy-qt_gui_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+qt_gui_py_common:
+  source_url: https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/jazzy/qt_gui_py_common/{version}-1.tar.gz
+  source_dir: qt_gui_core-release-release-jazzy-qt_gui_py_common-{version}-1
+  noarch: true
+  disable_tests: true
+qt_dotgraph:
+  source_url: https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/jazzy/qt_dotgraph/{version}-1.tar.gz
+  source_dir: qt_gui_core-release-release-jazzy-qt_dotgraph-{version}-1
+  noarch: true
+  disable_tests: true

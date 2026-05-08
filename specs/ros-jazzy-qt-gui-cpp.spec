@@ -1,47 +1,42 @@
 %global ros_distro       jazzy
-%global pkg_name         python_qt_binding
+%global pkg_name         qt_gui_cpp
 %global install_prefix   /opt/ros/jazzy
-# Pure-Python Qt binding glue — no compiled artifacts; debugsource list is empty.
-%global debug_package %{nil}
 
-Name:           ros-%{ros_distro}-python-qt-binding
-Version:        2.2.2
+Name:           ros-%{ros_distro}-qt-gui-cpp
+Version:        2.7.6
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy python_qt_binding
+Summary:        ROS 2 Jazzy qt_gui_cpp
 
 License:        BSD-3-Clause
-URL:            http://ros.org/wiki/python_qt_binding
-Source0:        https://github.com/ros2-gbp/python_qt_binding-release/archive/refs/tags/release/jazzy/python_qt_binding/2.2.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            http://ros.org/wiki/qt_gui_cpp
+Source0:        https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/jazzy/qt_gui_cpp/2.7.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
+BuildRequires:  pkgconfig
 BuildRequires:  python3-devel
-BuildRequires:  python3-qt5-devel python3-sip-devel libXext-devel
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  ros-jazzy-ament-cmake
+BuildRequires:  ros-jazzy-pluginlib
+BuildRequires:  ros-jazzy-python-qt-binding
+BuildRequires:  ros-jazzy-tinyxml2-vendor
 
-Requires:       python3-qt5-devel python3-sip-devel libXext-devel
+Requires:       ros-jazzy-pluginlib
+Requires:       ros-jazzy-qt-gui
+Requires:       ros-jazzy-tinyxml2-vendor
 
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 
 %description
-This stack provides Python bindings for Qt. There are two providers: pyside
-and pyqt. PySide2 is available under the GPL, LGPL and a commercial
-license. PyQt is released under the GPL.
-
-Both the bindings and tools to build bindings are included from each
-available provider. For PySide, it is called "Shiboken". For PyQt, this is
-called "SIP".
-
-Also provided is adapter code to make the user's Python code independent of
-which binding provider was actually used which makes it very easy to switch
-between these.
+qt_gui_cpp provides the foundation for C++-bindings for qt_gui and creates
+bindings for every generator available. At least one specific binding must
+be available in order to use C++-plugins.
 
 %prep
-%autosetup -p1 -n python_qt_binding-release-release-jazzy-python_qt_binding-2.2.2-1
+%autosetup -p1 -n qt_gui_core-release-release-jazzy-qt_gui_cpp-2.7.6-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -74,7 +69,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 echo 'tests skipped — see CLAUDE.md / packages.yaml'
 
 %files
-%license LICENSE
+# (no LICENSE file in source tree — see package.xml <license>)
 %doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
@@ -86,8 +81,10 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
+%{install_prefix}/include/%{pkg_name}/
+%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 2.2.2-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 2.7.6-1
 - Initial Fedora COPR build for ROS 2 Jazzy.
