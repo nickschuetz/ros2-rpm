@@ -1,15 +1,15 @@
 %global ros_distro       jazzy
-%global pkg_name         rqt
+%global pkg_name         rqt_graph
 %global install_prefix   /opt/ros/jazzy
 
-Name:           ros-%{ros_distro}-rqt
-Version:        1.6.3
+Name:           ros-%{ros_distro}-rqt-graph
+Version:        1.5.6
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy rqt
+Summary:        ROS 2 Jazzy rqt_graph
 
 License:        BSD-3-Clause
-URL:            http://ros.org/wiki/rqt
-Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/jazzy/rqt/1.6.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            http://wiki.ros.org/rqt_graph
+Source0:        https://github.com/ros2-gbp/rqt_graph-release/archive/refs/tags/release/jazzy/rqt_graph/1.5.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -20,18 +20,20 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-wheel
 
 Requires:       python3
+Requires:       ros-jazzy-ament-index-python
+Requires:       ros-jazzy-python-qt-binding
+Requires:       ros-jazzy-qt-dotgraph
 Requires:       ros-jazzy-rqt-gui
-Requires:       ros-jazzy-rqt-gui-cpp
 Requires:       ros-jazzy-rqt-gui-py
 
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 
 %description
-rqt is a Qt-based framework for GUI development for ROS.
+rqt_graph provides a GUI plugin for visualizing the ROS computation graph.
 
 %prep
-%autosetup -p1 -n rqt-release-release-jazzy-rqt-1.6.3-1
+%autosetup -p1 -n rqt_graph-release-release-jazzy-rqt_graph-1.5.6-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -74,15 +76,15 @@ PYEOF
 %files
 # (no LICENSE file in source tree — see package.xml <license>)
 %doc CHANGELOG.rst
+%{install_prefix}/bin/*
 
 # TODO: review the file list — generator emits a permissive glob and you may
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
-# rqt is a pure metapackage — setup.py has packages=[] (no Python modules).
-# Only ament_index sentinel + share/<pkg>/ + dist-info land in the buildroot.
+%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}.dist-info/
 %{install_prefix}/share/ament_index/resource_index/packages/%{pkg_name}
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.3-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 1.5.6-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

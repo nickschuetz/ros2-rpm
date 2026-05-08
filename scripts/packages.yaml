@@ -802,3 +802,38 @@ rqt_gui_py:
   source_dir: rqt-release-release-jazzy-rqt_gui_py-{version}-1
   noarch: true
   disable_tests: true
+rqt_graph:
+  source_url: https://github.com/ros2-gbp/rqt_graph-release/archive/refs/tags/release/jazzy/rqt_graph/{version}-1.tar.gz
+  source_dir: rqt_graph-release-release-jazzy-rqt_graph-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_topic:
+  source_url: https://github.com/ros2-gbp/rqt_topic-release/archive/refs/tags/release/jazzy/rqt_topic/{version}-1.tar.gz
+  source_dir: rqt_topic-release-release-jazzy-rqt_topic-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_console:
+  source_url: https://github.com/ros2-gbp/rqt_console-release/archive/refs/tags/release/jazzy/rqt_console/{version}-1.tar.gz
+  source_dir: rqt_console-release-release-jazzy-rqt_console-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_publisher:
+  source_url: https://github.com/ros2-gbp/rqt_publisher-release/archive/refs/tags/release/jazzy/rqt_publisher/{version}-1.tar.gz
+  source_dir: rqt_publisher-release-release-jazzy-rqt_publisher-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_action:
+  source_url: https://github.com/ros2-gbp/rqt_action-release/archive/refs/tags/release/jazzy/rqt_action/{version}-1.tar.gz
+  source_dir: rqt_action-release-release-jazzy-rqt_action-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_plot:
+  source_url: https://github.com/ros2-gbp/rqt_plot-release/archive/refs/tags/release/jazzy/rqt_plot/{version}-1.tar.gz
+  source_dir: rqt_plot-release-release-jazzy-rqt_plot-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_service_caller:
+  source_url: https://github.com/ros2-gbp/rqt_service_caller-release/archive/refs/tags/release/jazzy/rqt_service_caller/{version}-1.tar.gz
+  source_dir: rqt_service_caller-release-release-jazzy-rqt_service_caller-{version}-1
+  noarch: true
+  disable_tests: true
