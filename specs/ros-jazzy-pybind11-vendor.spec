@@ -1,6 +1,7 @@
 %global ros_distro       jazzy
 %global pkg_name         pybind11_vendor
 %global install_prefix   /opt/ros/jazzy
+%global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-pybind11-vendor
 Version:        3.1.3

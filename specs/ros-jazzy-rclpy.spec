@@ -1,6 +1,10 @@
 %global ros_distro       jazzy
 %global pkg_name         rclpy
 %global install_prefix   /opt/ros/jazzy
+# rclpy ships a single small pybind11 C extension; debuginfo extraction
+# produces an empty debugsource list. Skip the auto-debug split rather
+# than carry an empty subpackage.
+%global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-rclpy
 Version:        7.1.9
@@ -102,9 +106,10 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# rclpy is a Python package with a pybind11 C extension; the .so lives inside
+# site-packages/rclpy/ as _rclpy_pybind11.cpython-*.so, not at /opt/ros/jazzy/lib/lib*.so.
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
-%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog

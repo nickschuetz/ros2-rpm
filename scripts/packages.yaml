@@ -682,3 +682,13 @@ rclcpp_lifecycle:
   source_dir: rclcpp-release-release-jazzy-rclcpp_lifecycle-{version}-1
   noarch: false
   disable_tests: true
+launch_ros:
+  source_url: https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/jazzy/launch_ros/{version}-1.tar.gz
+  source_dir: launch_ros-release-release-jazzy-launch_ros-{version}-1
+  noarch: true
+  disable_tests: true
+ros2cli:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2cli/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-jazzy-ros2cli-{version}-1
+  noarch: true
+  disable_tests: true
