@@ -32,19 +32,19 @@ Common Python functions used by rosidl packages.
 %autosetup -p1 -n rosidl-4.6.7
 
 %generate_buildrequires
-pushd rosidl_pycommon
+pushd rosidl_pycommon > /dev/null
 %pyproject_buildrequires
-popd
+popd > /dev/null
 
 
 %build
-pushd rosidl_pycommon
+pushd rosidl_pycommon > /dev/null
 %pyproject_wheel
-popd
+popd > /dev/null
 
 
 %install
-pushd rosidl_pycommon
+pushd rosidl_pycommon > /dev/null
 %{python3} -m pip install \
     --root %{buildroot} \
     --prefix %{install_prefix} \
@@ -53,13 +53,13 @@ pushd rosidl_pycommon
     --no-warn-script-location \
     --disable-pip-version-check \
     %{_pyproject_wheeldir}/*.whl
-popd
+popd > /dev/null
 
 
 %check
-pushd rosidl_pycommon
+pushd rosidl_pycommon > /dev/null
 %pytest -v test || true
-popd
+popd > /dev/null
 
 
 %files

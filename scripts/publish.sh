@@ -27,6 +27,7 @@ if [ -z "$SOURCE_PATH" ]; then
     candidates=(
         "$REPO/build/ament_cmake_full/ament_cmake-"*/"$PKG"
         "$REPO/build/rosidl_pkgsrc/rosidl-"*/"$PKG"
+        "$REPO/build/${PKG}_pkgsrc"/*
         "$REPO/build/$PKG"
         "$REPO/build/${PKG}_pkg"
     )

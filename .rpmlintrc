@@ -22,6 +22,18 @@ addFilter(r"^.*: E: non-executable-script /opt/ros/.*\.py 644 /usr/bin/env pytho
 # bug. Suppress the duplicate-file warning for this specific layout.
 addFilter(r"^.*: W: files-duplicate /opt/ros/.*/share/.*/environment/.*\.sh /opt/ros/.*/share/.*/cmake/environment_hooks/environment/.*\.sh$")
 
+# ROS-specific spelling: msg, srv, idl, rmw, fastrtps etc. are technical terms
+# in the ROS ecosystem that rpmlint flags as misspellings.
+addFilter(r"^.*: E: spelling-error \('(msg|srv|idl|rmw|colcon|rclcpp|rclpy|rosidl|fastrtps|fastdds|rosbag|builtin|cmake|ament|geometry|sensor|nav|tf2|noetic|kilted|jazzy|lyrical)',")
+
+# rosdistro's rosdep maps system "build helper" keys (python3, gtest, gmock,
+# eigen, etc.) to their *-devel Fedora packages on the assumption that ROS
+# consumers need headers at build time. RPM's `Requires:` doesn't distinguish
+# build-time vs runtime, so consumers see *-devel as runtime deps and rpmlint
+# complains. The upstream mapping is correct for ROS's build graph; suppress
+# the rpmlint warning rather than diverge from upstream.
+addFilter(r"^.*: E: devel-dependency .*-devel")
+
 # When linting specs alone (no built RPMs), the file-level filters above don't
 # match anything and rpmlint treats them as "unused" errors. The filters are
 # load-bearing when linting built RPMs, so keep them at full effect; lower the

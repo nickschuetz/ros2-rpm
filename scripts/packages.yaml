@@ -102,6 +102,38 @@ ament_cmake_version:
   source_dir: ament_cmake-{version}
   build_subdir: ament_cmake_version
 
+ament_cmake_gtest:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_gtest
+  disable_tests: true
+
+ament_cmake_gmock:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_gmock
+  disable_tests: true
+
+ament_cmake_pytest:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_pytest
+  disable_tests: true
+
+# ROS 2 core build extension on top of ament_cmake. Single-package repo.
+# Jazzy is at 0.12.0; upstream master is 0.9.x — use the bloom release tag.
+ament_cmake_ros:
+  source_url: https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/release/jazzy/ament_cmake_ros/{version}-3.tar.gz
+  source_dir: ament_cmake_ros-release-release-jazzy-ament_cmake_ros-{version}-3
+  disable_tests: true
+
+# ROS 2 C utilities. Compiled library (so noarch: false). Single-package repo.
+rcutils:
+  source_url: https://github.com/ros2-gbp/rcutils-release/archive/refs/tags/release/jazzy/rcutils/{version}-1.tar.gz
+  source_dir: rcutils-release-release-jazzy-rcutils-{version}-1
+  noarch: false
+  disable_tests: true
+
 # Message packages
 #
 # rcl_interfaces uses bloom-release tags (the upstream monorepo's master is

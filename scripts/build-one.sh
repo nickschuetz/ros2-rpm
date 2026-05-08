@@ -46,7 +46,10 @@ rpmbuild -bs \
 SRPM=$(ls -t "$SRPMS"/${SPEC_NAME}-*.src.rpm | head -1)
 echo "==> SRPM: $SRPM"
 
-COPR_REPO="https://download.copr.fedorainfracloud.org/results/hellaenergy/ros2/$CHROOT/"
+# Use the direct pulp URL — download.copr.fedorainfracloud.org now redirects
+# to packages.redhat.com/api/pulp-content, and mock's dnf doesn't always
+# follow the redirect when fetching repodata.
+COPR_REPO="https://packages.redhat.com/api/pulp-content/public-copr/hellaenergy/ros2/$CHROOT/"
 
 echo "==> mock --rebuild on $CHROOT (with hellaenergy/ros2 COPR enabled)"
 sg mock -c "mock -r '$CHROOT' \

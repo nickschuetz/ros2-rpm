@@ -211,8 +211,12 @@ def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     rqs = runtime_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION)
 
     if build_subdir:
-        py_push = f"pushd {build_subdir}\n"
-        py_pop = "popd\n"
+        # Silence pushd/popd: their default output is the directory stack,
+        # which RPM captures as buildrequires tokens during
+        # %generate_buildrequires and breaks the build with
+        # "Dependency tokens must begin with alpha-numeric ...".
+        py_push = f"pushd {build_subdir} > /dev/null\n"
+        py_pop = "popd > /dev/null\n"
         py_changelog_path = f"{build_subdir}/CHANGELOG.rst"
         py_test_path = f"{build_subdir}/test"
     else:
@@ -314,16 +318,27 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     br_lines = "\n".join(f"BuildRequires:  {b}" for b in brs)
     rq_lines = "\n".join(f"Requires:       {r}" for r in rqs)
 
+    src_root = pkg.get("_source_dir")
     if build_subdir:
-        push = f"pushd {build_subdir}\n"
-        pop = "popd\n"
-        license_path = "LICENSE"
+        # Silence pushd/popd output to avoid RPM capturing dir-stack tokens
+        # as buildrequires (see python template for the same fix).
+        push = f"pushd {build_subdir} > /dev/null\n"
+        pop = "popd > /dev/null\n"
+        # When build_subdir is set, src_root points at the subpackage and
+        # LICENSE lives one level up (in the monorepo root).
+        license_search_dir = src_root.parent if src_root else None
         changelog_path = f"{build_subdir}/CHANGELOG.rst"
     else:
         push = ""
         pop = ""
-        license_path = "LICENSE"
+        license_search_dir = src_root
         changelog_path = "CHANGELOG.rst"
+
+    # Some bloom-release branches strip LICENSE from the package subdir; in
+    # those cases we omit %license rather than fabricate one. Detect by
+    # checking whether LICENSE exists in the prep-time directory.
+    has_license = bool(license_search_dir and (license_search_dir / "LICENSE").is_file())
+    license_line = "%license LICENSE" if has_license else "# (no LICENSE file in source tree — see package.xml <license>)"
 
     # Per ADR 0005 %check is mandatory, but some packages reference test-only
     # dependencies (ament_cmake_gtest, ament_lint_*, etc.) that haven't yet been
@@ -339,7 +354,6 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     # egg-info directory.
     ships_python = False
     cmakelists = None
-    src_root = pkg.get("_source_dir")
     if src_root is not None:
         cml = src_root / "CMakeLists.txt"
         if cml.is_file():
@@ -359,13 +373,20 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     # Detect installed include / lib trees from CMakeLists.txt rather than
     # gating on noarch (header-only packages are noarch but still ship headers).
     ships_headers = bool(cmakelists and "DIRECTORY include" in cmakelists)
-    ships_libs = bool(cmakelists and (
+    # Distinguish two `lib/...` install patterns:
+    #   - install(TARGETS ...) puts compiled .so files at lib/lib<name>.so*
+    #   - install(PROGRAMS ...) puts helper scripts at lib/<pkg>/<script>
+    # The two %files entries differ.
+    ships_compiled_lib = bool(cmakelists and (
         "install(TARGETS" in cmakelists or "ament_export_libraries" in cmakelists
     ))
+    ships_lib_scripts = bool(cmakelists and "install(PROGRAMS" in cmakelists)
     extra_arch_files = ""
     if ships_headers:
         extra_arch_files += "%{install_prefix}/include/%{pkg_name}/\n"
-    if ships_libs:
+    if ships_compiled_lib:
+        extra_arch_files += "%{install_prefix}/lib/lib%{pkg_name}.so*\n"
+    if ships_lib_scripts:
         extra_arch_files += "%{install_prefix}/lib/%{pkg_name}/\n"
 
     return f"""%global ros_distro       {distro}
@@ -417,15 +438,17 @@ export PYTHONPATH=%{{install_prefix}}/lib/python%{{python3_version}}/site-packag
 {check_body}
 
 %files
-%license {license_path}
+{license_line}
 %doc {changelog_path}
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
 # need additions or trimming.
 %{{install_prefix}}/share/%{{pkg_name}}/
-%{{install_prefix}}/share/ament_index/resource_index/packages/%{{pkg_name}}
-%{{install_prefix}}/share/ament_index/resource_index/package_run_dependencies/%{{pkg_name}}
-%{{install_prefix}}/share/ament_index/resource_index/parent_prefix_path/%{{pkg_name}}
+# Sentinels: ament_index/resource_index/<index>/<pkg>. Standard ones include
+# packages/, package_run_dependencies/, parent_prefix_path/, and any group the
+# package is member_of (rosidl_runtime_packages, rosidl_interface_packages, etc.).
+# A glob covers all of them in one line.
+%{{install_prefix}}/share/ament_index/resource_index/*/%{{pkg_name}}
 {extra_python_files}{extra_arch_files}
 
 %changelog
