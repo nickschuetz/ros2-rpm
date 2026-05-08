@@ -4,23 +4,34 @@ All user-visible changes to the COPR packages live here. Per-spec `%changelog` e
 
 The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Phase 2 reopened — dev-sandbox expansion] — 2026-05-08
+## [Phase 2 — dev-sandbox expansion live] — 2026-05-08
 
-Same day as the development-only pivot, [ADR 0011](docs/adr/0011-phase-2-dev-sandbox-expansion.md) reopened a smaller Phase 2 — the developer-tooling slice of `ros-jazzy-desktop` so visualization and debugging UX is reasonable on Fedora during the wait for Open Robotics's official Lyrical packages. Production positioning unchanged: still development-only, disclaimer banner unchanged.
+[ADR 0011](docs/adr/0011-phase-2-dev-sandbox-expansion.md) reopened a smaller Phase 2 (the developer-tooling slice of `ros-jazzy-desktop`) the same day as the development-only pivot. Most of the planned scope shipped that day. Production positioning unchanged: still development-only, disclaimer banner unchanged.
 
-### Planned Phase 2 additions
+### Added
 
-- `rviz2` + plugin chain (visualization). Adds **LGPL-3.0** to the COPR aggregate (Qt).
-- `rqt` + key plugins (`rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_service_caller`, `rqt_action`, `rqt_plot`).
-- `ros2cli` suite (`ros2pkg`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`, `ros2run`).
-- `rmw_cyclonedds_cpp` + `cyclonedds` as alternate RMW. Adds **EPL-2.0** to the COPR aggregate.
-- `launch` family + `launch_testing`.
-- `demo_nodes_cpp`, `demo_nodes_py` for environment verification.
+- **launch infrastructure**: `osrf_pycommon`, `launch`, `launch_xml`, `launch_yaml`, `launch_testing`, `launch_ros`.
+- **lifecycle backfill** (originally deferred from Phase 1): `lifecycle_msgs`, `rcl_lifecycle`, `rclcpp_lifecycle`, `rclpy`, `pybind11_vendor`.
+- **`ros2cli` + per-domain plugins**: `ros2cli`, `ros2pkg`, `ros2run`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`.
+- **rqt + plugins** (Fedora-only — Stream 10 lacks Qt5 build deps): `qt_gui`, `qt_gui_cpp`, `qt_gui_py_common`, `qt_dotgraph`, `python_qt_binding`, `pluginlib`, `tinyxml2_vendor`, `tango_icons_vendor`, `rqt`, `rqt_gui`, `rqt_gui_cpp`, `rqt_gui_py`, `rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_action`, `rqt_plot`, `rqt_service_caller`. Adds **LGPL-3.0** to the COPR's license aggregate (Qt5).
+- **demo nodes**: `example_interfaces`, `demo_nodes_cpp`, `demo_nodes_py`.
+- **Cyclone DDS chain (specs scaffolded but not pushed)**: `cyclonedds`, `rmw_cyclonedds_cpp`. Build mostly works against system libs minus iceoryx (which Fedora doesn't ship); held back from publish until %files is verified by a local mock build. Adds **EPL-2.0** to the aggregate when shipped.
 
 ### Metapackage
 
-- **New**: `ros-jazzy-ros-desktop` with heterogeneous License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (and `AND EPL-2.0` if Cyclone DDS is shipped).
-- `ros-jazzy-ros-core` and `ros-jazzy-ros-base` stay **permissive-only**. Users who run `dnf install ros-jazzy-ros-base` continue to get only Apache-2.0 / BSD-3-Clause content.
+- **New `ros-jazzy-ros-desktop`** — published. License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` honestly disclosed. Pulls in `ros-base` plus launch + ros2cli + rqt + demo_nodes. **rviz2 NOT included** — see "Deferred" below.
+- `ros-jazzy-ros-core` and `ros-jazzy-ros-base` continue to be **permissive-only**. Installing those still yields only Apache-2.0 / BSD-3-Clause content.
+
+### Build matrix caveat for Phase 2 GUI packages
+
+Phase 2 GUI surface (qt_gui_core, python_qt_binding, rqt + plugins) builds successfully on the **4 Fedora chroots** (`fedora-44` + `fedora-rawhide` × `x86_64` + `aarch64`) but **fails on CentOS Stream 10** because Stream 10 doesn't ship `python3-sip-devel` and other Qt5 build dependencies. Stream 10 users get `ros-jazzy-ros-base` and the headless launch / ros2cli / demo packages; for visualization on Stream 10, use a Fedora chroot.
+
+### Deferred (will revisit when blockers clear or upstream patches land)
+
+- **rviz2 chain**: `rviz_ogre_vendor`, `rviz_assimp_vendor`, `rviz_rendering`, `rviz_common`, `rviz_default_plugins`, `rviz2`. Two upstream blockers:
+  - `rviz_ogre_vendor`: Ogre's bundled CMake config has `cmake_minimum_required` below 3.5, which CMake 4.x (Fedora 44+) rejects. Workaround `-DCMAKE_POLICY_VERSION_MINIMUM=3.5` is in the spec but build still in progress at end of session.
+  - `rviz_assimp_vendor`: Assimp's CMake adds `-Werror` to the build flags via its own `target_compile_options`, ordered after our `-Wno-error` override. Without patching the assimp CMake source, Fedora's stricter GCC warnings (e.g. `-Wunused-but-set-variable`) fail the build. Likely needs a small upstream patch or a switch to system `assimp-devel` rather than the vendored ExternalProject.
+- `rcl_action_lifecycle`, `rclcpp_lifecycle_interface`, navigation stacks, simulation bridges — all out of scope per ADR 0011.
 
 ### Out of scope (per ADR 0011)
 

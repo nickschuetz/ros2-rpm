@@ -92,10 +92,10 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 # demo_nodes_cpp installs per-demo component libraries lib<demo>_library.so
 # (talker_library, listener_library, set_parameters_library, etc.) and the
-# corresponding executables under lib/demo_nodes_cpp/.
+# corresponding executables under lib/demo_nodes_cpp/. No bin/ entries —
+# all executables are package-scoped under lib/demo_nodes_cpp/.
 %{install_prefix}/lib/lib*_library.so*
 %{install_prefix}/lib/%{pkg_name}/
-%{install_prefix}/bin/*
 
 
 %changelog
