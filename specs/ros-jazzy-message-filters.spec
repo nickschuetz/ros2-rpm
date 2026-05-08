@@ -3,13 +3,13 @@
 %global install_prefix   /opt/ros/jazzy
 
 Name:           ros-%{ros_distro}-message-filters
-Version:        4.11.9
+Version:        4.11.13
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy message_filters
 
 License:        BSD-3-Clause
 URL:            https://github.com/ros2/message_filters
-Source0:        https://github.com/ros2-gbp/ros2_message_filters-release/archive/refs/tags/release/jazzy/message_filters/4.11.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/ros2_message_filters-release/archive/refs/tags/release/jazzy/message_filters/4.11.13-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -25,6 +25,7 @@ BuildRequires:  ros-jazzy-std-msgs
 
 Requires:       ros-jazzy-builtin-interfaces
 Requires:       ros-jazzy-rclcpp
+Requires:       ros-jazzy-rclpy
 Requires:       ros-jazzy-rcutils
 Requires:       ros-jazzy-std-msgs
 
@@ -36,7 +37,7 @@ A set of ROS 2 message filters which take in messages and may output those
 messages at a later time, based on the conditions that filter needs met.
 
 %prep
-%autosetup -p1 -n ros2_message_filters-release-release-jazzy-message_filters-4.11.9-1
+%autosetup -p1 -n ros2_message_filters-release-release-jazzy-message_filters-4.11.13-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -86,5 +87,5 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 4.11.9-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 4.11.13-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

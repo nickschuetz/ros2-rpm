@@ -3,13 +3,13 @@
 %global install_prefix   /opt/ros/jazzy
 
 Name:           ros-%{ros_distro}-launch
-Version:        3.4.9
+Version:        3.4.10
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy launch
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/launch-release
-Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch/3.4.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch/3.4.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -33,13 +33,26 @@ Requires:       ros-jazzy-osrf-pycommon
 The ROS launch tool.
 
 %prep
-%autosetup -p1 -n launch-release-release-jazzy-launch-3.4.9-1
+%autosetup -p1 -n launch-release-release-jazzy-launch-3.4.10-1
 
-# %pyproject_buildrequires would re-read setup.py's install_requires and emit
-# python3dist(<name>) BRs for every entry. For ROS Python packages whose deps
-# (launch, ament_index_python, …) live under /opt/ros/jazzy and don't register
-# python3dist(...) Provides, that fails dependency resolution. We emit the
-# concrete BuildRequires above instead.
+# Reduce setup.py's install_requires to ['setuptools'] before the
+# auto-generated buildrequires step runs. The full list typically references
+# ROS Python packages (launch, ament_index_python, etc.) that live under
+# /opt/ros/jazzy and don't register python3dist(...) Provides; leaving
+# those in setup.py causes pyproject buildrequires to emit BRs that Fedora
+# can't resolve. The runtime Requires: above already enforces these.
+python3 << 'PYEOF' || true
+import re
+p = "setup.py"
+s = open(p).read()
+s = re.sub(r"install_requires\s*=\s*\[[^\]]*\]", "install_requires=['setuptools']", s, flags=re.S)
+open(p, "w").write(s)
+PYEOF
+
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
@@ -72,5 +85,5 @@ The ROS launch tool.
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 3.4.9-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 3.4.10-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

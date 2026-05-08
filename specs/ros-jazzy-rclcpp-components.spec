@@ -3,13 +3,13 @@
 %global install_prefix   /opt/ros/jazzy
 
 Name:           ros-%{ros_distro}-rclcpp-components
-Version:        28.1.9
+Version:        28.1.18
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rclcpp_components
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rclcpp-release
-Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp_components/28.1.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp_components/28.1.18-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -35,7 +35,7 @@ Requires:       ros-jazzy-rclcpp
 Package containing tools for dynamically loadable components
 
 %prep
-%autosetup -p1 -n rclcpp-release-release-jazzy-rclcpp_components-28.1.9-1
+%autosetup -p1 -n rclcpp-release-release-jazzy-rclcpp_components-28.1.18-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -87,5 +87,5 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 28.1.9-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 28.1.18-1
 - Initial Fedora COPR build for ROS 2 Jazzy.
