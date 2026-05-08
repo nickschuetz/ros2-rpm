@@ -657,3 +657,28 @@ launch_testing:
   source_dir: launch-release-release-jazzy-launch_testing-{version}-1
   noarch: true
   disable_tests: true
+lifecycle_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/lifecycle_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-jazzy-lifecycle_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+rcl_lifecycle:
+  source_url: https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/jazzy/rcl_lifecycle/{version}-2.tar.gz
+  source_dir: rcl-release-release-jazzy-rcl_lifecycle-{version}-2
+  noarch: false
+  disable_tests: true
+pybind11_vendor:
+  source_url: https://github.com/ros2-gbp/pybind11_vendor-release/archive/refs/tags/release/jazzy/pybind11_vendor/{version}-1.tar.gz
+  source_dir: pybind11_vendor-release-release-jazzy-pybind11_vendor-{version}-1
+  noarch: false
+  disable_tests: true
+rclpy:
+  source_url: https://github.com/ros2-gbp/rclpy-release/archive/refs/tags/release/jazzy/rclpy/{version}-1.tar.gz
+  source_dir: rclpy-release-release-jazzy-rclpy-{version}-1
+  noarch: false
+  disable_tests: true
+rclcpp_lifecycle:
+  source_url: https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp_lifecycle/{version}-1.tar.gz
+  source_dir: rclcpp-release-release-jazzy-rclcpp_lifecycle-{version}-1
+  noarch: false
+  disable_tests: true
