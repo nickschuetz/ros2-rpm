@@ -867,3 +867,18 @@ rviz2:
   source_dir: rviz-release-release-jazzy-rviz2-{version}-2
   noarch: false
   disable_tests: true
+example_interfaces:
+  source_url: https://github.com/ros2-gbp/example_interfaces-release/archive/refs/tags/release/jazzy/example_interfaces/{version}-3.tar.gz
+  source_dir: example_interfaces-release-release-jazzy-example_interfaces-{version}-3
+  noarch: false
+  disable_tests: true
+demo_nodes_cpp:
+  source_url: https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/jazzy/demo_nodes_cpp/{version}-1.tar.gz
+  source_dir: demos-release-release-jazzy-demo_nodes_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+demo_nodes_py:
+  source_url: https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/jazzy/demo_nodes_py/{version}-1.tar.gz
+  source_dir: demos-release-release-jazzy-demo_nodes_py-{version}-1
+  noarch: true
+  disable_tests: true

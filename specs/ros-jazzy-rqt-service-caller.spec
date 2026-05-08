@@ -79,6 +79,7 @@ PYEOF
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}.dist-info/
+%{install_prefix}/lib/%{pkg_name}/
 %{install_prefix}/share/ament_index/resource_index/packages/%{pkg_name}
 %{install_prefix}/share/%{pkg_name}/
 
