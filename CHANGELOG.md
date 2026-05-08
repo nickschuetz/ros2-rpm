@@ -4,6 +4,14 @@ All user-visible changes to the COPR packages live here. Per-spec `%changelog` e
 
 The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [O3DE Gem coverage closed: gazebo_msgs added] — 2026-05-08
+
+Added `ros-jazzy-gazebo-msgs` (BSD-3-Clause, message-only). Closes the only optional dep that the [O3DE ROS 2 Gem](https://github.com/o3de/o3de-extras/tree/development/Gems/ROS2) had a `find_package(... QUIET)` for. With this in place, the Gem's optional `ContactSensor` and `ROS2 Spawner` components can be enabled at build time alongside the rest of the Gem.
+
+Caveat — upstream EOL trajectory: the package is slated for removal in ROS 2 Kilted Kaiju per upstream comments in the Gem's CMakeLists. This COPR's scope sunsets at Jazzy EOL anyway (per ADR 0010), so we ship it for the Jazzy lifetime. Post-Jazzy users targeting Kilted+ will need an alternative path for those Gem components.
+
+License is permissive; no new ADR required (BSD-3-Clause is already in the COPR's aggregate via `ros-jazzy-ros-base`). The package is a standalone opt-in; not Required: by `ros-jazzy-ros-base` or `ros-jazzy-ros-desktop`.
+
 ## [Phase 2 — dev-sandbox expansion live] — 2026-05-08
 
 [ADR 0011](docs/adr/0011-phase-2-dev-sandbox-expansion.md) reopened a smaller Phase 2 (the developer-tooling slice of `ros-jazzy-desktop`) the same day as the development-only pivot. Most of the planned scope shipped that day. Production positioning unchanged: still development-only, disclaimer banner unchanged.

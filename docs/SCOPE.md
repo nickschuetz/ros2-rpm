@@ -49,6 +49,7 @@ After ADR 0010 cancelled the originally-planned ~320-package full `ros-jazzy-des
 - **Launch infrastructure**: `launch`, `launch_ros`, `launch_xml`, `launch_yaml`, `launch_testing`, `osrf_pycommon`.
 - **Lifecycle backfill** (originally deferred from Phase 1): `lifecycle_msgs`, `rcl_lifecycle`, `rclcpp_lifecycle`, `rclpy`, `pybind11_vendor`.
 - **Demo nodes**: `demo_nodes_cpp`, `demo_nodes_py`, `example_interfaces` for environment verification.
+- **O3DE Gem optional dep**: `gazebo_msgs` (BSD-3-Clause, opt-in). Enables the [O3DE ROS 2 Gem](https://github.com/o3de/o3de-extras/tree/development/Gems/ROS2)'s optional `ContactSensor` and `ROS2 Spawner` components. Not pulled in by `ros-jazzy-ros-base` or `ros-jazzy-ros-desktop`; users install explicitly when they want those Gem features. Upstream is slated for removal in Kilted Kaiju, so post-Jazzy users will need an alternative path for these specific components.
 
 ### Phase 2 metapackage
 

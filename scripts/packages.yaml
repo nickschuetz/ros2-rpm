@@ -902,3 +902,8 @@ ament_copyright:
   source_dir: ament_lint-release-release-jazzy-ament_copyright-{version}-1
   noarch: true
   disable_tests: true
+gazebo_msgs:
+  source_url: https://github.com/ros2-gbp/gazebo_ros_pkgs-release/archive/refs/tags/release/jazzy/gazebo_msgs/{version}-1.tar.gz
+  source_dir: gazebo_ros_pkgs-release-release-jazzy-gazebo_msgs-{version}-1
+  noarch: false
+  disable_tests: true

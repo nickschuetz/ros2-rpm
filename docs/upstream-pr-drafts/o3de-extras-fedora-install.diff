@@ -1,0 +1,23 @@
+diff --git a/Gems/ROS2/README.md b/Gems/ROS2/README.md
+index <hash>..<hash> 100644
+--- a/Gems/ROS2/README.md
++++ b/Gems/ROS2/README.md
+@@ -3,7 +3,17 @@
+ With the ROS 2 Gem you can develop robotic simulations with [ROS (Robot Operating System) 2](https://www.ros.org/) in [Open 3D Engine (O3DE)](https://o3de.org).
+
+ ### Platform
+-The Gem is tested with ROS 2 Humble and Iron on Ubuntu 22.04. ROS 2 Jazzy support will be available on distro release day.
++The Gem is tested with ROS 2 Humble and Iron on Ubuntu 22.04. ROS 2 Jazzy support will be available on distro release day.
++
++ROS 2 Jazzy on **Fedora 44+** and **CentOS Stream 10** is available via the third-party [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2) COPR (development-only), which packages all of the Gem's required and optional ROS 2 dependencies, including `gazebo_msgs` for the optional `ContactSensor` and `ROS 2 Spawner` components:
++
++```bash
++sudo dnf copr enable hellaenergy/ros2
++sudo dnf install ros-jazzy-ros-base ros-jazzy-gazebo-msgs
++source /opt/ros/jazzy/setup.bash
++```
++
++The COPR is intended as a development-only sandbox covering the window until Open Robotics's official Fedora packages land for Lyrical Luth (the 2026 LTS).
+
+ >> The Gem is not available for Windows and does not support ROS 1.
+

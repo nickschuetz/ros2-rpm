@@ -27,6 +27,19 @@ The list is checked manually before each Phase milestone, and we'll add a CI wor
 
 _None yet._
 
+## Backlog (drafts ready, gated on conditions)
+
+Upstream contributions that are drafted but **not yet posted** because some condition isn't met. Each entry names what would unblock it.
+
+### `o3de/o3de-extras` — README docs PR for Fedora install path
+
+- **Status**: Drafted 2026-05-08. **Held back** because Fedora is not yet an officially-supported platform for O3DE (the engine itself), so adding a Fedora install path to the Gem's README would promise something the broader O3DE project hasn't committed to. Posting it would also implicitly assert that the Gem works on a platform the engine maintainers haven't blessed.
+- **Unblocks when**: O3DE-the-engine is officially tested on Fedora 44+ (or whatever Fedora release is current at the time), with a reproducible install path documented somewhere on o3de.org. After that, the Gem's README can credibly point Fedora users at this COPR for the ROS 2 Gem layer.
+- **Drafts in repo**:
+  - [`docs/upstream-pr-drafts/o3de-extras-fedora-install.diff`](upstream-pr-drafts/o3de-extras-fedora-install.diff) (proposed README change, 8 lines added under Platform).
+  - [`docs/upstream-pr-drafts/o3de-extras-fedora-install-body.md`](upstream-pr-drafts/o3de-extras-fedora-install-body.md) (PR description with What / Why / Verified / Scope sections).
+- **When revisiting**: re-verify the smoke test on the then-current Fedora and the then-current ROS 2 distro, refresh the Lyrical timing reference if relevant, and re-check that `gazebo_msgs` is still in scope (upstream is removing it in Kilted Kaiju per the Gem's own CMakeLists).
+
 ## Maintenance
 
 - **When a blocker is fixed upstream**: move the entry to "Closed" with the close date and the bloom-release tag where the fix landed.
