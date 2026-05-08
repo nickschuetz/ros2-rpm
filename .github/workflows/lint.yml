@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Install rpmlint
         run: dnf install -y --setopt=install_weak_deps=False rpmlint
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run rpmlint
         run: |
           if compgen -G "specs/*.spec" > /dev/null; then
@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Install tooling
         run: dnf install -y --setopt=install_weak_deps=False licensecheck git
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Verify SPDX expressions in specs
         run: |
           if compgen -G "specs/*.spec" > /dev/null; then
@@ -49,7 +49,7 @@ jobs:
   forbidden-patterns:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Reject obsolete spec patterns
         run: |
           if compgen -G "specs/*.spec" > /dev/null; then
