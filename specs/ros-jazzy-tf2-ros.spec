@@ -89,6 +89,9 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 %{install_prefix}/include/%{pkg_name}/
 %{install_prefix}/lib/lib%{pkg_name}.so*
+%{install_prefix}/lib/libstatic_transform_broadcaster_node.so*
+# CLI executables (buffer_server, static_transform_publisher, tf2_echo, tf2_monitor)
+%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog

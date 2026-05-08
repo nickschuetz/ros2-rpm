@@ -12,16 +12,16 @@ For the realized dependency-ordered build pipeline (ament_cmake stack → utilit
 
 ### Phase 1 direct consumers (the O3DE-targeted leaves)
 
-- `rclcpp`
+- `rclcpp` ✓ (live)
 - `builtin_interfaces` ✓ (live)
-- `std_msgs`
-- `sensor_msgs`
-- `nav_msgs`
-- `geometry_msgs`
-- `tf2_ros`
-- `ackermann_msgs`
-- `vision_msgs`
-- `control_msgs`
+- `std_msgs` ✓ (live)
+- `sensor_msgs` ✓ (live)
+- `nav_msgs` ✓ (live)
+- `geometry_msgs` ✓ (live)
+- `tf2_ros` ✓ (live)
+- `ackermann_msgs` ✓ (live)
+- `vision_msgs` ✓ (live)
+- `control_msgs` ✓ (live)
 
 ### Phase 1 transitive dependencies (representative; full list in `manifest.yaml`)
 

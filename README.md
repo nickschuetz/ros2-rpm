@@ -8,11 +8,11 @@ The end state is a `ros-jazzy-desktop`-equivalent install path — filling the g
 
 Delivered in two phases. Phase 1 is the current shipping scope; Phase 2 expands to full desktop.
 
-### Phase 1 — current scope (~70 packages, 50+ live)
+### Phase 1 — minimal subset (~85 packages, all live)
 
-Pipeline proving ground: `rclcpp`, common message packages, `rmw_fastrtps_cpp` + Fast DDS, transitive deps. License-clean (`Apache-2.0 AND BSD-3-Clause`). Validates the bloom + rosdep + Python-3.14 patch chain on a small surface. Ships first.
+Pipeline proving ground: `rclcpp`, common message packages (`std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `ackermann_msgs`, `vision_msgs`, `control_msgs`, `trajectory_msgs`), `rmw_fastrtps_cpp` + Fast DDS, `tf2_ros`, transitive deps. License-clean (`Apache-2.0 AND BSD-3-Clause`). Validates the bloom + rosdep + Python-3.14 patch chain on a small surface.
 
-**Status (snapshot, 2026-05-08)**: ament_cmake stack ✓ (all 21 packages), rcutils/rcpputils ✓, full rosidl chain ✓, Fast DDS chain ✓ (foonathan_memory_vendor + fastcdr + fastrtps + rmw + typesupport_fastrtps_c/cpp), `builtin_interfaces` ✓ (the first message package — multi-typesupport, all bindings). Currently cranking through the message tier (`std_msgs`, `geometry_msgs`, etc.). See [`docs/build-order.md`](docs/build-order.md) for the dependency-ordered build pipeline.
+**Status (snapshot, 2026-05-08)**: Phase 1 minimal subset complete across `fedora-44`, `fedora-rawhide`, `centos-stream-10` × `x86_64` + `aarch64`. All ten direct consumers (`rclcpp`, `tf2_ros`, all eight message packages above) plus their transitive closure are published. See [`docs/build-order.md`](docs/build-order.md) for the dependency-ordered pipeline and [`docs/SCOPE.md`](docs/SCOPE.md) for the full list with build-status markers.
 
 ### Phase 2 — `ros-jazzy-desktop` equivalent (~320 packages)
 
@@ -77,6 +77,10 @@ Pure-Python packages use `python3-<pkg>` instead of the runtime/devel split. Mes
 
 Vulnerability disclosure: [`docs/SECURITY.md`](docs/SECURITY.md).
 
+## Related work
+
+This repo is one of several ROS-on-Fedora packaging efforts. The [Fedora Robotics SIG](https://gitlab.com/fedora/sigs/robotics) is the official long-term home for ROS in Fedora's main repositories; their `fedros`/`rosfed` projects use a similar bloom-spec approach. This COPR is intentionally narrower and ships sooner via `/opt/ros/jazzy/`. See [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md) for the full landscape and how the two efforts complement each other.
+
 ## Documentation
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — pipeline overview, the four spec patterns, install layout, dependency model, CI/publishing flow.
@@ -84,6 +88,7 @@ Vulnerability disclosure: [`docs/SECURITY.md`](docs/SECURITY.md).
 - [`docs/build-order.md`](docs/build-order.md) — dependency-ordered build pipeline, build patterns the generator handles, and known edge cases.
 - [`docs/UPGRADING.md`](docs/UPGRADING.md) — upgrade procedures across ROS 2 distros and Fedora releases.
 - [`docs/SECURITY.md`](docs/SECURITY.md) — vulnerability handling, watchlist, disclosure.
+- [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md) — the broader Fedora-ROS packaging ecosystem.
 - [`docs/adr/`](docs/adr/) — architecture decision records (read these before opening scope-changing PRs).
 
 ## License
