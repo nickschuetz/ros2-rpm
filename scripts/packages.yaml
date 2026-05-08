@@ -897,3 +897,8 @@ rosidl_runtime_py:
   source_dir: rosidl_runtime_py-release-release-jazzy-rosidl_runtime_py-{version}-2
   noarch: true
   disable_tests: true
+ament_copyright:
+  source_url: https://github.com/ros2-gbp/ament_lint-release/archive/refs/tags/release/jazzy/ament_copyright/{version}-1.tar.gz
+  source_dir: ament_lint-release-release-jazzy-ament_copyright-{version}-1
+  noarch: true
+  disable_tests: true

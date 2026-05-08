@@ -70,8 +70,8 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 %{install_prefix}/share/%{pkg_name}/
 %{install_prefix}/share/foonathan_memory/
 %{install_prefix}/include/foonathan_memory/
-%{install_prefix}/lib64/foonathan_memory/
-%{install_prefix}/lib64/libfoonathan_memory-*.so*
+%{install_prefix}/lib/foonathan_memory/
+%{install_prefix}/lib/libfoonathan_memory-*.so*
 %{install_prefix}/bin/nodesize_dbg
 
 
