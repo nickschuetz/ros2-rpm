@@ -837,3 +837,33 @@ rqt_service_caller:
   source_dir: rqt_service_caller-release-release-jazzy-rqt_service_caller-{version}-1
   noarch: true
   disable_tests: true
+rviz_ogre_vendor:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_ogre_vendor/{version}-2.tar.gz
+  source_dir: rviz-release-release-jazzy-rviz_ogre_vendor-{version}-2
+  noarch: false
+  disable_tests: true
+rviz_assimp_vendor:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_assimp_vendor/{version}-2.tar.gz
+  source_dir: rviz-release-release-jazzy-rviz_assimp_vendor-{version}-2
+  noarch: false
+  disable_tests: true
+rviz_rendering:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_rendering/{version}-2.tar.gz
+  source_dir: rviz-release-release-jazzy-rviz_rendering-{version}-2
+  noarch: false
+  disable_tests: true
+rviz_common:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_common/{version}-2.tar.gz
+  source_dir: rviz-release-release-jazzy-rviz_common-{version}-2
+  noarch: false
+  disable_tests: true
+rviz_default_plugins:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_default_plugins/{version}-2.tar.gz
+  source_dir: rviz-release-release-jazzy-rviz_default_plugins-{version}-2
+  noarch: false
+  disable_tests: true
+rviz2:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz2/{version}-2.tar.gz
+  source_dir: rviz-release-release-jazzy-rviz2-{version}-2
+  noarch: false
+  disable_tests: true
