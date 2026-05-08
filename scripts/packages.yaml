@@ -892,3 +892,8 @@ ros_workspace:
   source_dir: ros_workspace-release-release-jazzy-ros_workspace-{version}-7
   noarch: true
   disable_tests: true
+rosidl_runtime_py:
+  source_url: https://github.com/ros2-gbp/rosidl_runtime_py-release/archive/refs/tags/release/jazzy/rosidl_runtime_py/{version}-2.tar.gz
+  source_dir: rosidl_runtime_py-release-release-jazzy-rosidl_runtime_py-{version}-2
+  noarch: true
+  disable_tests: true

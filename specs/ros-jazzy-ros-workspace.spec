@@ -68,20 +68,17 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # generator emits the conventional ament_cmake set but specific packages may
 # need additions or trimming.
 %{install_prefix}/share/%{pkg_name}/
+%{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 # ros_workspace generates the canonical workspace setup files at the
 # install prefix root (this is the package that makes
 # `source /opt/ros/jazzy/setup.bash` work).
 %{install_prefix}/setup.bash
 %{install_prefix}/setup.sh
 %{install_prefix}/setup.zsh
-%{install_prefix}/setup.dsv
 %{install_prefix}/local_setup.bash
 %{install_prefix}/local_setup.sh
 %{install_prefix}/local_setup.zsh
-%{install_prefix}/local_setup.dsv
-%{install_prefix}/_local_setup_util_*.py
-%{install_prefix}/.rosinstall
-%{install_prefix}/COLCON_IGNORE
+%{install_prefix}/_local_setup_util.py
 
 
 %changelog

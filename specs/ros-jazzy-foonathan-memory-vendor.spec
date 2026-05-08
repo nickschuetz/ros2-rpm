@@ -9,7 +9,7 @@
 
 Name:           ros-%{ros_distro}-foonathan-memory-vendor
 Version:        1.3.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Jazzy foonathan_memory_vendor
 
 License:        Apache-2.0
@@ -33,6 +33,12 @@ Foonathan/memory vendor package for Fast-RTPS.
 
 %prep
 %autosetup -p1 -n foonathan_memory_vendor-release-release-jazzy-foonathan_memory_vendor-1.3.1-3
+# Force the inner ExternalProject (the actual foonathan/memory upstream) to
+# install into lib/ rather than the GNUInstallDirs default of lib64/. The
+# outer wrapper's `install(DIRECTORY foo_mem_ext_prj_install/ ...)` copies
+# the staged tree as-is, so the inner CMAKE_INSTALL_LIBDIR controls where
+# libfoonathan_memory-*.so ends up in the final RPM.
+sed -i 's|^    -DCMAKE_INSTALL_PREFIX=|    -DCMAKE_INSTALL_LIBDIR=lib\n    -DCMAKE_INSTALL_PREFIX=|' CMakeLists.txt
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
