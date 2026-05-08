@@ -15,7 +15,7 @@ The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - **`ros2cli` + per-domain plugins**: `ros2cli`, `ros2pkg`, `ros2run`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`.
 - **rqt + plugins** (Fedora-only — Stream 10 lacks Qt5 build deps): `qt_gui`, `qt_gui_cpp`, `qt_gui_py_common`, `qt_dotgraph`, `python_qt_binding`, `pluginlib`, `tinyxml2_vendor`, `tango_icons_vendor`, `rqt`, `rqt_gui`, `rqt_gui_cpp`, `rqt_gui_py`, `rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_action`, `rqt_plot`, `rqt_service_caller`. Adds **LGPL-3.0** to the COPR's license aggregate (Qt5).
 - **demo nodes**: `example_interfaces`, `demo_nodes_cpp`, `demo_nodes_py`.
-- **Cyclone DDS chain (specs scaffolded but not pushed)**: `cyclonedds`, `rmw_cyclonedds_cpp`. Build mostly works against system libs minus iceoryx (which Fedora doesn't ship); held back from publish until %files is verified by a local mock build. Adds **EPL-2.0** to the aggregate when shipped.
+- **Cyclone DDS chain** (`cyclonedds`, `rmw_cyclonedds_cpp`): live across all 6 chroot/arch pairs. Built against system libs with `-DENABLE_SHM=OFF` (skips the iceoryx shared-memory transport which Fedora doesn't package); standard sockets transport is sufficient for development. Adds **EPL-2.0** to the COPR's license aggregate. Verified end-to-end: `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp /opt/ros/jazzy/lib/demo_nodes_cpp/talker` publishes successfully.
 
 ### Metapackage
 
