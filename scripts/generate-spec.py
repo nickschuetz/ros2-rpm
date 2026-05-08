@@ -409,7 +409,10 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     # CMake authors commonly use.
     import re as _re
     cml = cmakelists or ""
-    ships_headers = bool(_re.search(r"install\s*\(\s*[^)]*DIRECTORY\s+include", cml, _re.S))
+    ships_headers = bool(
+        _re.search(r"install\s*\(\s*[^)]*DIRECTORY\s+(?:[^)]*?/)?include", cml, _re.S)
+        or _re.search(r"install\s*\([^)]*DESTINATION\s+include", cml, _re.S)
+    )
     # Distinguish two `lib/...` install patterns:
     #   - install(TARGETS ...) puts compiled .so files at lib/lib<name>.so*
     #   - install(PROGRAMS ...) puts helper scripts at lib/<pkg>/<script>
@@ -437,6 +440,10 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
             "%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/\n"
             "%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/\n"
         )
+        # Message packages may also ship a regular lib<pkg>.so (e.g.
+        # rmw_dds_common bundles a helper library alongside its .msg files).
+        if ships_compiled_lib:
+            extra_arch_files += "%{install_prefix}/lib/lib%{pkg_name}.so*\n"
     else:
         if ships_headers:
             extra_arch_files += "%{install_prefix}/include/%{pkg_name}/\n"

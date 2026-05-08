@@ -1,44 +1,50 @@
 %global ros_distro       jazzy
-%global pkg_name         ament_cmake_vendor_package
+%global pkg_name         tf2
 %global install_prefix   /opt/ros/jazzy
 
-Name:           ros-%{ros_distro}-ament-cmake-vendor-package
-Version:        2.5.6
+Name:           ros-%{ros_distro}-tf2
+Version:        0.36.9
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy ament_cmake_vendor_package
+Summary:        ROS 2 Jazzy tf2
 
-License:        Apache-2.0
-URL:            https://github.com/ament/ament_cmake
-Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.5.6.tar.gz#/%{pkg_name}-%{version}.tar.gz
+License:        BSD-3-Clause
+URL:            http://www.ros.org/wiki/tf2
+Source0:        https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/jazzy/tf2/0.36.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
-BuildArch:      noarch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  ros-jazzy-ament-cmake-core
-BuildRequires:  ros-jazzy-ament-cmake-export-dependencies
+BuildRequires:  ros-jazzy-ament-cmake
+BuildRequires:  ros-jazzy-ament-cmake-ros
+BuildRequires:  ros-jazzy-builtin-interfaces
+BuildRequires:  ros-jazzy-geometry-msgs
+BuildRequires:  ros-jazzy-rcutils
+BuildRequires:  ros-jazzy-rosidl-runtime-cpp
 
-Requires:       git
-Requires:       python3-vcstool
-Requires:       ros-jazzy-ament-cmake-core
-Requires:       ros-jazzy-ament-cmake-export-dependencies
+Requires:       ros-jazzy-builtin-interfaces
+Requires:       ros-jazzy-geometry-msgs
+Requires:       ros-jazzy-rcutils
+Requires:       ros-jazzy-rosidl-runtime-cpp
 
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 
 %description
-Macros for maintaining a 'vendor' package.
+tf2 is the second generation of the transform library, which lets the user
+keep track of multiple coordinate frames over time. tf2 maintains the
+relationship between coordinate frames in a tree structure buffered in
+time, and lets the user transform points, vectors, etc between any two
+coordinate frames at any desired point in time.
 
 %prep
-%autosetup -p1 -n ament_cmake-2.5.6
+%autosetup -p1 -n geometry2-release-release-jazzy-tf2-0.36.9-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
 # execute_process invocations of python3.
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-pushd ament_cmake_vendor_package > /dev/null
 %cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
@@ -54,14 +60,11 @@ pushd ament_cmake_vendor_package > /dev/null
     -DSHARE_INSTALL_PREFIX=%{install_prefix}/share \
     -DSETUPTOOLS_DEB_LAYOUT=OFF -DBUILD_TESTING=OFF
 %cmake_build
-popd > /dev/null
 
 
 %install
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-pushd ament_cmake_vendor_package > /dev/null
 %cmake_install
-popd > /dev/null
 
 
 %check
@@ -69,8 +72,8 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 echo 'tests skipped — see CLAUDE.md / packages.yaml'
 
 %files
-%license LICENSE
-# (no CHANGELOG.rst in source tree)
+# (no LICENSE file in source tree — see package.xml <license>)
+%doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
 # need additions or trimming.
@@ -79,8 +82,10 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+%{install_prefix}/include/%{pkg_name}/
+%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.6-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.36.9-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

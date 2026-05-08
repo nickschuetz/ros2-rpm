@@ -1,37 +1,64 @@
 %global ros_distro       jazzy
-%global pkg_name         tracetools
+%global pkg_name         rmw_fastrtps_cpp
 %global install_prefix   /opt/ros/jazzy
 
-Name:           ros-%{ros_distro}-tracetools
-Version:        8.2.5
+Name:           ros-%{ros_distro}-rmw-fastrtps-cpp
+Version:        8.4.3
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy tracetools
+Summary:        ROS 2 Jazzy rmw_fastrtps_cpp
 
 License:        Apache-2.0
-URL:            https://docs.ros.org/en/rolling/p/tracetools/
-Source0:        https://github.com/ros2-gbp/ros2_tracing-release/archive/refs/tags/release/jazzy/tracetools/8.2.5-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2-gbp/rmw_fastrtps-release
+Source0:        https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/jazzy/rmw_fastrtps_cpp/8.4.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  lttng-ust-devel
-BuildRequires:  pkgconfig
 BuildRequires:  python3-devel
-BuildRequires:  ros-jazzy-ament-cmake-gen-version-h
 BuildRequires:  ros-jazzy-ament-cmake-ros
+BuildRequires:  ros-jazzy-fastcdr
+BuildRequires:  ros-jazzy-fastrtps
+BuildRequires:  ros-jazzy-fastrtps-cmake-module
+BuildRequires:  ros-jazzy-rcpputils
+BuildRequires:  ros-jazzy-rcutils
+BuildRequires:  ros-jazzy-rmw
+BuildRequires:  ros-jazzy-rmw-dds-common
+BuildRequires:  ros-jazzy-rmw-fastrtps-shared-cpp
+BuildRequires:  ros-jazzy-rosidl-dynamic-typesupport
+BuildRequires:  ros-jazzy-rosidl-dynamic-typesupport-fastrtps
+BuildRequires:  ros-jazzy-rosidl-runtime-c
+BuildRequires:  ros-jazzy-rosidl-runtime-cpp
+BuildRequires:  ros-jazzy-rosidl-typesupport-fastrtps-c
+BuildRequires:  ros-jazzy-rosidl-typesupport-fastrtps-cpp
+BuildRequires:  ros-jazzy-tracetools
 
-Requires:       lttng-tools
-Requires:       lttng-ust-devel
+Requires:       ros-jazzy-ament-cmake
+Requires:       ros-jazzy-fastcdr
+Requires:       ros-jazzy-fastrtps
+Requires:       ros-jazzy-fastrtps-cmake-module
+Requires:       ros-jazzy-rcpputils
+Requires:       ros-jazzy-rcutils
+Requires:       ros-jazzy-rmw
+Requires:       ros-jazzy-rmw-dds-common
+Requires:       ros-jazzy-rmw-fastrtps-shared-cpp
+Requires:       ros-jazzy-rosidl-dynamic-typesupport
+Requires:       ros-jazzy-rosidl-dynamic-typesupport-fastrtps
+Requires:       ros-jazzy-rosidl-runtime-c
+Requires:       ros-jazzy-rosidl-runtime-cpp
+Requires:       ros-jazzy-rosidl-typesupport-fastrtps-c
+Requires:       ros-jazzy-rosidl-typesupport-fastrtps-cpp
+Requires:       ros-jazzy-tracetools
 
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 
 %description
-Tracing wrapper for ROS 2.
+Implement the ROS middleware interface using eProsima FastRTPS static code
+generation in C++.
 
 %prep
-%autosetup -p1 -n ros2_tracing-release-release-jazzy-tracetools-8.2.5-1
+%autosetup -p1 -n rmw_fastrtps-release-release-jazzy-rmw_fastrtps_cpp-8.4.3-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -76,10 +103,8 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 %{install_prefix}/include/%{pkg_name}/
 %{install_prefix}/lib/lib%{pkg_name}.so*
-%{install_prefix}/lib/libtracetools_status.so*
-%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 8.2.5-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 8.4.3-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

@@ -1,6 +1,7 @@
 %global ros_distro       jazzy
 %global pkg_name         libyaml_vendor
 %global install_prefix   /opt/ros/jazzy
+%global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-libyaml-vendor
 Version:        1.6.3
