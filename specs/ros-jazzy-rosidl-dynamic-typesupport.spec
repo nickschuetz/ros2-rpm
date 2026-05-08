@@ -1,50 +1,36 @@
 %global ros_distro       jazzy
-%global pkg_name         rosidl_typesupport_fastrtps_cpp
+%global pkg_name         rosidl_dynamic_typesupport
 %global install_prefix   /opt/ros/jazzy
 
-Name:           ros-%{ros_distro}-rosidl-typesupport-fastrtps-cpp
-Version:        3.6.3
+Name:           ros-%{ros_distro}-rosidl-dynamic-typesupport
+Version:        0.1.2
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy rosidl_typesupport_fastrtps_cpp
+Summary:        ROS 2 Jazzy rosidl_dynamic_typesupport
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release
-Source0:        https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/release/jazzy/rosidl_typesupport_fastrtps_cpp/3.6.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2-gbp/rosidl_dynamic_typesupport-release
+Source0:        https://github.com/ros2-gbp/rosidl_dynamic_typesupport-release/archive/refs/tags/release/jazzy/rosidl_dynamic_typesupport/0.1.2-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  ros-jazzy-ament-cmake-python
 BuildRequires:  ros-jazzy-ament-cmake-ros
-BuildRequires:  ros-jazzy-fastcdr
-BuildRequires:  ros-jazzy-fastrtps-cmake-module
-BuildRequires:  ros-jazzy-rmw
+BuildRequires:  ros-jazzy-rcutils
 BuildRequires:  ros-jazzy-rosidl-runtime-c
 
-Requires:       python3-devel
-Requires:       ros-jazzy-ament-cmake-ros
-Requires:       ros-jazzy-ament-index-python
-Requires:       ros-jazzy-fastcdr
-Requires:       ros-jazzy-fastrtps-cmake-module
-Requires:       ros-jazzy-rmw
-Requires:       ros-jazzy-rosidl-cli
-Requires:       ros-jazzy-rosidl-generator-c
-Requires:       ros-jazzy-rosidl-generator-cpp
-Requires:       ros-jazzy-rosidl-pycommon
+Requires:       ros-jazzy-rcutils
 Requires:       ros-jazzy-rosidl-runtime-c
-Requires:       ros-jazzy-rosidl-runtime-cpp
-Requires:       ros-jazzy-rosidl-typesupport-interface
 
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 
 %description
-Generate the C++ interfaces for eProsima FastRTPS.
+Unified serialization support interface for dynamic typesupport in C.
 
 %prep
-%autosetup -p1 -n rosidl_typesupport_fastrtps-release-release-jazzy-rosidl_typesupport_fastrtps_cpp-3.6.3-1
+%autosetup -p1 -n rosidl_dynamic_typesupport-release-release-jazzy-rosidl_dynamic_typesupport-0.1.2-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -77,7 +63,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 echo 'tests skipped — see CLAUDE.md / packages.yaml'
 
 %files
-# (no LICENSE file in source tree — see package.xml <license>)
+%license LICENSE
 %doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
@@ -87,13 +73,10 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
 %{install_prefix}/include/%{pkg_name}/
 %{install_prefix}/lib/lib%{pkg_name}.so*
-%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 3.6.3-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.1.2-1
 - Initial Fedora COPR build for ROS 2 Jazzy.
