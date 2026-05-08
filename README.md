@@ -83,6 +83,7 @@ This repo is one of several ROS-on-Fedora packaging efforts. The [Fedora Robotic
 
 ## Documentation
 
+- [`CHANGELOG.md`](CHANGELOG.md) — COPR-level release history (per-spec `%changelog` is the per-package audit trail).
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — pipeline overview, the four spec patterns, install layout, dependency model, CI/publishing flow.
 - [`docs/SCOPE.md`](docs/SCOPE.md) — phased scope policy, in/out lists, package boundaries.
 - [`docs/build-order.md`](docs/build-order.md) — dependency-ordered build pipeline, build patterns the generator handles, and known edge cases.
