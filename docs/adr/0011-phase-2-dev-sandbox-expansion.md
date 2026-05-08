@@ -1,6 +1,6 @@
 # ADR 0011 — Phase 2: dev-sandbox expansion of `ros-jazzy-desktop` content
 
-**Status:** Accepted (2026-05-08)
+**Status:** Accepted (2026-05-08). Most of the planned Phase 2 surface shipped within the day (rqt suite, ros2cli, Cyclone DDS chain, launch family, demo nodes, lifecycle backfill). The **`rviz2` chain remains deferred** at end-of-session due to two upstream blockers — Ogre 14.x's `cmake_minimum_required` predates CMake 4.x (Fedora 44+'s default), and Assimp's bundled `-Werror` overrides our spec's `-Wno-error` and trips on Fedora's stricter GCC warnings. System library substitution doesn't help (Fedora ships Ogre 1.9, too old; Assimp 6.x, incompatibly new). Not a scope reversal — the deferral is engineering blocker, not a policy change. See [`docs/SCOPE.md` → "rviz2 deferral side effects"](../SCOPE.md#rviz2-deferral-side-effects) for the impact and workarounds.
 
 ## Context
 

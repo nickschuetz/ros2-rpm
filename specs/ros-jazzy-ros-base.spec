@@ -49,9 +49,11 @@ stack and the common message packages used by most robotics applications:
 std_msgs, geometry_msgs, sensor_msgs, nav_msgs, trajectory_msgs, action_msgs,
 service_msgs, ackermann_msgs, vision_msgs, and control_msgs.
 
-License-clean: contains only Apache-2.0 and BSD-3-Clause content. Phase 2
-will expand to upstream ros-jazzy-desktop with rviz2 (Qt/LGPL-3.0) and
-related packages.
+License-clean: contains only Apache-2.0 and BSD-3-Clause content. The
+Phase 2 dev-sandbox metapackage `ros-jazzy-ros-desktop` is a separate
+opt-in install that adds the rqt suite (Qt/LGPL-3.0) and the Cyclone
+DDS alternate RMW (EPL-2.0). The rviz2 chain is currently deferred in
+both Phase 1 and Phase 2 — see docs/SCOPE.md.
 
 %prep
 # No source — pure metapackage.

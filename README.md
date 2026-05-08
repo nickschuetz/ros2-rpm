@@ -16,17 +16,18 @@ Two phases, both development-only. The disclaimer at the top of this README appl
 
 ~85 packages: `rclcpp`, `tf2_ros`, common message packages (`std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `trajectory_msgs`, `ackermann_msgs`, `vision_msgs`, `control_msgs`), `rmw_fastrtps_cpp` + Fast DDS, plus the metapackages `ros-jazzy-ros-core` and `ros-jazzy-ros-base`. Built on `fedora-44`, `fedora-rawhide`, `centos-stream-10` × `x86_64` + `aarch64`. License-clean: only `Apache-2.0` and `BSD-3-Clause`.
 
-### Phase 2 — dev-sandbox expansion (in progress)
+### Phase 2 — dev-sandbox expansion (live)
 
-Per [ADR 0011](docs/adr/0011-phase-2-dev-sandbox-expansion.md), Phase 2 expands the development sandbox so developers can visualize, debug, and test their code locally on Fedora — without forcing a hop to a RHEL container. Phase 2 is **smaller than the originally-planned ~320-package full desktop** (the originally-cancelled Phase 2 in [ADR 0010](docs/adr/0010-project-pivot-to-development-only.md)) — only the developer-tooling slice. Adds the `ros-jazzy-ros-desktop` metapackage with a heterogeneous license aggregate honestly disclosed.
+Per [ADR 0011](docs/adr/0011-phase-2-dev-sandbox-expansion.md), Phase 2 expands the development sandbox so developers can visualize, debug, and test their code locally on Fedora. Phase 2 is **smaller than the originally-planned ~320-package full desktop** (the originally-cancelled Phase 2 in [ADR 0010](docs/adr/0010-project-pivot-to-development-only.md)) — only the developer-tooling slice. Adds the `ros-jazzy-ros-desktop` metapackage with a heterogeneous license aggregate honestly disclosed.
 
-Included:
-- `rviz2` + plugin chain (visualization).
-- `rqt` + key plugins (`rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_service_caller`, `rqt_action`, `rqt_plot`).
+Live:
+- `rqt` + key plugins (`rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_service_caller`, `rqt_action`, `rqt_plot`) — Fedora chroots only; CentOS Stream 10 lacks Qt5 build deps.
 - `ros2cli` and per-domain CLI tools (`ros2pkg`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`, `ros2run`).
 - `rmw_cyclonedds_cpp` + `cyclonedds` as alternate RMW (adds `EPL-2.0`).
-- `launch` family (`launch`, `launch_ros`, `launch_xml`, `launch_yaml`).
+- `launch` family (`launch`, `launch_ros`, `launch_xml`, `launch_yaml`, `launch_testing`).
 - `demo_nodes_cpp` and `demo_nodes_py` for end-to-end environment verification.
+
+**Deferred — `rviz2` chain.** 3D visualization is **not** packaged. Two upstream blockers: Ogre 14.x's bundled `cmake_minimum_required` predates CMake 4.x (Fedora 44 ships CMake 4.x), and Assimp's bundled `-Werror` overrides the spec's `-Wno-error` and trips on Fedora's stricter GCC warnings. Fedora's system `ogre-devel` is too old (1.9) and `assimp-devel` is too new (6.x) to substitute. See [`docs/SCOPE.md`](docs/SCOPE.md#rviz2-deferral-side-effects) for what this means in practice and the workarounds.
 
 Explicitly **not** in Phase 2 dev-sandbox: full `nav2_*` navigation, `ros2control`, simulation bridges, deployment tooling. Those are production-shaped surfaces and belong on Open Robotics's official Lyrical packages.
 

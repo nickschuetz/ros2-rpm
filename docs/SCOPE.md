@@ -41,18 +41,58 @@ For the realized dependency-ordered build pipeline (ament_cmake stack → utilit
 
 After ADR 0010 cancelled the originally-planned ~320-package full `ros-jazzy-desktop` (production trajectory), [ADR 0011](adr/0011-phase-2-dev-sandbox-expansion.md) **reopened Phase 2 as a smaller dev-sandbox expansion** so developers can visualize, debug, and test their code locally on Fedora. The dev-only positioning is unchanged; the disclaimer banner stays on every public surface; Open Robotics remains the production path for Lyrical.
 
-### Phase 2 in scope
+### Phase 2 — what's live (Fedora chroots only — see Stream 10 caveat below)
 
-- **Visualization**: `rviz2`, `rviz_common`, `rviz_default_plugins`, `rviz_rendering`, `rviz_ogre_vendor`, `rviz_assimp_vendor`.
-- **rqt suite**: `rqt`, `rqt_gui`, `rqt_gui_cpp`, `rqt_gui_py`, `rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_service_caller`, `rqt_action`, `rqt_plot`. Underlying Qt foundation: `qt_gui`, `qt_gui_cpp`, `qt_gui_py_common`, `qt_dotgraph`.
+- **rqt suite**: `rqt`, `rqt_gui`, `rqt_gui_cpp`, `rqt_gui_py`, `rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_service_caller`, `rqt_action`, `rqt_plot`. Underlying Qt foundation: `qt_gui`, `qt_gui_cpp`, `qt_gui_py_common`, `qt_dotgraph`, `python_qt_binding`, `pluginlib`, `tinyxml2_vendor`, `tango_icons_vendor`.
 - **Alternate RMW**: `rmw_cyclonedds_cpp` and `cyclonedds`. Adds `EPL-2.0` to the COPR's license aggregate.
-- **`ros2cli` suite**: `ros2cli`, `ros2pkg`, `ros2run`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`.
-- **Launch infrastructure**: `launch`, `launch_ros`, `launch_xml`, `launch_yaml`, `launch_testing` (verify against current Phase 1 manifest before duplicating).
+- **`ros2cli` suite**: `ros2cli`, `ros2pkg`, `ros2run`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`. Plus `rosidl_runtime_py`, `ament_copyright` (transitive runtime deps).
+- **Launch infrastructure**: `launch`, `launch_ros`, `launch_xml`, `launch_yaml`, `launch_testing`, `osrf_pycommon`.
+- **Lifecycle backfill** (originally deferred from Phase 1): `lifecycle_msgs`, `rcl_lifecycle`, `rclcpp_lifecycle`, `rclpy`, `pybind11_vendor`.
 - **Demo nodes**: `demo_nodes_cpp`, `demo_nodes_py`, `example_interfaces` for environment verification.
 
 ### Phase 2 metapackage
 
-- **`ros-jazzy-ros-desktop`** — new metapackage. License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (and `AND EPL-2.0` if Cyclone DDS is shipped). Pulls in `ros-jazzy-ros-base` plus the Phase 2 surface. Users explicitly opt in to the heterogeneous license aggregate by installing this metapackage.
+- **`ros-jazzy-ros-desktop`** — License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (Qt5 via the rqt suite). Pulls in `ros-jazzy-ros-base` plus the Phase 2 surface. Users explicitly opt in to the heterogeneous license aggregate by installing this metapackage. **Does not include rviz2** — see deferral note below.
+
+### Phase 2 build matrix caveat
+
+The Qt5-dependent packages (qt_gui_core, python_qt_binding, rqt + plugins) build successfully on the **4 Fedora chroots** (`fedora-44` + `fedora-rawhide` × `x86_64` + `aarch64`) but fail on **CentOS Stream 10** because Stream 10 doesn't ship `python3-sip-devel` and other Qt5 build deps. Stream 10 users get `ros-jazzy-ros-base` + the headless launch / ros2cli / demo packages; for visualization on Stream 10, run `rqt` from a Fedora chroot.
+
+<a name="rviz2-deferral-side-effects"></a>
+### rviz2 deferral — side effects
+
+`rviz2` (and its chain: `rviz_ogre_vendor`, `rviz_assimp_vendor`, `rviz_rendering`, `rviz_common`, `rviz_default_plugins`) is **not packaged**. Two upstream blockers identified during Phase 2 P-4:
+
+| Package | Blocker |
+|---|---|
+| `rviz_ogre_vendor` | Ogre 14.x's vendored CMake config has `cmake_minimum_required` below CMake 4.x's hard floor. Fedora 44 ships CMake 4.x. Workaround `-DCMAKE_POLICY_VERSION_MINIMUM=3.5` was tried but Ogre's build hit further issues; needs upstream attention or a real CMake-policy patch. |
+| `rviz_assimp_vendor` | Assimp's bundled CMakeLists adds `-Werror` via its own `target_compile_options`, ordered after our spec's `-Wno-error` override and Fedora's stricter GCC warnings (`-Wunused-but-set-variable` on `MS3DLoader.cpp`). Fixing this requires either an upstream patch or replacing the vendored ExternalProject with system `assimp-devel`. |
+
+System library substitution doesn't help: Fedora's `ogre-devel` is **1.9.x**, not the **14.x** rviz needs. Fedora's `assimp-devel` is **6.x**, newer than rviz's vendored 5.x with API differences.
+
+**What you lose without rviz2:**
+
+- **No 3D visualization.** Point clouds, robot models (URDF), TF frame trees, occupancy grids, navigation costmaps, marker arrays — none of these can be visualized. rviz2 is the canonical 3D visualizer in ROS 2.
+- **No camera image rendering.** `sensor_msgs/Image` topics can't be displayed live; you can echo metadata via `ros2 topic echo /image_raw` but not see the pixels.
+- **Most tutorials become read-only at the visualization step.** Many ROS 2 tutorials end with "now look at the result in rviz2." You can run the launch files; you just can't see the output.
+- **SLAM, localization, and navigation development is significantly harder.** These workflows are visual-feedback driven; debugging without a 3D viewer of the map / pose / plan is painful.
+- **Robot model debugging is harder.** Verifying URDF/Xacro frames or joint states without `rviz2 -d robot.rviz` means relying on `tf2_echo`/`tf2_monitor` text output.
+
+**What still works without rviz2:**
+
+- **rqt for non-3D debugging.** `rqt_graph` shows the node/topic graph; `rqt_topic` echoes any topic into a Qt list; `rqt_console` aggregates `/rosout` log messages with severity filtering; `rqt_plot` plots scalar message fields over time. None of these need rviz2 or Ogre.
+- **All headless workflows.** Writing nodes, testing message passing, integration tests via `launch_testing`, performance measurement via `ros2 topic hz` — none touch rviz2.
+- **CLI inspection.** `ros2 topic list / echo / hz / info`, `ros2 node list / info`, `ros2 service list / call`, `ros2 param list / get / set`, `ros2 interface show` — full coverage.
+
+**Workarounds if you need 3D visualization today:**
+
+- Run a RHEL 9 container with [packages.ros.org's ROS 2 Jazzy RPMs](https://docs.ros.org/en/jazzy/Installation/RHEL-Install-RPMs.html) — those ship rviz2 against RHEL 9's older Ogre.
+- Forward your DDS topics to a separate workstation with rviz2 already installed (set `ROS_DOMAIN_ID` consistently and ensure firewall allows DDS multicast).
+- Wait for Open Robotics's official Lyrical packages, which the project pivoted to deferring this surface to (per [ADR 0010](adr/0010-project-pivot-to-development-only.md)).
+
+**When this deferral closes:**
+
+When upstream `rviz_ogre_vendor` / `rviz_assimp_vendor` accept patches for the CMake 4.x and `-Werror` issues — or when this repo gains the bandwidth to carry those patches locally — the rviz2 chain rebuilds against the existing P-3 foundation in days. Tracked but not committed; the dev-only positioning means waiting is acceptable.
 
 ### Phase 2 explicitly out of scope (per ADR 0011)
 

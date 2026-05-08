@@ -156,15 +156,17 @@ The dep graph is realized as the tier list in [`build-order.md`](build-order.md)
 ## Phase plan
 
 ```
-   Phase 1 ─────────────────────────────────────────► Phase 2 ──────► Phase 3 (aspirational)
-   minimal subset (~70 packages)                      desktop          Fedora main
-   COPR /opt/ros/jazzy install                        + rviz2/rqt      FHS layout
-                                                      + ~250 pkgs      separate effort
+   Phase 1 (live)        ───►  Phase 2 (live, modulo rviz2)            ╳ Phase 3 (dropped)
+   minimal subset                dev sandbox                              FHS / Fedora main
+   ~85 packages                  + rqt + ros2cli + Cyclone DDS            see ADR 0010
+   /opt/ros/jazzy/                + launch + demo_nodes + lifecycle
+                                  + ros-jazzy-ros-desktop metapackage
+                                  ⚠ rviz2 chain deferred (upstream blockers)
 ```
 
-- **Phase 1** (current): the subset O3DE and embedded-robotics workloads consume — `rclcpp`, common message packages, Fast DDS, `tf2_ros`. License-clean (`Apache-2.0 AND BSD-3-Clause`). Status snapshot in [`SCOPE.md`](SCOPE.md).
-- **Phase 2** (planned): `ros-jazzy-desktop`-equivalent — adds `rviz2`, `rqt_*`, navigation/manipulation stacks, alternative RMW implementations. License aggregate becomes heterogeneous (Qt LGPL-3.0, optional Cyclone DDS EPL-2.0). See [ADR 0006](adr/0006-full-ros2-desktop-as-eventual-scope.md).
-- **Phase 3** (aspirational): submission to Fedora main repos. Requires upstream-first FHS support work, multi-year. See [ADR 0007](adr/0007-install-location-opt-ros-jazzy.md).
+- **Phase 1** (live): minimal subset — `rclcpp`, common message packages, Fast DDS, `tf2_ros`. License-clean (`Apache-2.0 AND BSD-3-Clause`). See [`SCOPE.md`](SCOPE.md) for the package list.
+- **Phase 2** (live except rviz2): the developer-tooling slice of `ros-jazzy-desktop` — rqt suite, ros2cli, alternate Cyclone DDS RMW, launch family, demo_nodes, lifecycle backfill, plus the `ros-jazzy-ros-desktop` metapackage with the heterogeneous `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0 AND EPL-2.0` aggregate. **rviz2 chain is deferred** pending upstream patches for Ogre's CMake-policy floor and Assimp's bundled `-Werror`; see [`SCOPE.md` → "rviz2 deferral side effects"](SCOPE.md#rviz2-deferral-side-effects). See [ADR 0011](adr/0011-phase-2-dev-sandbox-expansion.md).
+- **Phase 3** (dropped): Fedora main-repo inclusion was originally aspirational; dropped in [ADR 0010](adr/0010-project-pivot-to-development-only.md). Production distribution is now Open Robotics's lane via their official Lyrical packages.
 
 ## CI / publishing flow
 
