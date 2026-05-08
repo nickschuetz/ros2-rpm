@@ -882,3 +882,13 @@ demo_nodes_py:
   source_dir: demos-release-release-jazzy-demo_nodes_py-{version}-1
   noarch: true
   disable_tests: true
+ros_environment:
+  source_url: https://github.com/ros2-gbp/ros_environment-release/archive/refs/tags/release/jazzy/ros_environment/{version}-1.tar.gz
+  source_dir: ros_environment-release-release-jazzy-ros_environment-{version}-1
+  noarch: true
+  disable_tests: true
+ros_workspace:
+  source_url: https://github.com/ros2-gbp/ros_workspace-release/archive/refs/tags/release/jazzy/ros_workspace/{version}-7.tar.gz
+  source_dir: ros_workspace-release-release-jazzy-ros_workspace-{version}-7
+  noarch: true
+  disable_tests: true

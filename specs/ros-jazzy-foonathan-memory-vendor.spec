@@ -42,6 +42,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
     -DCMAKE_PREFIX_PATH=%{install_prefix} \
+    -DCMAKE_INSTALL_LIBDIR=lib \
     -DSETUPTOOLS_DEB_LAYOUT=OFF -DBUILD_TESTING=OFF
 %cmake_build
 

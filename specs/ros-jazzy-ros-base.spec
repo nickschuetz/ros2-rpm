@@ -2,7 +2,7 @@
 %global install_prefix   /opt/ros/jazzy
 
 Name:           ros-%{ros_distro}-ros-base
-Version:        0.13.0
+Version:        0.13.1
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy default install — ros-core plus tf2 and common message types
 
@@ -13,8 +13,15 @@ Source0:        ros-jazzy-ros-base-%{version}.tar.gz
 
 BuildArch:      noarch
 
-# Pulls in the full ros_core
-Requires:       ros-jazzy-ros-core = %{version}-%{release}
+# Pulls in the full ros_core (rclcpp, RMW + Fast DDS, message foundations)
+Requires:       ros-jazzy-ros-core
+
+# Workspace setup files (this is what makes `source /opt/ros/jazzy/setup.bash` work).
+Requires:       ros-jazzy-ros-workspace
+Requires:       ros-jazzy-ros-environment
+
+# Python client library — needed for any Python ROS 2 development.
+Requires:       ros-jazzy-rclpy
 
 # tf2 stack — frame transforms, tf2_ros pubs / subs
 Requires:       ros-jazzy-tf2
@@ -60,5 +67,9 @@ echo "ros-jazzy-ros-base %{version} (metapackage)" > %{buildroot}%{install_prefi
 %{install_prefix}/.ros-base-version
 
 %changelog
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.1-1
+- Add ros-workspace, ros-environment, rclpy to the dependency set so a
+  fresh `dnf install ros-jazzy-ros-base` results in a usable Python +
+  C++ ROS environment with /opt/ros/jazzy/setup.bash present.
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.0-1
 - Initial Phase 1 ros-base metapackage covering tf2 + common message stack.
