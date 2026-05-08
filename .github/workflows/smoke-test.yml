@@ -1,0 +1,57 @@
+name: smoke-test
+
+# Validates the published hellaenergy/ros2 contents on a fresh Fedora 44
+# container. PRs that break the smoke test against ros-jazzy-ros-base are
+# blocked from merging.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Daily at 06:00 UTC — catches drift if upstream Fedora updates
+    # something the COPR depends on between PRs.
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smoke-test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke-test-fedora-44:
+    name: Smoke test — Fedora 44 (x86_64)
+    runs-on: ubuntu-latest
+    container: fedora:44
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install COPR + ros-base + optional sub-packages
+        # bash + sudo + dnf-plugins-core (for `dnf copr enable`) come from
+        # core packages already in fedora:44, but we re-confirm rather than
+        # assume.
+        run: |
+          dnf -y install dnf-plugins-core which procps-ng diffutils \
+                         rpm-build cmake gcc gcc-c++ python3-devel \
+                         findutils
+          dnf copr enable -y hellaenergy/ros2
+          dnf -y install \
+            ros-jazzy-ros-base \
+            ros-jazzy-ros2cli \
+            ros-jazzy-ros2node \
+            ros-jazzy-ros2topic \
+            ros-jazzy-demo-nodes-cpp
+
+      - name: Run smoke test
+        run: bash scripts/smoke-test.sh -v
+
+  # We only run x86_64 against the COPR in CI; aarch64 + Stream 10 are
+  # exercised by the COPR build matrix itself. Adding them here would
+  # quintuple CI time for marginal additional coverage given the build
+  # matrix already gates publishing.

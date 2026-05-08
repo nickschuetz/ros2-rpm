@@ -99,9 +99,20 @@ Vulnerability disclosure: [`docs/SECURITY.md`](docs/SECURITY.md).
 
 The [Open Robotics official Fedora packages](https://docs.ros.org/) (starting with Lyrical, the 2026 LTS) are the production-grade path for ROS 2 on Fedora. The [Fedora Robotics SIG](https://gitlab.com/fedora/sigs/robotics) (whose `fedros` / `rosfed` projects use a similar bloom-spec approach) is working separately on Fedora-main-repo inclusion on a longer timeline. This COPR is narrower than either: a development-only sandbox for Jazzy on Fedora until the official Lyrical packages arrive. See [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md) for the full landscape.
 
+## Validating your install
+
+After installing, run [`scripts/smoke-test.sh`](scripts/smoke-test.sh) to verify your install is functional. It checks: package presence, `setup.bash` activation, Python `import rclpy`, a tiny `rclcpp` C++ build + run, `ros2 topic list`, and demo_nodes_cpp talker. No root, no GUI, ~20 seconds.
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/nickschuetz/ros2-rpm/main/scripts/smoke-test.sh)
+```
+
+Full documentation: [`docs/SMOKE-TEST.md`](docs/SMOKE-TEST.md).
+
 ## Documentation
 
 - [`CHANGELOG.md`](CHANGELOG.md) — COPR-level release history (per-spec `%changelog` is the per-package audit trail).
+- [`docs/SMOKE-TEST.md`](docs/SMOKE-TEST.md) — install validation, what each check does, common failure modes.
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — pipeline overview, the four spec patterns, install layout, dependency model, CI/publishing flow.
 - [`docs/SCOPE.md`](docs/SCOPE.md) — phased scope policy, in/out lists, package boundaries.
 - [`docs/build-order.md`](docs/build-order.md) — dependency-ordered build pipeline, build patterns the generator handles, and known edge cases.
