@@ -35,6 +35,21 @@ Framework for ROS 2 command line tools.
 %prep
 %autosetup -p1 -n ros2cli-release-release-jazzy-ros2cli-0.32.9-1
 
+# Reduce setup.py's install_requires to ['setuptools'] before the
+# auto-generated buildrequires step runs. The full list typically references
+# ROS Python packages (launch, ament_index_python, etc.) that live under
+# /opt/ros/jazzy and don't register python3dist(...) Provides; leaving
+# those in setup.py causes pyproject buildrequires to emit BRs that Fedora
+# can't resolve. The runtime Requires: above already enforces these.
+python3 << 'PYEOF' || true
+import re
+p = "setup.py"
+s = open(p).read()
+s = re.sub(r"install_requires\s*=\s*\[[^\]]*\]", "install_requires=['setuptools']", s, flags=re.S)
+open(p, "w").write(s)
+PYEOF
+
+
 %generate_buildrequires
 %pyproject_buildrequires
 

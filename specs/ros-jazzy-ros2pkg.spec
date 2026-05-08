@@ -36,11 +36,24 @@ The pkg command for ROS 2 command line tools.
 %prep
 %autosetup -p1 -n ros2cli-release-release-jazzy-ros2pkg-0.32.9-1
 
-# %pyproject_buildrequires would re-read setup.py's install_requires and emit
-# python3dist(<name>) BRs for every entry. For ROS Python packages whose deps
-# (launch, ament_index_python, …) live under /opt/ros/jazzy and don't register
-# python3dist(...) Provides, that fails dependency resolution. We emit the
-# concrete BuildRequires above instead.
+# Reduce setup.py's install_requires to ['setuptools'] before the
+# auto-generated buildrequires step runs. The full list typically references
+# ROS Python packages (launch, ament_index_python, etc.) that live under
+# /opt/ros/jazzy and don't register python3dist(...) Provides; leaving
+# those in setup.py causes pyproject buildrequires to emit BRs that Fedora
+# can't resolve. The runtime Requires: above already enforces these.
+python3 << 'PYEOF' || true
+import re
+p = "setup.py"
+s = open(p).read()
+s = re.sub(r"install_requires\s*=\s*\[[^\]]*\]", "install_requires=['setuptools']", s, flags=re.S)
+open(p, "w").write(s)
+PYEOF
+
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
