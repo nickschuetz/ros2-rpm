@@ -742,3 +742,23 @@ ros2component:
   source_dir: ros2cli-release-release-jazzy-ros2component-{version}-1
   noarch: true
   disable_tests: true
+python_qt_binding:
+  source_url: https://github.com/ros2-gbp/python_qt_binding-release/archive/refs/tags/release/jazzy/python_qt_binding/{version}-1.tar.gz
+  source_dir: python_qt_binding-release-release-jazzy-python_qt_binding-{version}-1
+  noarch: false
+  disable_tests: true
+pluginlib:
+  source_url: https://github.com/ros2-gbp/pluginlib-release/archive/refs/tags/release/jazzy/pluginlib/{version}-1.tar.gz
+  source_dir: pluginlib-release-release-jazzy-pluginlib-{version}-1
+  noarch: false
+  disable_tests: true
+tinyxml2_vendor:
+  source_url: https://github.com/ros2-gbp/tinyxml2_vendor-release/archive/refs/tags/release/jazzy/tinyxml2_vendor/{version}-1.tar.gz
+  source_dir: tinyxml2_vendor-release-release-jazzy-tinyxml2_vendor-{version}-1
+  noarch: false
+  disable_tests: true
+tango_icons_vendor:
+  source_url: https://github.com/ros2-gbp/tango_icons_vendor-release/archive/refs/tags/release/jazzy/tango_icons_vendor/{version}-1.tar.gz
+  source_dir: tango_icons_vendor-release-release-jazzy-tango_icons_vendor-{version}-1
+  noarch: false
+  disable_tests: true
