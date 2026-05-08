@@ -1,49 +1,40 @@
 %global ros_distro       jazzy
-%global pkg_name         rosidl_generator_py
+%global pkg_name         action_msgs
 %global install_prefix   /opt/ros/jazzy
 
-Name:           ros-%{ros_distro}-rosidl-generator-py
-Version:        0.22.2
+Name:           ros-%{ros_distro}-action-msgs
+Version:        2.0.3
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy rosidl_generator_py
+Summary:        ROS 2 Jazzy action_msgs
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/rosidl_python-release
-Source0:        https://github.com/ros2-gbp/rosidl_python-release/archive/refs/tags/release/jazzy/rosidl_generator_py/0.22.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2-gbp/rcl_interfaces-release
+Source0:        https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/action_msgs/2.0.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
-BuildArch:      noarch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-jazzy-ament-cmake
-BuildRequires:  ros-jazzy-rosidl-runtime-c
+BuildRequires:  ros-jazzy-builtin-interfaces
+BuildRequires:  ros-jazzy-rosidl-core-generators
+BuildRequires:  ros-jazzy-service-msgs
+BuildRequires:  ros-jazzy-unique-identifier-msgs
 
-Requires:       python3-numpy
-Requires:       ros-jazzy-ament-cmake
-Requires:       ros-jazzy-ament-index-python
-Requires:       ros-jazzy-rosidl-cli
-Requires:       ros-jazzy-rosidl-generator-c
-Requires:       ros-jazzy-rosidl-parser
-Requires:       ros-jazzy-rosidl-pycommon
-Requires:       ros-jazzy-rosidl-runtime-c
-Requires:       ros-jazzy-rosidl-typesupport-c
-Requires:       ros-jazzy-rosidl-typesupport-interface
-# rosidl_generator_py's CMake macros find_package(python_cmake_module) and
-# import rpyutils at code-gen time. Upstream's package.xml omits them; pull
-# them in here so every consumer inherits the transitive deps.
-Requires:       ros-jazzy-python-cmake-module
-Requires:       ros-jazzy-rpyutils
+Requires:       ros-jazzy-builtin-interfaces
+Requires:       ros-jazzy-rosidl-core-runtime
+Requires:       ros-jazzy-service-msgs
+Requires:       ros-jazzy-unique-identifier-msgs
 
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 
 %description
-Generate the ROS interfaces in Python.
+Messages and service definitions common among all ROS actions.
 
 %prep
-%autosetup -p1 -n rosidl_python-release-release-jazzy-rosidl_generator_py-0.22.2-1
+%autosetup -p1 -n rcl_interfaces-release-release-jazzy-action_msgs-2.0.3-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -53,6 +44,15 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
     -DCMAKE_PREFIX_PATH=%{install_prefix} \
+    -DCMAKE_INSTALL_INCLUDEDIR=include \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_INSTALL_BINDIR=bin \
+    -DCMAKE_INSTALL_DATADIR=share \
+    -DCMAKE_INSTALL_SYSCONFDIR=etc \
+    -DINCLUDE_INSTALL_DIR=%{install_prefix}/include \
+    -DLIB_INSTALL_DIR=%{install_prefix}/lib \
+    -DSYSCONF_INSTALL_DIR=%{install_prefix}/etc \
+    -DSHARE_INSTALL_PREFIX=%{install_prefix}/share \
     -DSETUPTOOLS_DEB_LAYOUT=OFF -DBUILD_TESTING=OFF
 %cmake_build
 
@@ -73,16 +73,17 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # generator emits the conventional ament_cmake set but specific packages may
 # need additions or trimming.
 %{install_prefix}/share/%{pkg_name}/
-# Sentinels: ament_index/resource_index/<index>/<pkg>. Standard ones include
-# packages/, package_run_dependencies/, parent_prefix_path/, and any group the
-# package is member_of (rosidl_runtime_packages, rosidl_interface_packages, etc.).
-# A glob covers all of them in one line.
+# Sentinels: ament_index/resource_index/<index>/<pkg>. Glob covers
+# packages/, package_run_dependencies/, parent_prefix_path/, and any
+# member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# Message package — multiple typesupport .so variants + Python bindings.
+%{install_prefix}/include/%{pkg_name}/
+%{install_prefix}/lib/lib%{pkg_name}__rosidl_*.so
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
-%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog
-* Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 0.22.2-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 2.0.3-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

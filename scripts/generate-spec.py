@@ -418,13 +418,32 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
         or "ament_export_libraries" in cml
     )
     ships_lib_scripts = bool(_re.search(r"install\s*\(\s*PROGRAMS\b", cml, _re.S))
+    # Message packages: detect msg/ srv/ action/ subdirs in source. They
+    # generate per-typesupport .so libs with names lib<pkg>__rosidl_*.so
+    # (one each for generator_c, generator_py, typesupport_c/cpp, typesupport_
+    # fastrtps_c/cpp, typesupport_introspection_c/cpp). Plus include headers
+    # in include/<pkg>/<pkg>/ (the doubled subpath upstream uses) and Python
+    # bindings under lib/python<X>/site-packages/<pkg>/.
+    is_message_pkg = bool(src_root and (
+        (src_root / "msg").is_dir() or (src_root / "srv").is_dir() or (src_root / "action").is_dir()
+    ))
+
     extra_arch_files = ""
-    if ships_headers:
-        extra_arch_files += "%{install_prefix}/include/%{pkg_name}/\n"
-    if ships_compiled_lib:
-        extra_arch_files += "%{install_prefix}/lib/lib%{pkg_name}.so*\n"
-    if ships_lib_scripts:
-        extra_arch_files += "%{install_prefix}/lib/%{pkg_name}/\n"
+    if is_message_pkg:
+        extra_arch_files += (
+            "# Message package — multiple typesupport .so variants + Python bindings.\n"
+            "%{install_prefix}/include/%{pkg_name}/\n"
+            "%{install_prefix}/lib/lib%{pkg_name}__rosidl_*.so\n"
+            "%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/\n"
+            "%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/\n"
+        )
+    else:
+        if ships_headers:
+            extra_arch_files += "%{install_prefix}/include/%{pkg_name}/\n"
+        if ships_compiled_lib:
+            extra_arch_files += "%{install_prefix}/lib/lib%{pkg_name}.so*\n"
+        if ships_lib_scripts:
+            extra_arch_files += "%{install_prefix}/lib/%{pkg_name}/\n"
 
     # Only ament_cmake packages (which call ament_package()) install
     # /opt/ros/<distro>/share/ament_index/resource_index/<group>/<pkg>

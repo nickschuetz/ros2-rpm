@@ -2,6 +2,7 @@
 
 - **Status**: Accepted as Phase 1 scope; superseded in part by ADR 0006 which makes this the first phase of a phased path to full `ros-jazzy-desktop`.
 - **Date**: 2026-05-07
+- **Realization note (2026-05-08)**: Phase 1 build is in progress. The "~70 packages" estimate held — current count is ~50+ live with ~20 more in the message-tier and rcl/rclcpp/tf2 layers to reach full Phase 1. See [`docs/build-order.md`](../build-order.md) for the realized dependency tiers, which surfaced ~10 additional supporting packages (rcutils, rcpputils, rmw, fastdds chain, ament_index_python, python_cmake_module, rpyutils, rosidl_dynamic_typesupport, unique_identifier_msgs, rosidl_default_generators/runtime) that the original ADR didn't enumerate by name.
 
 ## Context
 

@@ -254,6 +254,88 @@ builtin_interfaces:
   noarch: false  # generates compiled type-support libraries
   disable_tests: true  # ament_lint_common not yet packaged
 
+# Tier 0: rosidl_defaults umbrellas (alongside the rosidl_core ones we already
+# have). Distinct from core: defaults pulls in additional generators.
+rosidl_default_generators:
+  source_url: https://github.com/ros2-gbp/rosidl_defaults-release/archive/refs/tags/release/jazzy/rosidl_default_generators/{version}-3.tar.gz
+  source_dir: rosidl_defaults-release-release-jazzy-rosidl_default_generators-{version}-3
+  disable_tests: true
+
+rosidl_default_runtime:
+  source_url: https://github.com/ros2-gbp/rosidl_defaults-release/archive/refs/tags/release/jazzy/rosidl_default_runtime/{version}-3.tar.gz
+  source_dir: rosidl_defaults-release-release-jazzy-rosidl_default_runtime-{version}-3
+  disable_tests: true
+
+unique_identifier_msgs:
+  source_url: https://github.com/ros2-gbp/unique_identifier_msgs-release/archive/refs/tags/release/jazzy/unique_identifier_msgs/{version}-3.tar.gz
+  source_dir: unique_identifier_msgs-release-release-jazzy-unique_identifier_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+# Tier 1: in-repo siblings of builtin_interfaces, no msg deps.
+service_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/service_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-jazzy-service_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+std_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/jazzy/std_msgs/{version}-1.tar.gz
+  source_dir: common_interfaces-release-release-jazzy-std_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+# Tier 2.
+action_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/action_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-jazzy-action_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+geometry_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/jazzy/geometry_msgs/{version}-1.tar.gz
+  source_dir: common_interfaces-release-release-jazzy-geometry_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+ackermann_msgs:
+  source_url: https://github.com/ros2-gbp/ackermann_msgs-release/archive/refs/tags/release/jazzy/ackermann_msgs/{version}-6.tar.gz
+  source_dir: ackermann_msgs-release-release-jazzy-ackermann_msgs-{version}-6
+  noarch: false
+  disable_tests: true
+
+trajectory_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/jazzy/trajectory_msgs/{version}-1.tar.gz
+  source_dir: common_interfaces-release-release-jazzy-trajectory_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+# Tier 3.
+sensor_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/jazzy/sensor_msgs/{version}-1.tar.gz
+  source_dir: common_interfaces-release-release-jazzy-sensor_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+nav_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/jazzy/nav_msgs/{version}-1.tar.gz
+  source_dir: common_interfaces-release-release-jazzy-nav_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+vision_msgs:
+  source_url: https://github.com/ros2-gbp/vision_msgs-release/archive/refs/tags/release/jazzy/vision_msgs/{version}-3.tar.gz
+  source_dir: vision_msgs-release-release-jazzy-vision_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+# Tier 4.
+control_msgs:
+  source_url: https://github.com/ros2-gbp/control_msgs-release/archive/refs/tags/release/jazzy/control_msgs/{version}-1.tar.gz
+  source_dir: control_msgs-release-release-jazzy-control_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
 # rosidl monorepo (https://github.com/ros2/rosidl, tag 4.6.7 for jazzy).
 # Pure-Python packages stay noarch; CMake packages that compile flip the flag.
 # All entries inherit version 4.6.7 from each package.xml.

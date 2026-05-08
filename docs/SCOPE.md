@@ -8,10 +8,12 @@ The package set is delivered in **two phases**, with **Phase 3** as an aspiratio
 
 The package set required by the [O3DE ROS 2 Gem](https://github.com/o3de/o3de-extras/tree/development/Gems/ROS2) and adjacent embedded-robotics workloads — approximately 70 packages. Pipeline proving ground for Phase 2.
 
-### Phase 1 direct consumers
+For the realized dependency-ordered build pipeline (ament_cmake stack → utility libs → rosidl chain → Fast DDS chain → message foundation → tier-1/2/3/4 messages → client APIs), see [`docs/build-order.md`](build-order.md).
+
+### Phase 1 direct consumers (the O3DE-targeted leaves)
 
 - `rclcpp`
-- `builtin_interfaces`
+- `builtin_interfaces` ✓ (live)
 - `std_msgs`
 - `sensor_msgs`
 - `nav_msgs`
@@ -23,10 +25,12 @@ The package set required by the [O3DE ROS 2 Gem](https://github.com/o3de/o3de-ex
 
 ### Phase 1 transitive dependencies (representative; full list in `manifest.yaml`)
 
-- `rcl`, `rclcpp_components`, `rmw`, `rmw_implementation`, `rmw_fastrtps_cpp`
-- `rosidl_*` and `ament_*` build tooling
-- Fast DDS, Fast CDR, foonathan_memory
-- `tinyxml2`, `console_bridge`, `libyaml`, `spdlog`, `pybind11` — linked from system Fedora packages, never vendored
+- **Build tooling**: full `ament_cmake_*` family, `python_cmake_module`, `ament_index_python`.
+- **Utility libs**: `rcutils`, `rcpputils`, `rpyutils`.
+- **rosidl chain**: `rosidl_typesupport_interface`, `rosidl_pycommon`, `rosidl_adapter`, `rosidl_runtime_c/cpp`, `rosidl_parser`, `rosidl_cli`, `rosidl_cmake`, `rosidl_generator_c/cpp/py/type_description`, `rosidl_typesupport_introspection_c/cpp`, `rosidl_typesupport_c/cpp`, `rosidl_typesupport_fastrtps_c/cpp`, `rosidl_dynamic_typesupport`, `rosidl_core_generators/runtime`, `rosidl_default_generators/runtime`.
+- **Middleware**: `rmw`, `rmw_fastrtps_cpp` (Phase 1 default RMW).
+- **Fast DDS chain**: `foonathan_memory_vendor` (vendor wrapper), `fastcdr`, `fastrtps`, `fastrtps_cmake_module`.
+- **System libs (linked from Fedora)**: `tinyxml2`, `console_bridge`, `libyaml`, `spdlog`, `pybind11`, `asio`, `openssl`. Never vendored.
 
 ### Phase 1 metapackages
 

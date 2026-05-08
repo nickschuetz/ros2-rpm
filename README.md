@@ -8,9 +8,11 @@ The end state is a `ros-jazzy-desktop`-equivalent install path — filling the g
 
 Delivered in two phases. Phase 1 is the current shipping scope; Phase 2 expands to full desktop.
 
-### Phase 1 — current scope (~70 packages)
+### Phase 1 — current scope (~70 packages, 50+ live)
 
 Pipeline proving ground: `rclcpp`, common message packages, `rmw_fastrtps_cpp` + Fast DDS, transitive deps. License-clean (`Apache-2.0 AND BSD-3-Clause`). Validates the bloom + rosdep + Python-3.14 patch chain on a small surface. Ships first.
+
+**Status (snapshot, 2026-05-08)**: ament_cmake stack ✓ (all 21 packages), rcutils/rcpputils ✓, full rosidl chain ✓, Fast DDS chain ✓ (foonathan_memory_vendor + fastcdr + fastrtps + rmw + typesupport_fastrtps_c/cpp), `builtin_interfaces` ✓ (the first message package — multi-typesupport, all bindings). Currently cranking through the message tier (`std_msgs`, `geometry_msgs`, etc.). See [`docs/build-order.md`](docs/build-order.md) for the dependency-ordered build pipeline.
 
 ### Phase 2 — `ros-jazzy-desktop` equivalent (~320 packages)
 
@@ -78,6 +80,7 @@ Vulnerability disclosure: [`docs/SECURITY.md`](docs/SECURITY.md).
 ## Documentation
 
 - [`docs/SCOPE.md`](docs/SCOPE.md) — phased scope policy, in/out lists, package boundaries.
+- [`docs/build-order.md`](docs/build-order.md) — dependency-ordered build pipeline, build patterns the generator handles, and known edge cases.
 - [`docs/UPGRADING.md`](docs/UPGRADING.md) — upgrade procedures across ROS 2 distros and Fedora releases.
 - [`docs/SECURITY.md`](docs/SECURITY.md) — vulnerability handling, watchlist, disclosure.
 - [`docs/adr/`](docs/adr/) — architecture decision records (read these before opening scope-changing PRs).
