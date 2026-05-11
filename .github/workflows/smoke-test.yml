@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install COPR + ros-base + optional sub-packages
         # bash + sudo + dnf-plugins-core (for `dnf copr enable`) come from
