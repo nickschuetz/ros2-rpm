@@ -1,0 +1,109 @@
+name: drift-check
+
+# Weekly check of local spec versions versus upstream rosdistro/jazzy.
+# When drift is detected, open (or update in place) a single sticky issue
+# labeled `upstream-drift` with the full drift report. When drift returns
+# to zero, close the sticky issue with a "fully caught up" comment.
+#
+# Weekly rather than nightly: rosdistro pushes are frequent and on a
+# dev-only COPR most individual bumps aren't urgent. Batching is cleaner
+# than nag-style daily pings.
+
+on:
+  schedule:
+    # Sunday at 08:00 UTC. Gives weekend visibility ahead of a fresh week,
+    # doesn't crowd weekday-morning notification feeds.
+    - cron: '0 8 * * 0'
+  workflow_dispatch: {}
+  push:
+    paths:
+      - 'scripts/check-upstream.py'
+      - 'scripts/packages.yaml'
+      - '.github/workflows/drift-check.yml'
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: drift-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PyYAML
+        run: pip install --quiet pyyaml
+
+      - name: Ensure labels exist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          gh label create upstream-drift --repo "$REPO" \
+            --color BFD4F2 \
+            --description "Local specs behind upstream rosdistro/jazzy" 2>/dev/null || true
+          gh label create maintenance --repo "$REPO" \
+            --color CCCCCC \
+            --description "Repo maintenance / housekeeping" 2>/dev/null || true
+
+      - name: Run drift checker
+        id: drift
+        run: |
+          set -euo pipefail
+          python3 scripts/check-upstream.py --json > /tmp/drift.json
+          python3 scripts/check-upstream.py        > /tmp/drift.md
+          cat /tmp/drift.md
+          {
+            echo '## Upstream drift report'
+            echo
+            cat /tmp/drift.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          BEHIND=$(python3 -c '
+          import json
+          with open("/tmp/drift.json") as f:
+              d = json.load(f)
+          print(sum(1 for r in d if r.get("status") == "behind"))
+          ')
+          echo "behind=$BEHIND" >> "$GITHUB_OUTPUT"
+
+      - name: Open / update drift issue when packages are behind
+        if: steps.drift.outputs.behind != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          TITLE="Upstream drift: ${{ steps.drift.outputs.behind }} package(s) behind rosdistro/jazzy"
+
+          EXISTING=$(gh issue list --repo "$REPO" --state open --label upstream-drift \
+                       --json number --jq '.[0].number' || echo "")
+
+          if [ -n "$EXISTING" ]; then
+            gh issue edit "$EXISTING" --repo "$REPO" --title "$TITLE" \
+              --body-file /tmp/drift.md
+          else
+            gh issue create --repo "$REPO" --title "$TITLE" \
+              --label upstream-drift,maintenance \
+              --body-file /tmp/drift.md
+          fi
+
+      - name: Close drift issue when fully caught up
+        if: steps.drift.outputs.behind == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          EXISTING=$(gh issue list --repo "$REPO" --state open --label upstream-drift \
+                       --json number --jq '.[0].number' || echo "")
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --repo "$REPO" \
+              --body "Fully caught up with rosdistro/jazzy — closing. Next check: weekly cron."
+            gh issue close "$EXISTING" --repo "$REPO"
+          fi

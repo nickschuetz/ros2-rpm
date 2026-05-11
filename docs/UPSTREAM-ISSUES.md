@@ -51,3 +51,5 @@ Upstream contributions that are drafted but **not yet posted** because some cond
 
 - [`scripts/check-upstream-issues.py`](../scripts/check-upstream-issues.py) reads this file's "Open" section, queries the GitHub API for each linked issue / PR, and reports any that have closed.
 - [`.github/workflows/upstream-issues.yml`](../.github/workflows/upstream-issues.yml) runs that script nightly at 08:00 UTC. When at least one tracked item has closed, the workflow opens (or updates) a single canonical tracking issue with label `upstream-tracker,maintenance` so the deferral can be revisited.
+- [`scripts/check-upstream.py`](../scripts/check-upstream.py) compares local spec versions against `rosdistro/jazzy/distribution.yaml`.
+- [`.github/workflows/drift-check.yml`](../.github/workflows/drift-check.yml) runs that script weekly (Sundays at 08:00 UTC). When packages are behind upstream, the workflow opens (or updates in place) a single sticky issue labeled `upstream-drift,maintenance`. When drift returns to zero, the workflow closes the sticky issue with a "fully caught up" comment. Weekly rather than nightly so rosdistro's frequent small bumps don't become alert fatigue.
