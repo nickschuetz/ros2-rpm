@@ -79,9 +79,8 @@ jobs:
     container:
       image: registry.fedoraproject.org/fedora:44
     steps:
-      - name: Install Python + syft
-        run: |
-          dnf install -y --setopt=install_weak_deps=False python3 syft rpm-build
+      - name: Install Python
+        run: dnf install -y --setopt=install_weak_deps=False python3
       - uses: actions/checkout@v6
       - name: Self-test validator with a known-good SBOM fixture
         run: |
