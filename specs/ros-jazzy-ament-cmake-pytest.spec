@@ -58,7 +58,7 @@ popd > /dev/null
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-echo 'tests skipped — see CLAUDE.md / packages.yaml'
+echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
 %license LICENSE

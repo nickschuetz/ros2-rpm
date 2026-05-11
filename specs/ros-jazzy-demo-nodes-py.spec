@@ -75,11 +75,11 @@ PYEOF
 
 
 %files
-# (no LICENSE file in source tree — see package.xml <license>)
+# (no LICENSE file in source tree; see package.xml <license>)
 %doc CHANGELOG.rst
 %{install_prefix}/bin/*
 
-# TODO: review the file list — generator emits a permissive glob and you may
+# TODO: review the file list, generator emits a permissive glob and you may
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}.dist-info/

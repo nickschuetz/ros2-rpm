@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# publish.sh — generate, build, validate, and publish one package end-to-end.
+# publish.sh, generate, build, validate, and publish one package end-to-end.
 #
 # Usage:
 #   scripts/publish.sh <package_name> [<source_path>]
@@ -45,7 +45,7 @@ echo "    source: $SOURCE_PATH"
 echo "    spec:   $SPEC"
 
 if [ -f "$SPEC" ]; then
-    echo "    spec already exists — skipping generation (hand-tuned?)"
+    echo "    spec already exists, skipping generation (hand-tuned?)"
 else
     echo "==> Generating spec"
     "$REPO/scripts/generate-spec.py" "$SOURCE_PATH" > "$SPEC"

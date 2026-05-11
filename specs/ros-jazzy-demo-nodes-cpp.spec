@@ -77,10 +77,10 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-echo 'tests skipped — see CLAUDE.md / packages.yaml'
+echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
-# (no LICENSE file in source tree — see package.xml <license>)
+# (no LICENSE file in source tree; see package.xml <license>)
 %doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
@@ -92,7 +92,7 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 # demo_nodes_cpp installs per-demo component libraries lib<demo>_library.so
 # (talker_library, listener_library, set_parameters_library, etc.) and the
-# corresponding executables under lib/demo_nodes_cpp/. No bin/ entries —
+# corresponding executables under lib/demo_nodes_cpp/. No bin/ entries:
 # all executables are package-scoped under lib/demo_nodes_cpp/.
 %{install_prefix}/lib/lib*_library.so*
 %{install_prefix}/lib/%{pkg_name}/

@@ -23,7 +23,7 @@ ament_cmake_core:
   source_dir: ament_cmake-{version}
   build_subdir: ament_cmake_core
 
-# ament_cmake family — all share the same monorepo and tag.
+# ament_cmake family, all share the same monorepo and tag.
 ament_cmake:
   source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
   source_dir: ament_cmake-{version}
@@ -127,7 +127,7 @@ ament_cmake_vendor_package:
   disable_tests: true
 
 # ROS 2 core build extension on top of ament_cmake. Single-package repo.
-# Jazzy is at 0.12.0; upstream master is 0.9.x — use the bloom release tag.
+# Jazzy is at 0.12.0; upstream master is 0.9.x, use the bloom release tag.
 ament_cmake_ros:
   source_url: https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/release/jazzy/ament_cmake_ros/{version}-3.tar.gz
   source_dir: ament_cmake_ros-release-release-jazzy-ament_cmake_ros-{version}-3
@@ -153,14 +153,14 @@ ament_index_python:
   source_dir: ament_index-release-release-jazzy-ament_index_python-{version}-1
   disable_tests: true
 
-# rosidl_python — only rosidl_generator_py lives here (jazzy branch).
+# rosidl_python, only rosidl_generator_py lives here (jazzy branch).
 rosidl_generator_py:
   source_url: https://github.com/ros2-gbp/rosidl_python-release/archive/refs/tags/release/jazzy/rosidl_generator_py/{version}-1.tar.gz
   source_dir: rosidl_python-release-release-jazzy-rosidl_generator_py-{version}-1
-  # No native code — pure-Python generator + cmake macros.
+  # No native code, pure-Python generator + cmake macros.
   disable_tests: true
 
-# rosidl_typesupport — generates per-language bindings, separate repo.
+# rosidl_typesupport, generates per-language bindings, separate repo.
 rosidl_typesupport_c:
   source_url: https://github.com/ros2-gbp/rosidl_typesupport-release/archive/refs/tags/release/jazzy/rosidl_typesupport_c/{version}-1.tar.gz
   source_dir: rosidl_typesupport-release-release-jazzy-rosidl_typesupport_c-{version}-1
@@ -173,7 +173,7 @@ rosidl_typesupport_cpp:
   noarch: false  # ships librosidl_typesupport_cpp.so
   disable_tests: true
 
-# Fast DDS chain — eProsima's DDS implementation. Multiple compiled C++ libs.
+# Fast DDS chain, eProsima's DDS implementation. Multiple compiled C++ libs.
 foonathan_memory_vendor:
   source_url: https://github.com/ros2-gbp/foonathan_memory_vendor-release/archive/refs/tags/release/jazzy/foonathan_memory_vendor/{version}-3.tar.gz
   source_dir: foonathan_memory_vendor-release-release-jazzy-foonathan_memory_vendor-{version}-3
@@ -205,40 +205,40 @@ rosidl_typesupport_fastrtps_cpp:
   noarch: false
   disable_tests: true
 
-# rmw — the ROS 2 middleware abstraction layer.
+# rmw, the ROS 2 middleware abstraction layer.
 rmw:
   source_url: https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/jazzy/rmw/{version}-1.tar.gz
   source_dir: rmw-release-release-jazzy-rmw-{version}-1
   noarch: false
   disable_tests: true
 
-# rosidl_dynamic_typesupport — runtime introspection layer for messages.
+# rosidl_dynamic_typesupport, runtime introspection layer for messages.
 rosidl_dynamic_typesupport:
   source_url: https://github.com/ros2-gbp/rosidl_dynamic_typesupport-release/archive/refs/tags/release/jazzy/rosidl_dynamic_typesupport/{version}-3.tar.gz
   source_dir: rosidl_dynamic_typesupport-release-release-jazzy-rosidl_dynamic_typesupport-{version}-3
   noarch: false
   disable_tests: true
 
-# fastrtps_cmake_module — eProsima Fast-DDS CMake helper, in
+# fastrtps_cmake_module, eProsima Fast-DDS CMake helper, in
 # rosidl_typesupport_fastrtps-release (per rosdistro/jazzy/distribution.yaml).
 fastrtps_cmake_module:
   source_url: https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/release/jazzy/fastrtps_cmake_module/{version}-1.tar.gz
   source_dir: rosidl_typesupport_fastrtps-release-release-jazzy-fastrtps_cmake_module-{version}-1
   disable_tests: true
 
-# python_cmake_module — CMake helper for finding system Python.
+# python_cmake_module, CMake helper for finding system Python.
 python_cmake_module:
   source_url: https://github.com/ros2-gbp/python_cmake_module-release/archive/refs/tags/release/jazzy/python_cmake_module/{version}-2.tar.gz
   source_dir: python_cmake_module-release-release-jazzy-python_cmake_module-{version}-2
   disable_tests: true
 
-# rpyutils — Python utilities used by rosidl_generator_py at code-gen time.
+# rpyutils, Python utilities used by rosidl_generator_py at code-gen time.
 rpyutils:
   source_url: https://github.com/ros2-gbp/rpyutils-release/archive/refs/tags/release/jazzy/rpyutils/{version}-1.tar.gz
   source_dir: rpyutils-release-release-jazzy-rpyutils-{version}-1
   disable_tests: true
 
-# rosidl_core umbrellas — pull in the whole generation/runtime stack.
+# rosidl_core umbrellas, pull in the whole generation/runtime stack.
 rosidl_core_generators:
   source_url: https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/release/jazzy/rosidl_core_generators/{version}-1.tar.gz
   source_dir: rosidl_core-release-release-jazzy-rosidl_core_generators-{version}-1
@@ -342,7 +342,7 @@ control_msgs:
   noarch: false
   disable_tests: true
 
-# rclcpp + tf2_ros chain — final layer of Phase 1 minimal subset.
+# rclcpp + tf2_ros chain, final layer of Phase 1 minimal subset.
 ament_index_cpp:
   source_url: https://github.com/ros2-gbp/ament_index-release/archive/refs/tags/release/jazzy/ament_index_cpp/{version}-1.tar.gz
   source_dir: ament_index-release-release-jazzy-ament_index_cpp-{version}-1
@@ -586,7 +586,7 @@ rosidl_runtime_cpp:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_runtime_cpp
-  # Header-only C++ library — no .so produced.
+  # Header-only C++ library, no .so produced.
   disable_tests: true
 
 rosidl_generator_c:

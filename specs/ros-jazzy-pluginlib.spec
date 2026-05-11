@@ -69,10 +69,10 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-echo 'tests skipped — see CLAUDE.md / packages.yaml'
+echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
-# (no LICENSE file in source tree — see package.xml <license>)
+# (no LICENSE file in source tree; see package.xml <license>)
 %doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
@@ -83,7 +83,7 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 %{install_prefix}/include/%{pkg_name}/
-# pluginlib is INTERFACE (header-only) — no .so. Ships only list_plugins
+# pluginlib is INTERFACE (header-only), no .so. Ships only list_plugins
 # CLI under lib/pluginlib/.
 %{install_prefix}/lib/%{pkg_name}/
 

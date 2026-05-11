@@ -1,4 +1,4 @@
-# ADR 0010 — Project pivot to development-only; Lyrical official is OR's responsibility
+# ADR 0010, Project pivot to development-only; Lyrical official is OR's responsibility
 
 **Status:** Accepted (2026-05-08). Amended same day by **ADR 0011** which reopens Phase 2 in a narrower form (dev-sandbox expansion of `ros-jazzy-desktop`, not the original ~320-package full desktop). The development-only positioning, the disclaimer-everywhere rule, and the production-deferral to Open Robotics all remain in force. Only the "Phase 2 cancelled" portion of this ADR is narrowed.
 
@@ -16,7 +16,7 @@ That trajectory presumed this repo (and the Fedora Robotics SIG) would be the on
 
 Open Robotics is taking on official Fedora support starting with **Lyrical Luth** (the 2026 LTS). The official packages will be supported, CVE-tracked, and will be the recommended path for any production use of ROS 2 on Fedora.
 
-This changes the role of this repo entirely. We are no longer filling a multi-year gap — we are providing a stop-gap development sandbox for Jazzy on Fedora until the official Lyrical packages arrive. After that, the official packages take over.
+This changes the role of this repo entirely. We are no longer filling a multi-year gap, we are providing a stop-gap development sandbox for Jazzy on Fedora until the official Lyrical packages arrive. After that, the official packages take over.
 
 ## Decision
 
@@ -30,16 +30,16 @@ This changes the role of this repo entirely. We are no longer filling a multi-ye
 3. **Production-grade claims are dropped**:
    - The "STIG-adjacent posture for CentOS Stream 10" pitch in `docs/SECURITY.md` is replaced with a plain statement that no production-deployment claim is being made.
    - The CVE-feed automation roadmap (drift-tracking, OSV scanning) is downgraded from required to optional. If implemented at all, it serves the maintainer's curiosity, not a user-facing SLA.
-4. **Per-package install messaging**: `%description` blocks should not promise long-term support. Spec-file changes for this are not retroactive — new specs and any spec touched in a future PR pick up the reframe.
+4. **Per-package install messaging**: `%description` blocks should not promise long-term support. Spec-file changes for this are not retroactive, new specs and any spec touched in a future PR pick up the reframe.
 5. **Distro lifecycle policy**:
    - Adding a Lyrical chroot here is **no longer a goal**. When the official Open Robotics Lyrical packages ship, users should switch to those. This COPR's chroots stay frozen at the Phase 1 build matrix (Fedora 44 / Fedora rawhide / CentOS Stream 10 × x86_64 + aarch64) for Jazzy only.
-   - The COPR's lifetime past Jazzy EOL (May 2029) is **left open** — could be retired entirely, frozen as a historical archive, or extended to track a later development distro. To be decided closer to the date in a follow-up ADR. No commitment today.
+   - The COPR's lifetime past Jazzy EOL (May 2029) is **left open**, could be retired entirely, frozen as a historical archive, or extended to track a later development distro. To be decided closer to the date in a follow-up ADR. No commitment today.
 
 ## What stays the same
 
 - The technical pipeline (`scripts/generate-spec.py`, `bloom-rpm` post-processing, COPR build flow) is still useful infrastructure and remains in place.
-- Phase 1 packages keep shipping — they are appropriate for development workflows.
-- Build hardening flags, license cleanliness, SBOM emission per build — all retained because they are good engineering hygiene, not because we are claiming production posture.
+- Phase 1 packages keep shipping, they are appropriate for development workflows.
+- Build hardening flags, license cleanliness, SBOM emission per build, all retained because they are good engineering hygiene, not because we are claiming production posture.
 - All eight chroot/arch pairs continue to build on every change. Dropping aarch64 or Stream 10 would only churn CI for no gain.
 
 ## Why this matters
@@ -52,6 +52,6 @@ Without this pivot, two harmful outcomes were likely:
 ## Consequences
 
 - Reduces this repo's ambitions but increases its honesty.
-- Decouples this repo from the Fedora Robotics SIG's main-repo effort — they were always on a different timeline; the official Lyrical packages from Open Robotics now establish the "real" path that both efforts ultimately defer to.
+- Decouples this repo from the Fedora Robotics SIG's main-repo effort, they were always on a different timeline; the official Lyrical packages from Open Robotics now establish the "real" path that both efforts ultimately defer to.
 - README, CLAUDE.md, SCOPE.md, RELATED-WORK.md, CITATION.cff, COPR description, GitHub description, CHANGELOG: all updated in the same change-window as this ADR.
 - ADR 0001 (minimal subset scope) and ADR 0006 (full desktop as eventual scope) carry retroactive notes pointing here. They are not deleted because they explain the historical reasoning.

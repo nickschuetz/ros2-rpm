@@ -65,7 +65,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-echo 'tests skipped — see CLAUDE.md / packages.yaml'
+echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
 %license LICENSE
@@ -78,7 +78,7 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-# Message package — multiple typesupport .so variants + Python bindings.
+# Message package: multiple typesupport .so variants + Python bindings.
 %{install_prefix}/include/%{pkg_name}/
 %{install_prefix}/lib/lib%{pkg_name}__rosidl_*.so
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/

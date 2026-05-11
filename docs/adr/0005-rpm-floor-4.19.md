@@ -30,7 +30,7 @@ Picking RPM 6.0 features unguarded breaks Stream 10. Refusing all RPM 6.0 featur
 
 **Negative**:
 - A handful of Fedora-only conveniences require guards.
-- Future Stream 10 EOL will simplify this — but that's years away.
+- Future Stream 10 EOL will simplify this, but that's years away.
 
 **Neutral**:
 - This floor matches the broader Fedora packaging community's practice for cross-EL/Fedora specs in 2026.

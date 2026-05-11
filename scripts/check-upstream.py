@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""scripts/check-upstream.py — diff packages.yaml against rosdistro/jazzy.
+"""scripts/check-upstream.py, diff packages.yaml against rosdistro/jazzy.
 
 Fetches https://raw.githubusercontent.com/ros/rosdistro/master/jazzy/distribution.yaml
 and compares the `version:` field for every package present in
@@ -96,7 +96,7 @@ def compare(distro_yaml: dict, our_packages: dict) -> list[dict]:
             if pkg_name not in release_pkgs:
                 continue
             ver_full = release.get("version", "")
-            # Strip the trailing "-<bloom_release>" — we only care about upstream version.
+            # Strip the trailing "-<bloom_release>", we only care about upstream version.
             upstream_version = ver_full.split("-")[0] if ver_full else None
             upstream_repo = repo_name
             break
@@ -107,7 +107,7 @@ def compare(distro_yaml: dict, our_packages: dict) -> list[dict]:
                 "local": local_version,
                 "upstream": None,
                 "status": "not-in-rosdistro",
-                "note": "no entry in jazzy/distribution.yaml — upstream may have removed or renamed",
+                "note": "no entry in jazzy/distribution.yaml, upstream may have removed or renamed",
             })
             continue
 
@@ -138,7 +138,7 @@ def render_markdown(report: list[dict]) -> str:
     not_in_rosdistro = [r for r in report if r["status"] == "not-in-rosdistro"]
 
     lines: list[str] = []
-    lines.append("# Upstream drift report — `hellaenergy/ros2`")
+    lines.append("# Upstream drift report, `hellaenergy/ros2`")
     lines.append("")
     lines.append(f"Snapshot of upstream `rosdistro/jazzy/distribution.yaml` versus this COPR's published spec versions.")
     lines.append("")

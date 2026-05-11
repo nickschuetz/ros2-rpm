@@ -22,7 +22,7 @@ BuildRequires:  ros-jazzy-ament-cmake
 Requires:       ros-jazzy-ament-cmake
 # ament_cmake_ros-extras.cmake unconditionally find_package()s these test
 # framework packages; without these Requires every consumer's CMake configure
-# fails. Upstream's package.xml omits them — workaround locally.
+# fails. Upstream's package.xml omits them, workaround locally.
 Requires:       ros-jazzy-ament-cmake-gmock
 Requires:       ros-jazzy-ament-cmake-gtest
 Requires:       ros-jazzy-ament-cmake-pytest
@@ -55,10 +55,10 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-echo 'tests skipped — see CLAUDE.md / packages.yaml'
+echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
-# (no LICENSE file in source tree — see package.xml <license>)
+# (no LICENSE file in source tree; see package.xml <license>)
 %doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may

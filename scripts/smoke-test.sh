@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/smoke-test.sh — end-to-end install validation for hellaenergy/ros2
+# scripts/smoke-test.sh, end-to-end install validation for hellaenergy/ros2
 #
 # Run after `dnf install ros-jazzy-ros-base` (and optionally
 # ros-jazzy-ros2cli + ros-jazzy-demo-nodes-cpp) to confirm the install is
@@ -18,7 +18,7 @@
 # - You're on Fedora 44+ or CentOS Stream 10.
 # - You've enabled `dnf copr enable hellaenergy/ros2` and installed at
 #   minimum `ros-jazzy-ros-base`.
-# - /opt/ros/jazzy/ is writable to root only (don't run this as root —
+# - /opt/ros/jazzy/ is writable to root only (don't run this as root;
 #   the test never needs root).
 
 set -uo pipefail
@@ -73,7 +73,7 @@ section() {
 }
 
 #-----------------------------------------------------------------------
-# Section 1 — install presence
+# Section 1, install presence
 #-----------------------------------------------------------------------
 section "Install presence"
 
@@ -105,7 +105,7 @@ if [ "$FAIL" -gt 0 ]; then
 fi
 
 #-----------------------------------------------------------------------
-# Section 2 — environment activation
+# Section 2, environment activation
 #-----------------------------------------------------------------------
 section "Environment activation"
 
@@ -128,7 +128,7 @@ check "setup.bash adds /opt/ros/jazzy/bin to PATH" \
     bash -c "echo '$SETUP_OUTPUT' | grep -q 'PATH_HAS_ROS=[1-9]'"
 
 #-----------------------------------------------------------------------
-# Section 3 — Python bindings
+# Section 3, Python bindings
 #-----------------------------------------------------------------------
 section "Python bindings (rclpy)"
 
@@ -154,7 +154,7 @@ else
 fi
 
 #-----------------------------------------------------------------------
-# Section 4 — C++ build + run
+# Section 4, C++ build + run
 #-----------------------------------------------------------------------
 section "C++ rclcpp (compile + run)"
 
@@ -195,7 +195,7 @@ EOF
 fi
 
 #-----------------------------------------------------------------------
-# Section 5 — ros2 CLI (only if ros2cli is installed)
+# Section 5, ros2 CLI (only if ros2cli is installed)
 #-----------------------------------------------------------------------
 section "ros2 CLI"
 
@@ -216,7 +216,7 @@ else
 fi
 
 #-----------------------------------------------------------------------
-# Section 6 — demo_nodes (talker actually publishes)
+# Section 6, demo_nodes (talker actually publishes)
 #-----------------------------------------------------------------------
 section "Demo nodes (publish path)"
 
@@ -230,7 +230,7 @@ else
 fi
 
 #-----------------------------------------------------------------------
-# Section 7 — O3DE Gem optional dep (gazebo_msgs)
+# Section 7, O3DE Gem optional dep (gazebo_msgs)
 #-----------------------------------------------------------------------
 section "O3DE Gem optional dep (gazebo_msgs)"
 

@@ -4,7 +4,7 @@ This is the dependency-ordered build pipeline. Tiers must be built sequentially 
 
 The order is derived from `package.xml` `<*_depend>` declarations. New packages are added to this document as they enter the build set.
 
-## Phase 1 minimal subset — current build order
+## Phase 1 minimal subset, current build order
 
 ```
 T-A  Foundation Python tooling
@@ -35,7 +35,7 @@ T-B  ament_cmake stack (no compilation, mostly CMake macros)
 T-C  Utility libs (compiled C/C++)
      ├─ rcutils              (C utilities)
      ├─ rcpputils            (C++ utilities)
-     ├─ ament_index_python   (Python — ament_index lookups)
+     ├─ ament_index_python   (Python, ament_index lookups)
      ├─ python_cmake_module  (CMake helper for finding system Python)
      ├─ rpyutils             (Python helpers used at code-gen time)
      │
@@ -132,10 +132,10 @@ These caught us during Phase 1; documented so future packages can avoid them:
 
 Once Phase 1's message set is complete, the remaining steps to a usable ROS 2 install are:
 
-- **rcl** + **rclcpp** + **rclpy** — the client APIs
-- **tf2** + **tf2_ros** — coordinate-frame transforms
-- **ros2cli** + **ros2run/topic/service/action/...** — the `ros2` command-line tool
-- **launch** + **launch_ros** — launch system
+- **rcl** + **rclcpp** + **rclpy**, the client APIs
+- **tf2** + **tf2_ros**, coordinate-frame transforms
+- **ros2cli** + **ros2run/topic/service/action/...**, the `ros2` command-line tool
+- **launch** + **launch_ros**, launch system
 - **Convenience metapackages** (`ros-jazzy-ros-core`, `ros-jazzy-ros-base`) wrapping the above
 
-Phase 2 (full `ros-jazzy-desktop`-equivalent) extends with `rviz2`, `rqt_*`, navigation/manipulation stacks, etc. — see [ADR 0006](adr/0006-full-ros2-desktop-as-eventual-scope.md).
+Phase 2 (full `ros-jazzy-desktop`-equivalent) extends with `rviz2`, `rqt_*`, navigation/manipulation stacks, etc., see [ADR 0006](adr/0006-full-ros2-desktop-as-eventual-scope.md).

@@ -61,7 +61,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-echo 'tests skipped — see CLAUDE.md / packages.yaml'
+echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
 %license LICENSE
@@ -71,7 +71,7 @@ echo 'tests skipped — see CLAUDE.md / packages.yaml'
 # need additions or trimming.
 # Cyclone DDS is upstream Eclipse, not a bloom-shaped ROS package. The
 # %files list below was derived from a local mock build's "-- Installing:"
-# log — list explicitly rather than glob to keep ownership scoped to this
+# log, list explicitly rather than glob to keep ownership scoped to this
 # package only.
 %{install_prefix}/include/dds/
 %{install_prefix}/include/ddsc/

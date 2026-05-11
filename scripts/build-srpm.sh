@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# build-srpm.sh — build SRPMs from spec files.
+# build-srpm.sh, build SRPMs from spec files.
 #
 # Reads specs from $1, writes SRPMs to $2.
 
@@ -12,7 +12,7 @@ mkdir -p "$SRPM_DIR"
 
 if ! compgen -G "$SPEC_DIR/*.spec" > /dev/null && \
    ! compgen -G "$SPEC_DIR/generated/*.spec" > /dev/null; then
-    echo "No specs in $SPEC_DIR/ — nothing to build."
+    echo "No specs in $SPEC_DIR/, nothing to build."
     exit 0
 fi
 

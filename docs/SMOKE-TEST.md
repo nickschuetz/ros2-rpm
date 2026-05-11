@@ -2,7 +2,7 @@
 
 After installing from the [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2) COPR, run [`scripts/smoke-test.sh`](../scripts/smoke-test.sh) to verify your install is functional.
 
-It is a **user** smoke test, not a developer regression suite — it doesn't run upstream test suites, doesn't measure performance, and doesn't try to reach a public DDS network. It checks that:
+It is a **user** smoke test, not a developer regression suite, it doesn't run upstream test suites, doesn't measure performance, and doesn't try to reach a public DDS network. It checks that:
 
 - The packages installed where they were supposed to.
 - `source /opt/ros/jazzy/setup.bash` produces a usable shell environment.
@@ -54,10 +54,10 @@ Verifies the RPM install actually placed files where this COPR claims:
 - `ros-jazzy-ros-base` is registered in the RPM database.
 - `/opt/ros/jazzy/setup.bash` exists (sourced by the next section).
 - `librclcpp.so*` is at `/opt/ros/jazzy/lib/`.
-- `libfoonathan_memory*.so` is at `/opt/ros/jazzy/lib/` — **not** `lib64/`. (Fedora's `GNUInstallDirs` defaults to `lib64/` for 64-bit binaries; the COPR explicitly forces `lib/` to keep the runtime loader path consistent with every other ROS lib in the prefix.)
+- `libfoonathan_memory*.so` is at `/opt/ros/jazzy/lib/`, **not** `lib64/`. (Fedora's `GNUInstallDirs` defaults to `lib64/` for 64-bit binaries; the COPR explicitly forces `lib/` to keep the runtime loader path consistent with every other ROS lib in the prefix.)
 - A `site-packages/rclpy/` directory exists for some installed Python version (Fedora ships 3.14 on F44; Stream 10 ships 3.12).
 
-If any of these fail, the rest of the test is skipped — there's nothing useful to test against.
+If any of these fail, the rest of the test is skipped, there's nothing useful to test against.
 
 ### 2. Environment activation (3 checks)
 
@@ -69,7 +69,7 @@ Sources `setup.bash` in a subshell and confirms it actually populates the enviro
 
 If `setup.bash` exists but doesn't set these, `ros_workspace` is broken.
 
-### 3. Python bindings — rclpy (5 checks, optional)
+### 3. Python bindings, rclpy (5 checks, optional)
 
 Skipped if `ros-jazzy-rclpy` isn't installed (it's pulled in by `ros-jazzy-ros-base ≥ 0.13.1`).
 
@@ -88,7 +88,7 @@ Skipped if `cmake` or `g++` aren't on PATH.
 - Builds it.
 - Runs the binary; expects clean exit.
 
-This is the most stringent check in the suite — it exercises the CMake config files, the ament_target_dependencies macro, the linker against `librclcpp.so` and its transitive deps, and the runtime middleware load.
+This is the most stringent check in the suite, it exercises the CMake config files, the ament_target_dependencies macro, the linker against `librclcpp.so` and its transitive deps, and the runtime middleware load.
 
 ### 5. ros2 CLI (3 checks, optional)
 
@@ -98,11 +98,11 @@ Skipped if `ros-jazzy-ros2cli` isn't installed.
 - `ros2 --help` runs and exits 0.
 - `ros2 topic list` (5-second timeout) returns at least the daemon topic `/rosout`. (Skipped further if `ros-jazzy-ros2topic` isn't installed.)
 
-### 6. Demo nodes — publish path (1 check, optional)
+### 6. Demo nodes, publish path (1 check, optional)
 
 Skipped if `ros-jazzy-demo-nodes-cpp` isn't installed.
 
-- Runs `/opt/ros/jazzy/lib/demo_nodes_cpp/talker` for 3 seconds, greps the output for `Hello World`. Confirms the publisher is actually reaching DDS — i.e. that `rmw_fastrtps_cpp` loaded its dependencies cleanly at runtime.
+- Runs `/opt/ros/jazzy/lib/demo_nodes_cpp/talker` for 3 seconds, greps the output for `Hello World`. Confirms the publisher is actually reaching DDS, i.e. that `rmw_fastrtps_cpp` loaded its dependencies cleanly at runtime.
 
 ## What it doesn't cover
 
@@ -113,14 +113,14 @@ This test is intentionally narrow:
 - **No multi-host networking checks.** A real DDS deployment spans multiple hosts; that's an integration test, not a smoke test.
 - **No security / signing verification.** When the COPR project key is wired in, README will document `gpg --verify` of `repodata`.
 - **No performance regressions.** Use `ros2 topic hz` against a known publisher for that.
-- **No coverage of Cyclone DDS or the rviz2 chain** — both are Phase 2 work [deferred](../CHANGELOG.md) at the time of writing.
+- **No coverage of Cyclone DDS or the rviz2 chain**, both are Phase 2 work [deferred](../CHANGELOG.md) at the time of writing.
 
 ## Failure modes you might see
 
 | Symptom | Probable cause |
 |---|---|
 | `ros-jazzy-ros-base RPM installed: FAIL` | COPR not enabled, or you ran `dnf install` for a single sub-package without the metapackage. |
-| `/opt/ros/jazzy/setup.bash exists: FAIL` | `ros-jazzy-ros-workspace` is missing — bug in this COPR. Open an issue. |
+| `/opt/ros/jazzy/setup.bash exists: FAIL` | `ros-jazzy-ros-workspace` is missing, bug in this COPR. Open an issue. |
 | `libfoonathan_memory*.so present (not lib64): FAIL` | You're running an old `ros-jazzy-foonathan-memory-vendor` (Release: 1). Run `sudo dnf upgrade ros-jazzy-foonathan-memory-vendor` and re-test. |
 | `import rclpy: FAIL` with `ModuleNotFoundError` | `ros-jazzy-rclpy` not installed. `sudo dnf install ros-jazzy-rclpy`. |
 | `rclcpp run: FAIL` with `failed to load any RMW implementations` | Missing `ros-jazzy-rmw-fastrtps-cpp` or it can't dlopen its deps. Re-check the foonathan check above. |

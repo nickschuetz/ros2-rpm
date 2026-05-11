@@ -38,7 +38,7 @@ ExternalProject build of assimp.
 # Make our previously-installed ROS Python packages discoverable to CMake's
 # execute_process invocations of python3.
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-# Strip -Werror — assimp's internal source emits new GCC 14/15 warnings
+# Strip -Werror, assimp's internal source emits new GCC 14/15 warnings
 # that are treated as errors with Fedora's default hardening flags.
 export CFLAGS="${CFLAGS} -Wno-error"
 export CXXFLAGS="${CXXFLAGS} -Wno-error"
@@ -67,10 +67,10 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-echo 'tests skipped — see CLAUDE.md / packages.yaml'
+echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
-# (no LICENSE file in source tree — see package.xml <license>)
+# (no LICENSE file in source tree; see package.xml <license>)
 %doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may

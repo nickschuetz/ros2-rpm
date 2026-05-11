@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# manifest-fetch.sh — refresh manifest.yaml pins from upstream rosdistro.
+# manifest-fetch.sh, refresh manifest.yaml pins from upstream rosdistro.
 
 set -euo pipefail
 

@@ -32,9 +32,9 @@ Every PR that adds a new package to `manifest.yaml` / `packages.yaml` must add a
 
 ## Why not fix it upstream
 
-- Adding Fedora to `rosdistro/jazzy/distribution.yaml`'s `release_platforms` would require Open Robotics to commit to running upstream Fedora RPM builds in their CI — a decision they have repeatedly declined for resource reasons.
+- Adding Fedora to `rosdistro/jazzy/distribution.yaml`'s `release_platforms` would require Open Robotics to commit to running upstream Fedora RPM builds in their CI, a decision they have repeatedly declined for resource reasons.
 - Even if accepted upstream, the change wouldn't reach our builds for weeks (rosdistro has a controlled release cadence).
-- The override is ~30 lines of YAML per package — trivial to maintain.
+- The override is ~30 lines of YAML per package, trivial to maintain.
 - A long-term Phase 3 effort (Fedora main repo inclusion, see [ADR 0007](0007-install-location-opt-ros-jazzy.md)) would naturally include upstreaming this metadata.
 
 ## Consequences
@@ -58,6 +58,6 @@ When adding a new package N:
 1. Add stanza to `scripts/packages.yaml` with `source_url`, `source_dir`, etc.
 2. Add stanza to `build/local-rosdep-jazzy.yaml` mapping `N` → `ros-jazzy-<dashed-N>`.
 3. Run `rosdep update` to refresh the cache.
-4. Run `scripts/publish.sh N` — generator now resolves N's deps correctly.
+4. Run `scripts/publish.sh N`, generator now resolves N's deps correctly.
 
 The lint workflow does not currently enforce step 2 (no automated check that every `packages.yaml` entry has a matching rosdep override). Future improvement: add a CI check in `.github/workflows/lint.yml` that diffs the two files and fails on mismatch.

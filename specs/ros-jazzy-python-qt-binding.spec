@@ -1,7 +1,7 @@
 %global ros_distro       jazzy
 %global pkg_name         python_qt_binding
 %global install_prefix   /opt/ros/jazzy
-# Pure-Python Qt binding glue — no compiled artifacts; debugsource list is empty.
+# Pure-Python Qt binding glue, no compiled artifacts; debugsource list is empty.
 %global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-python-qt-binding
@@ -71,7 +71,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-echo 'tests skipped — see CLAUDE.md / packages.yaml'
+echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
 %license LICENSE

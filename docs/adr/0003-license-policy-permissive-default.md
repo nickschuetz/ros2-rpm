@@ -1,15 +1,15 @@
-# ADR 0003: License policy — permissive default, opt-in non-permissive standalones
+# ADR 0003: License policy, permissive default, opt-in non-permissive standalones
 
 - **Status**: Accepted
 - **Date**: 2026-05-07
 
 ## Context
 
-The minimal subset (ADR 0001) is `Apache-2.0 AND BSD-3-Clause`. Some legitimate ROS 2 use cases want non-permissive packages — `rmw_cyclonedds_cpp` (transitively EPL-2.0 via Cyclone DDS) for QoS or interop reasons; `rviz2` (transitively LGPL-3.0 via Qt) for visualization. The question is how (or whether) to admit them.
+The minimal subset (ADR 0001) is `Apache-2.0 AND BSD-3-Clause`. Some legitimate ROS 2 use cases want non-permissive packages, `rmw_cyclonedds_cpp` (transitively EPL-2.0 via Cyclone DDS) for QoS or interop reasons; `rviz2` (transitively LGPL-3.0 via Qt) for visualization. The question is how (or whether) to admit them.
 
 Options considered:
-- (a) Strict refusal — never include non-permissive packages.
-- (b) Open inclusion via a single fat metapackage — silently expands the License aggregate.
+- (a) Strict refusal, never include non-permissive packages.
+- (b) Open inclusion via a single fat metapackage, silently expands the License aggregate.
 - (c) Strict permissive default in metapackages, opt-in standalones for non-permissive.
 - (d) Two separate COPRs (`-core` and `-extras`).
 

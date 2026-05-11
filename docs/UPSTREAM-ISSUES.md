@@ -31,7 +31,7 @@ _None yet._
 
 Upstream contributions that are drafted but **not yet posted** because some condition isn't met. Each entry names what would unblock it.
 
-### `o3de/o3de-extras` — README docs PR for Fedora install path
+### `o3de/o3de-extras`, README docs PR for Fedora install path
 
 - **Status**: Drafted 2026-05-08. **Held back** because Fedora is not yet an officially-supported platform for O3DE (the engine itself), so adding a Fedora install path to the Gem's README would promise something the broader O3DE project hasn't committed to. Posting it would also implicitly assert that the Gem works on a platform the engine maintainers haven't blessed.
 - **Unblocks when**: O3DE-the-engine is officially tested on Fedora 44+ (or whatever Fedora release is current at the time), with a reproducible install path documented somewhere on o3de.org. After that, the Gem's README can credibly point Fedora users at this COPR for the ROS 2 Gem layer.

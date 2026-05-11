@@ -19,7 +19,7 @@ BuildRequires:  python3-devel
 BuildRequires:  ros-jazzy-ament-cmake
 BuildRequires:  ros-jazzy-rosidl-core-generators
 # rosidl_generator_py's CMake macros find_package(python_cmake_module) at
-# generate-interfaces time — pull it in explicitly here.
+# generate-interfaces time, pull it in explicitly here.
 BuildRequires:  ros-jazzy-python-cmake-module
 # rosidl_generator_py imports rpyutils at code-gen time.
 BuildRequires:  ros-jazzy-rpyutils
@@ -64,7 +64,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
-echo 'tests skipped — see CLAUDE.md / packages.yaml'
+echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
 %doc CHANGELOG.rst

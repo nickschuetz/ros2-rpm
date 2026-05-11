@@ -20,13 +20,13 @@ Gated by the readiness checklist tracked in the pinned GitHub issue (see `CLAUDE
 
 ### Approaching upstream EOL
 
-Upstream Open Robotics EOLs Jazzy in May 2029. The COPR's posture past that date is **not yet decided** — see [README → "Long-term posture"](../README.md#long-term-posture). Three credible options when the time comes:
+Upstream Open Robotics EOLs Jazzy in May 2029. The COPR's posture past that date is **not yet decided**, see [README → "Long-term posture"](../README.md#long-term-posture). Three credible options when the time comes:
 
 - **Sunset entirely.** Drop chroots, archive the branch, README banner pointing users to Open Robotics's then-current distro. Cleanest for users, but loses any historical-reproducibility value.
 - **Freeze as a historical archive.** Stop publishing new builds, leave the existing RPMs reachable for users who need a known-good Jazzy snapshot for reproducing past development work.
 - **Pivot to a later development distro.** If a near-future ROS 2 distro is on similar Fedora-on-Fedora footing and the maintainer is willing to do the work, replay this COPR's pipeline against that distro on dev-only terms.
 
-The choice will be made via a follow-up ADR ~90 days before EOL based on usage telemetry, Open Robotics's published Fedora roadmap at that time, and maintainer bandwidth. Whichever path is chosen, security posture beyond EOL is **not** part of the commitment — Fedora's CVE pipeline only covers deps while the underlying Fedora release is in support.
+The choice will be made via a follow-up ADR ~90 days before EOL based on usage telemetry, Open Robotics's published Fedora roadmap at that time, and maintainer bandwidth. Whichever path is chosen, security posture beyond EOL is **not** part of the commitment, Fedora's CVE pipeline only covers deps while the underlying Fedora release is in support.
 
 Concrete mechanics regardless of path:
 
@@ -43,7 +43,7 @@ When a new Fedora release ships:
 2. Run the full build matrix on the new chroot. Common breakage:
    - **Python ABI**: Fedora bumps Python every release. `%pyproject_*` macros handle most of this; `rclpy` and ament_python may need patches.
    - **CMake major-version bumps**: F44 ships CMake 4.0; later releases may bring breaking changes. Bump `cmake_minimum_required(...)` in any patched-upstream config.
-   - **Soname drift**: `tinyxml2`, `console_bridge`, `libyaml`, `spdlog`, `pybind11`, `boost` — rebuild deps will resolve most cases automatically; track explicit pins where they exist.
+   - **Soname drift**: `tinyxml2`, `console_bridge`, `libyaml`, `spdlog`, `pybind11`, `boost`, rebuild deps will resolve most cases automatically; track explicit pins where they exist.
 3. Once green, drop the EOL'd Fedora release (typically N-2). Fedora supports the latest two releases.
 
 ## CentOS Stream 10 → Stream 11 (future)

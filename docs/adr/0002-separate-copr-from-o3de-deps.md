@@ -22,7 +22,7 @@
 
 **Negative**:
 - Two COPR projects to maintain instead of one.
-- Users who only learn about `o3de-dependencies` need the External Repository link to reach ROS 2 — handled by COPR's metadata.
+- Users who only learn about `o3de-dependencies` need the External Repository link to reach ROS 2, handled by COPR's metadata.
 
 **Neutral**:
 - The user experience is identical: `dnf copr enable hellaenergy/o3de-dependencies` automatically also enables `hellaenergy/ros2` once we wire the External Repositories field.

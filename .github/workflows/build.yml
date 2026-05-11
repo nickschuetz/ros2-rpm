@@ -74,7 +74,7 @@ jobs:
           if compgen -G "specs/*.spec" > /dev/null; then
             rpmlint specs/*.spec
           else
-            echo "No specs yet — pipeline scaffold only."
+            echo "No specs yet, pipeline scaffold only."
           fi
 
       # TODO: wire bloom + rosdep + the manifest -> SRPM -> mock build flow here.

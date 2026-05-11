@@ -6,7 +6,7 @@ Version:        0.13.0
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy core libraries and runtime
 
-# Aggregate of permissive-licensed runtime packages only — Phase 1 license rule.
+# Aggregate of permissive-licensed runtime packages only, Phase 1 license rule.
 License:        Apache-2.0 AND BSD-3-Clause
 URL:            https://github.com/nickschuetz/ros2-rpm
 Source0:        ros-jazzy-ros-core-%{version}.tar.gz
@@ -46,7 +46,7 @@ This is the minimal-runtime install. For tf2 + sensor / nav messages,
 install ros-jazzy-ros-base instead.
 
 %prep
-# No source — pure metapackage.
+# No source, pure metapackage.
 
 %build
 # Nothing to build.

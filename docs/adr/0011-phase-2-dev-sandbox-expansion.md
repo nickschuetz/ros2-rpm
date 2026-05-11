@@ -1,6 +1,6 @@
-# ADR 0011 — Phase 2: dev-sandbox expansion of `ros-jazzy-desktop` content
+# ADR 0011, Phase 2: dev-sandbox expansion of `ros-jazzy-desktop` content
 
-**Status:** Accepted (2026-05-08). Most of the planned Phase 2 surface shipped within the day (rqt suite, ros2cli, Cyclone DDS chain, launch family, demo nodes, lifecycle backfill). The **`rviz2` chain remains deferred** at end-of-session due to two upstream blockers — Ogre 14.x's `cmake_minimum_required` predates CMake 4.x (Fedora 44+'s default), and Assimp's bundled `-Werror` overrides our spec's `-Wno-error` and trips on Fedora's stricter GCC warnings. System library substitution doesn't help (Fedora ships Ogre 1.9, too old; Assimp 6.x, incompatibly new). Not a scope reversal — the deferral is engineering blocker, not a policy change. See [`docs/SCOPE.md` → "rviz2 deferral side effects"](../SCOPE.md#rviz2-deferral-side-effects) for the impact and workarounds.
+**Status:** Accepted (2026-05-08). Most of the planned Phase 2 surface shipped within the day (rqt suite, ros2cli, Cyclone DDS chain, launch family, demo nodes, lifecycle backfill). The **`rviz2` chain remains deferred** at end-of-session due to two upstream blockers, Ogre 14.x's `cmake_minimum_required` predates CMake 4.x (Fedora 44+'s default), and Assimp's bundled `-Werror` overrides our spec's `-Wno-error` and trips on Fedora's stricter GCC warnings. System library substitution doesn't help (Fedora ships Ogre 1.9, too old; Assimp 6.x, incompatibly new). Not a scope reversal, the deferral is engineering blocker, not a policy change. See [`docs/SCOPE.md` → "rviz2 deferral side effects"](../SCOPE.md#rviz2-deferral-side-effects) for the impact and workarounds.
 
 ## Context
 
@@ -17,23 +17,23 @@ Without those, the development sandbox is "good enough to build against" but not
 
 ## Decision
 
-**Phase 2 is reopened — as a dev-sandbox expansion, not a production trajectory.** ADR 0010's development-only positioning stays in force. This ADR amends rather than reverses ADR 0010.
+**Phase 2 is reopened, as a dev-sandbox expansion, not a production trajectory.** ADR 0010's development-only positioning stays in force. This ADR amends rather than reverses ADR 0010.
 
 Concretely:
 
 1. **Disclaimer is unchanged.** Every public surface (README, COPR description + instructions, GitHub repo description, CITATION.cff, per-package `%description`) continues to carry the **"Not the official ROS 2 packages for Fedora"** banner and the pointer to Open Robotics's upcoming Lyrical packages.
 2. **Production claims still forbidden.** No CVE SLA, no STIG-adjacent posture, no vendor-support framing. Phase 2 packages are subject to the same engineering-hygiene-not-SLA rule as Phase 1.
-3. **Open Robotics is still the production path.** Phase 2 dev-sandbox does not compete with their official Lyrical packages — when those ship, users move to them. The COPR's long-term lifecycle past Jazzy EOL is undecided (see ADR 0010, Consequences); not constrained by this ADR.
+3. **Open Robotics is still the production path.** Phase 2 dev-sandbox does not compete with their official Lyrical packages, when those ship, users move to them. The COPR's long-term lifecycle past Jazzy EOL is undecided (see ADR 0010, Consequences); not constrained by this ADR.
 
 ### Phase 2 dev-sandbox scope
 
-The Phase 2 set is **smaller than the originally-cancelled ~320-package full desktop**. It is the developer-tooling slice — what a developer needs to inspect, visualize, and debug their own code on Fedora today.
+The Phase 2 set is **smaller than the originally-cancelled ~320-package full desktop**. It is the developer-tooling slice, what a developer needs to inspect, visualize, and debug their own code on Fedora today.
 
-- **Visualization**: `rviz2` and its plugin dependencies, `rviz_common`, `rviz_default_plugins`, `rviz_rendering`, `rviz_visual_testing_framework` (skip the test framework for runtime — only needed for `%check`).
+- **Visualization**: `rviz2` and its plugin dependencies, `rviz_common`, `rviz_default_plugins`, `rviz_rendering`, `rviz_visual_testing_framework` (skip the test framework for runtime, only needed for `%check`).
 - **rqt suite (debug GUIs)**: `rqt`, `rqt_gui`, `rqt_gui_cpp`, `rqt_gui_py`, `rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_service_caller`, `rqt_action`, `rqt_plot`. Skip the lifecycle/diagnostic plugins for now (they need additional infrastructure that isn't in Phase 1).
 - **Alternate RMW**: `rmw_cyclonedds_cpp` and `cyclonedds`. Adds `EPL-2.0` to the COPR's license aggregate. Documented honestly per ADR 0003.
 - **Demo nodes (development verification)**: `demo_nodes_cpp`, `demo_nodes_py`, `example_interfaces`. These run the canonical "talker/listener" pair developers use to confirm their environment is healthy.
-- **Launch + utilities**: `launch`, `launch_ros`, `launch_xml`, `launch_yaml`, `launch_testing` if they aren't already in Phase 1. (Many of these will be — verify against `manifest.yaml` before adding to `packages.yaml`.)
+- **Launch + utilities**: `launch`, `launch_ros`, `launch_xml`, `launch_yaml`, `launch_testing` if they aren't already in Phase 1. (Many of these will be, verify against `manifest.yaml` before adding to `packages.yaml`.)
 - **`ros2cli` and core CLI tools**: `ros2cli`, `ros2pkg`, `ros2run`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`. The `ros2 ...` command-line surface developers actually use.
 
 ### Explicitly NOT in Phase 2 dev-sandbox
@@ -43,7 +43,7 @@ The Phase 2 set is **smaller than the originally-cancelled ~320-package full des
 - `gazebo` / `ros_gz_*` simulation bridges. Large dep surface; covered separately by the upstream Gazebo Fedora packages.
 - Any package whose only purpose is the production deployment workflow (release tooling, deployment helpers).
 
-If a developer needs one of those, they can request it as a one-off PR with justification — but the default answer is "use Open Robotics's Lyrical packages when those ship" or "spin up a RHEL container."
+If a developer needs one of those, they can request it as a one-off PR with justification, but the default answer is "use Open Robotics's Lyrical packages when those ship" or "spin up a RHEL container."
 
 ### Metapackage policy under Phase 2
 
@@ -73,7 +73,7 @@ ADR 0010's decision was driven by the production trajectory ("OR will deliver th
 
 ## Consequences
 
-- README, COPR description + instructions, GitHub repo description, CHANGELOG, SCOPE.md, RELATED-WORK.md updated in the same change-window as this ADR — per the sync rule in CLAUDE.md.
+- README, COPR description + instructions, GitHub repo description, CHANGELOG, SCOPE.md, RELATED-WORK.md updated in the same change-window as this ADR, per the sync rule in CLAUDE.md.
 - ADR 0006 (full desktop as eventual scope) stays cancelled; ADR 0011's scope is intentionally smaller than that.
 - ADR 0010 carries a retroactive note pointing to ADR 0011 as the dev-sandbox amendment.
 - No reversal of any technical infrastructure: same generator, same publish flow, same chroot matrix, same license invariants.

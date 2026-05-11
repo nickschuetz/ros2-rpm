@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# postprocess-spec.sh — apply ros2-rpm transformations to a bloom-generated spec.
+# postprocess-spec.sh, apply ros2-rpm transformations to a bloom-generated spec.
 #
 # bloom-generate rosrpm produces specs that are mostly modern but diverge from
 # our ADR 0005 standards in specific ways. This script applies the universal

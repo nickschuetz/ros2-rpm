@@ -1,8 +1,8 @@
 # ADR 0001: Minimal subset scope
 
-- **Status**: Accepted as the project's final scope (after the 2026-05-08 development-only pivot — see ADR 0010). Originally framed as Phase 1 of a phased plan; ADR 0006 (Phase 2 expansion) is now cancelled and ADR 0010 makes this minimal subset the project's permanent scope.
+- **Status**: Accepted as the project's final scope (after the 2026-05-08 development-only pivot, see ADR 0010). Originally framed as Phase 1 of a phased plan; ADR 0006 (Phase 2 expansion) is now cancelled and ADR 0010 makes this minimal subset the project's permanent scope.
 - **Date**: 2026-05-07
-- **Realization note (2026-05-08)**: Phase 1 minimal subset shipped — ~85 packages live across all 6 chroot/arch pairs. The "~70 packages" estimate undercounted by ~15 due to the rosidl chain expanding more than expected. See [`docs/build-order.md`](../build-order.md) for the realized dependency tiers.
+- **Realization note (2026-05-08)**: Phase 1 minimal subset shipped, ~85 packages live across all 6 chroot/arch pairs. The "~70 packages" estimate undercounted by ~15 due to the rosidl chain expanding more than expected. See [`docs/build-order.md`](../build-order.md) for the realized dependency tiers.
 - **Pivot note (2026-05-08)**: Open Robotics is taking on official Fedora support starting with Lyrical Luth. ADR 0010 makes this minimal subset the project's final scope (no Phase 2, no Phase 3) and reframes the entire repo as development-only.
 
 ## Context
@@ -13,7 +13,7 @@ Upstream ros.org publishes RPMs for RHEL 9, but not Fedora and not CentOS Stream
 
 ## Decision
 
-Scope this COPR to the **O3DE-minimal subset** — approximately 70 packages — rather than the full desktop install.
+Scope this COPR to the **O3DE-minimal subset**, approximately 70 packages, rather than the full desktop install.
 
 Initial in-scope packages: `rclcpp`, `builtin_interfaces`, `std_msgs`, `sensor_msgs`, `nav_msgs`, `geometry_msgs`, `tf2_ros`, `ackermann_msgs`, `vision_msgs`, `control_msgs`, plus their transitive deps including `rmw_fastrtps_cpp` + Fast DDS.
 

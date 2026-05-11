@@ -25,7 +25,7 @@ RPM 6.0 (shipped in Fedora 43+) lays groundwork for built-in SBOM macros. Fedora
 
 **Negative**:
 - `syft` is an extra build-time dependency in every chroot; `BuildRequires: syft` everywhere.
-- SBOM lives in the package not in the build manifest — slightly harder for aggregate auditing than a build-time export. Acceptable trade-off until Fedora's macro lands.
+- SBOM lives in the package not in the build manifest, slightly harder for aggregate auditing than a build-time export. Acceptable trade-off until Fedora's macro lands.
 
 **Neutral**:
 - Path is portable: when the native macro arrives, the spec change is local (drop the explicit `syft` invocation, drop the `BuildRequires: syft`, add `%generate_sbom`).

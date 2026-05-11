@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""generate-spec.py — render an RPM spec from a ROS 2 package source.
+"""generate-spec.py, render an RPM spec from a ROS 2 package source.
 
 Reads package.xml (for version, description, license, deps) and
 scripts/packages.yaml (for the source URL and build layout) and emits
@@ -211,7 +211,7 @@ def runtime_requires(pkg: dict, build_type: str, distro: str, os_version: str) -
 
 
 def has_console_scripts(setup_py_path: Path) -> bool:
-    """Detect entry_points console_scripts in a setup.py — those land in /bin."""
+    """Detect entry_points console_scripts in a setup.py, those land in /bin."""
     if not setup_py_path.is_file():
         return False
     try:
@@ -253,7 +253,7 @@ def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
         py_changelog_path = "CHANGELOG.rst"
         py_test_path = "test"
 
-    # Detect entry_points / console_scripts in setup.py — those land in
+    # Detect entry_points / console_scripts in setup.py, those land in
     # /opt/ros/<distro>/bin/<name> and must be added to %files.
     setup_py = py_src_root / "setup.py" if py_src_root else None
     py_has_console_scripts = bool(setup_py and has_console_scripts(setup_py))
@@ -265,7 +265,7 @@ def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     # branches sometimes strip LICENSE from per-package subtrees).
     py_license_search = py_src_root.parent if (py_src_root and build_subdir) else py_src_root
     py_has_license = bool(py_license_search and (py_license_search / "LICENSE").is_file())
-    py_license_line = "%license LICENSE" if py_has_license else "# (no LICENSE file in source tree — see package.xml <license>)"
+    py_license_line = "%license LICENSE" if py_has_license else "# (no LICENSE file in source tree; see package.xml <license>)"
 
     br_lines = "\n".join(f"BuildRequires:  {b}" for b in brs)
     rq_lines = "\n".join(f"Requires:       {r}" for r in rqs)
@@ -340,7 +340,7 @@ PYEOF
 {py_license_line}
 %doc {py_changelog_path}
 {py_extra_files}
-# TODO: review the file list — generator emits a permissive glob and you may
+# TODO: review the file list, generator emits a permissive glob and you may
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
 %{{install_prefix}}/lib/python%{{python3_version}}/site-packages/%{{pkg_name}}/
 %{{install_prefix}}/lib/python%{{python3_version}}/site-packages/%{{pkg_name}}-%{{version}}.dist-info/
@@ -396,7 +396,7 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     # those cases we omit %license rather than fabricate one. Detect by
     # checking whether LICENSE exists in the prep-time directory.
     has_license = bool(license_search_dir and (license_search_dir / "LICENSE").is_file())
-    license_line = "%license LICENSE" if has_license else "# (no LICENSE file in source tree — see package.xml <license>)"
+    license_line = "%license LICENSE" if has_license else "# (no LICENSE file in source tree; see package.xml <license>)"
 
     # CHANGELOG.rst is not always present (some upstream packages put it
     # elsewhere or omit it). Skip %doc when missing rather than fail the build.
@@ -410,7 +410,7 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     # disable_tests: true in packages.yaml until the test deps land.
     disable_tests = cfg.get("disable_tests", False)
     cmake_test_flag = " -DBUILD_TESTING=OFF" if disable_tests else ""
-    check_body = "echo 'tests skipped — see CLAUDE.md / packages.yaml'" if disable_tests else f"{push}%ctest\n{pop}"
+    check_body = "echo 'tests skipped (see CLAUDE.md / packages.yaml)'" if disable_tests else f"{push}%ctest\n{pop}"
 
     # Some ament_cmake packages also install a Python module via
     # `ament_python_install_package(...)`. Detect this so %files picks up
@@ -465,7 +465,7 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     extra_arch_files = ""
     if is_message_pkg:
         extra_arch_files += (
-            "# Message package — multiple typesupport .so variants + Python bindings.\n"
+            "# Message package: multiple typesupport .so variants + Python bindings.\n"
             "%{install_prefix}/include/%{pkg_name}/\n"
             "%{install_prefix}/lib/lib%{pkg_name}__rosidl_*.so\n"
             "%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/\n"
@@ -607,7 +607,7 @@ def main():
     elif pkg["build_type"] in ("ament_cmake", "cmake"):
         # 'cmake' build_type (used by vendor packages and the occasional
         # standalone library) is a strict subset of 'ament_cmake' for spec-
-        # generation purposes — no ament_index sentinels but otherwise the
+        # generation purposes, no ament_index sentinels but otherwise the
         # same %prep/%build/%install/%check shape.
         spec = render_cmake_spec(pkg, cfg, args.distro, args.prefix)
     else:

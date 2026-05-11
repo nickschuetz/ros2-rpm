@@ -8,7 +8,7 @@
 Two install-layout conventions are in tension:
 
 - **Upstream ROS 2**: installs under `/opt/ros/$DISTRO`. Used by `bloom-rpm`, every Debian release of ROS 2, every community Fedora COPR (`tavie/ros2`, `techtasie/ros2`), and the install instructions every ROS 2 user has internalized. Supports clean side-by-side multi-distro installs.
-- **Fedora main-repo policy**: [packaging guidelines](https://docs.fedoraproject.org/en-US/packaging-guidelines/#_filesystem_layout) forbid `/opt`. Apps must follow FHS — `/usr/lib64`, `/usr/include`, `/usr/share`. COPRs are exempt as third-party repositories.
+- **Fedora main-repo policy**: [packaging guidelines](https://docs.fedoraproject.org/en-US/packaging-guidelines/#_filesystem_layout) forbid `/opt`. Apps must follow FHS, `/usr/lib64`, `/usr/include`, `/usr/share`. COPRs are exempt as third-party repositories.
 
 The user's stated long-term goal includes Fedora main inclusion. The question is whether to bend the COPR's layout toward FHS now or stay on `/opt`.
 
@@ -16,7 +16,7 @@ The user's stated long-term goal includes Fedora main inclusion. The question is
 
 **Two-track approach.**
 
-1. **COPR uses `/opt/ros/jazzy`.** Spec files use `%global ros_install_prefix /opt/ros/%{ros_distro}` and reference `%{ros_install_prefix}/...` everywhere — the layout is centralized to a single macro per spec.
+1. **COPR uses `/opt/ros/jazzy`.** Spec files use `%global ros_install_prefix /opt/ros/%{ros_distro}` and reference `%{ros_install_prefix}/...` everywhere, the layout is centralized to a single macro per spec.
 2. **Fedora main inclusion is a separate, longer-term Phase 3 effort**, not pursued by carrying FHS-rebasing patches in this repo. The honest path is upstream-first: get ROS 2 itself to honor `CMAKE_INSTALL_PREFIX` (REP-class proposal + CMake config refactor), then submit FHS-compliant packages to Fedora.
 3. **Reject** "patch every spec in this repo to install under `/usr/lib64/ros2-jazzy/`." This would diverge from every other ROS 2 distro packaging, balloon maintenance, and almost certainly fail the "minimal upstream divergence" review test in Fedora itself.
 
@@ -25,7 +25,7 @@ The user's stated long-term goal includes Fedora main inclusion. The question is
 **Positive**:
 - Matches user expectations from Ubuntu / Debian / existing community Fedora COPRs.
 - `bloom-rpm` works without divergent patches; CI complexity stays bounded.
-- Side-by-side distro installs (Jazzy + Lyrical) are clean — distinct `/opt/ros/<distro>` trees.
+- Side-by-side distro installs (Jazzy + Lyrical) are clean, distinct `/opt/ros/<distro>` trees.
 - Single macro change per spec if/when Phase 3 begins; per-conditional handling is straightforward.
 
 **Negative**:
@@ -33,7 +33,7 @@ The user's stated long-term goal includes Fedora main inclusion. The question is
 - Phase 3 may not happen for years. Be honest with users that "in Fedora main" is aspirational.
 
 **Neutral**:
-- Fedora's `redhat-rpm-config` hardening flags apply path-independently — `/opt` does not weaken security posture.
+- Fedora's `redhat-rpm-config` hardening flags apply path-independently, `/opt` does not weaken security posture.
 - This decision aligns with how `tavie/ros2`, `techtasie/ros2`, and every Debian-based ROS 2 distribution is laid out.
 
 ## Phase 3 readiness signals (informational)

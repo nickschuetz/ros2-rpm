@@ -4,9 +4,9 @@
 Name:           ros-%{ros_distro}-ros-base
 Version:        0.13.1
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy default install — ros-core plus tf2 and common message types
+Summary:        ROS 2 Jazzy default install, ros-core plus tf2 and common message types
 
-# Aggregate of permissive-licensed runtime packages only — Phase 1 license rule.
+# Aggregate of permissive-licensed runtime packages only, Phase 1 license rule.
 License:        Apache-2.0 AND BSD-3-Clause
 URL:            https://github.com/nickschuetz/ros2-rpm
 Source0:        ros-jazzy-ros-base-%{version}.tar.gz
@@ -20,15 +20,15 @@ Requires:       ros-jazzy-ros-core
 Requires:       ros-jazzy-ros-workspace
 Requires:       ros-jazzy-ros-environment
 
-# Python client library — needed for any Python ROS 2 development.
+# Python client library, needed for any Python ROS 2 development.
 Requires:       ros-jazzy-rclpy
 
-# tf2 stack — frame transforms, tf2_ros pubs / subs
+# tf2 stack, frame transforms, tf2_ros pubs / subs
 Requires:       ros-jazzy-tf2
 Requires:       ros-jazzy-tf2-msgs
 Requires:       ros-jazzy-tf2-ros
 
-# Phase 1 direct consumers — common message packages
+# Phase 1 direct consumers, common message packages
 Requires:       ros-jazzy-std-msgs
 Requires:       ros-jazzy-geometry-msgs
 Requires:       ros-jazzy-sensor-msgs
@@ -53,10 +53,10 @@ License-clean: contains only Apache-2.0 and BSD-3-Clause content. The
 Phase 2 dev-sandbox metapackage `ros-jazzy-ros-desktop` is a separate
 opt-in install that adds the rqt suite (Qt/LGPL-3.0) and the Cyclone
 DDS alternate RMW (EPL-2.0). The rviz2 chain is currently deferred in
-both Phase 1 and Phase 2 — see docs/SCOPE.md.
+both Phase 1 and Phase 2, see docs/SCOPE.md.
 
 %prep
-# No source — pure metapackage.
+# No source, pure metapackage.
 
 %build
 # Nothing to build.

@@ -72,12 +72,12 @@ PYEOF
 
 
 %files
-# (no LICENSE file in source tree — see package.xml <license>)
+# (no LICENSE file in source tree; see package.xml <license>)
 %doc CHANGELOG.rst
 
-# TODO: review the file list — generator emits a permissive glob and you may
+# TODO: review the file list, generator emits a permissive glob and you may
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
-# rqt is a pure metapackage — setup.py has packages=[] (no Python modules).
+# rqt is a pure metapackage, setup.py has packages=[] (no Python modules).
 # Only ament_index sentinel + share/<pkg>/ + dist-info land in the buildroot.
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}.dist-info/
 %{install_prefix}/share/ament_index/resource_index/packages/%{pkg_name}

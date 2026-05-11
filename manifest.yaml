@@ -1,4 +1,4 @@
-# manifest.yaml — source pins for the ROS 2 Jazzy minimal subset.
+# manifest.yaml, source pins for the ROS 2 Jazzy minimal subset.
 #
 # Each entry pins a package to a specific git tag or commit SHA. Never use
 # moving branches. Pin format is the value upstream advertises in

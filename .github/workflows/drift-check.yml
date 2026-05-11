@@ -104,6 +104,6 @@ jobs:
                        --json number --jq '.[0].number' || echo "")
           if [ -n "$EXISTING" ]; then
             gh issue comment "$EXISTING" --repo "$REPO" \
-              --body "Fully caught up with rosdistro/jazzy — closing. Next check: weekly cron."
+              --body "Fully caught up with rosdistro/jazzy, closing. Next check: weekly cron."
             gh issue close "$EXISTING" --repo "$REPO"
           fi

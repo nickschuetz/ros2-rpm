@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# build-one.sh — build a single spec end-to-end (SRPM + mock) for one chroot.
+# build-one.sh, build a single spec end-to-end (SRPM + mock) for one chroot.
 #
 # Usage:
 #   scripts/build-one.sh <spec-name-without-extension> [chroot]
@@ -46,7 +46,7 @@ rpmbuild -bs \
 SRPM=$(ls -t "$SRPMS"/${SPEC_NAME}-*.src.rpm | head -1)
 echo "==> SRPM: $SRPM"
 
-# Use the direct pulp URL — download.copr.fedorainfracloud.org now redirects
+# Use the direct pulp URL, download.copr.fedorainfracloud.org now redirects
 # to packages.redhat.com/api/pulp-content, and mock's dnf doesn't always
 # follow the redirect when fetching repodata.
 COPR_REPO="https://packages.redhat.com/api/pulp-content/public-copr/hellaenergy/ros2/$CHROOT/"

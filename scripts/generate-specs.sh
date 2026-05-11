@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# generate-specs.sh — produce RPM spec files from manifest.yaml.
+# generate-specs.sh, produce RPM spec files from manifest.yaml.
 #
 # For each entry in manifest.yaml, this script:
 #   1. Fetches the upstream tarball at the pinned version.
@@ -20,7 +20,7 @@ set -euo pipefail
 SPEC_DIR="${1:?usage: generate-specs.sh <output-spec-dir>}"
 mkdir -p "$SPEC_DIR/generated"
 
-echo "generate-specs.sh — scaffolded, not fully wired yet."
+echo "generate-specs.sh, scaffolded, not fully wired yet."
 echo
 echo "Working flow today (manual):"
 echo "  1. mkdir -p build && cd build"

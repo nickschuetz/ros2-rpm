@@ -10,7 +10,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    # Daily at 06:00 UTC — catches drift if upstream Fedora updates
+    # Daily at 06:00 UTC, catches drift if upstream Fedora updates
     # something the COPR depends on between PRs.
     - cron: '0 6 * * *'
   workflow_dispatch: {}
@@ -24,7 +24,7 @@ concurrency:
 
 jobs:
   smoke-test-fedora-44:
-    name: Smoke test — Fedora 44 (x86_64)
+    name: Smoke test, Fedora 44 (x86_64)
     runs-on: ubuntu-latest
     container: fedora:44
 

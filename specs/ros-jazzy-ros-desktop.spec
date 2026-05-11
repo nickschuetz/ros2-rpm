@@ -4,12 +4,12 @@
 Name:           ros-%{ros_distro}-ros-desktop
 Version:        0.13.0
 Release:        1%{?dist}
-Summary:        ROS 2 Jazzy dev-sandbox install — ros-base plus rqt, ros2cli, launch, demos
+Summary:        ROS 2 Jazzy dev-sandbox install, ros-base plus rqt, ros2cli, launch, demos
 
 # Heterogeneous license aggregate, honestly disclosed per ADR 0011.
 # - Apache-2.0 / BSD-3-Clause: ros-base contents (rclcpp, tf2, message packages, etc.).
 # - LGPL-3.0: Qt5 (via rqt suite for visualization / debug GUIs).
-License:        Apache-2.0 AND BSD-3-Clause AND LGPL-3.0
+License:        Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only
 URL:            https://github.com/nickschuetz/ros2-rpm
 Source0:        ros-jazzy-ros-desktop-%{version}.tar.gz
 
@@ -40,8 +40,8 @@ Requires:       ros-jazzy-ros2lifecycle
 Requires:       ros-jazzy-ros2param
 Requires:       ros-jazzy-ros2component
 
-# rqt + plugins (Phase 2 P-3, Fedora-only — Stream 10 lacks Qt5/sip-devel).
-# These pull LGPL-3.0 via Qt5 — the package's License: aggregate above is
+# rqt + plugins (Phase 2 P-3, Fedora-only, Stream 10 lacks Qt5/sip-devel).
+# These pull LGPL-3.0 via Qt5, the package's License: aggregate above is
 # the disclosure. Users explicitly opt in by installing ros-jazzy-ros-desktop.
 Requires:       ros-jazzy-rqt
 Requires:       ros-jazzy-rqt-gui
@@ -74,19 +74,19 @@ This metapackage carries a heterogeneous license aggregate including LGPL-3.0
 that aggregate. ros-jazzy-ros-base remains permissive-only (Apache-2.0 AND
 BSD-3-Clause) for users who want the smaller default.
 
-Phase 2 dev-sandbox per ADR 0011 — not the official ROS 2 packages for
+Phase 2 dev-sandbox per ADR 0011, not the official ROS 2 packages for
 Fedora; Open Robotics's official Lyrical packages are the production path.
 
 Note: Phase 2 GUI packages (rqt suite) build on Fedora chroots only; CentOS
 Stream 10 ships without the Qt5 build deps required by python_qt_binding.
 On Stream 10, install ros-jazzy-ros-base instead.
 
-Note: rviz2 is **not** included in this metapackage — its Ogre and Assimp
+Note: rviz2 is **not** included in this metapackage, its Ogre and Assimp
 vendor builds need workarounds for CMake 4.x and Fedora's GCC -Werror that
 have not landed in upstream rviz_*_vendor. Tracked for a future iteration.
 
 %prep
-# No source — pure metapackage.
+# No source, pure metapackage.
 
 %build
 # Nothing to build.
