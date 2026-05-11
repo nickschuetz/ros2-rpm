@@ -1,0 +1,101 @@
+name: spec-dry-build
+
+# Mock-build dry-run for PRs that touch specs/. The goal is to catch the
+# common COPR-breaks-on-publish failure modes (spec syntax errors, broken
+# Source0 URLs, BuildRequires that won't resolve on Fedora 44) BEFORE the
+# COPR build cycle. Cheap and high-signal: spec parse + source fetch + BR
+# resolvability against hellaenergy/ros2 itself.
+#
+# Limits the dry-build to the first 3 changed specs per PR so the job stays
+# under ~5 minutes even on a sweeping rebase. PRs that touch more than 3
+# specs still get coverage via the regular COPR build matrix once they merge.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'specs/**/*.spec'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: spec-dry-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dry-build:
+    runs-on: ubuntu-24.04
+    container:
+      image: registry.fedoraproject.org/fedora:44
+    steps:
+      - name: Install build + introspection tooling
+        run: |
+          dnf install -y --setopt=install_weak_deps=False \
+            rpm-build rpmdevtools \
+            dnf-plugins-core \
+            git findutils \
+            curl
+
+      - name: Enable hellaenergy/ros2 (so cross-package BRs resolve)
+        run: dnf copr enable -y hellaenergy/ros2
+
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed specs in this PR
+        id: changed
+        run: |
+          set -euo pipefail
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+          mapfile -t specs < <(git diff --name-only --diff-filter=AM "$BASE" "$HEAD" -- 'specs/*.spec' | head -3)
+          if [ ${#specs[@]} -eq 0 ]; then
+            echo "No spec files changed in this PR."
+            echo "have_specs=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          printf '  %s\n' "${specs[@]}"
+          echo "have_specs=1" >> "$GITHUB_OUTPUT"
+          {
+            echo "specs<<EOF"
+            printf '%s\n' "${specs[@]}"
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Parse + source-fetch + BR-resolve check
+        if: steps.changed.outputs.have_specs == '1'
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/sources /tmp/srpms
+          FAIL=0
+          while IFS= read -r spec; do
+            [ -z "$spec" ] && continue
+            echo
+            echo "=== $spec ==="
+
+            echo "-- rpmspec -P (macro expansion + syntax)"
+            rpmspec -P --define "_topdir /tmp" "$spec" > /dev/null
+
+            echo "-- rpmspec -q --srpm (NEVRA round-trip)"
+            rpmspec -q --srpm --define "_topdir /tmp" "$spec"
+
+            echo "-- spectool -g (fetch Source0)"
+            spectool -g -C /tmp/sources --define "_topdir /tmp" "$spec"
+
+            echo "-- rpmbuild -bs (produce SRPM)"
+            rpmbuild -bs \
+              --define "_topdir /tmp" \
+              --define "_sourcedir /tmp/sources" \
+              --define "_srcrpmdir /tmp/srpms" \
+              "$spec"
+
+            echo "-- dnf builddep --assumeno (validate BRs resolve)"
+            SRPM=$(ls -t /tmp/srpms/*.src.rpm | head -1)
+            if ! dnf builddep --assumeno "$SRPM"; then
+              echo "ERROR: BuildRequires for $spec do not resolve against current Fedora 44 + hellaenergy/ros2." >&2
+              FAIL=1
+            fi
+          done <<< "${{ steps.changed.outputs.specs }}"
+          exit $FAIL

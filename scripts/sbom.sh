@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# sbom.sh — generate CycloneDX SBOMs for built RPMs in a result dir.
+# sbom.sh, generate CycloneDX SBOMs for built RPMs in a result dir.
 #
 # Per ADR 0004, the canonical place for an SBOM is INSIDE each RPM at
 # %{_datadir}/doc/<name>/sbom.cdx.json. This script is the fallback /
@@ -21,7 +21,7 @@ mkdir -p "$OUT_DIR"
 shopt -s nullglob
 rpms=("$RESULT_DIR"/*.rpm)
 if [ ${#rpms[@]} -eq 0 ]; then
-    echo "No RPMs in $RESULT_DIR/ — nothing to inspect."
+    echo "No RPMs in $RESULT_DIR/, nothing to inspect."
     exit 0
 fi
 
@@ -30,3 +30,8 @@ for rpm in "${rpms[@]}"; do
     syft "$rpm" -o cyclonedx-json="$OUT_DIR/${name}.cdx.json"
     echo "wrote $OUT_DIR/${name}.cdx.json"
 done
+
+# Validate every emitted SBOM. Catches syft producing garbage or a future
+# version changing output shape unexpectedly.
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+python3 "$SCRIPT_DIR/validate-sbom.py" "$OUT_DIR"
