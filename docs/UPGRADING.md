@@ -13,7 +13,7 @@ Gated by the readiness checklist tracked in the pinned GitHub issue (see `CLAUDE
 1. Pin the [tracking issue](https://github.com/nickschuetz/ros2-rpm/issues) for the new distro.
 2. When all checklist items hold, cut a `<distro>` branch in the repo.
 3. Run the bloom-rpm pipeline against the new branch's manifest.
-4. Validate on all 8 chroot/arch pairs in CI.
+4. Validate on all 6 chroot/arch pairs in CI (3 distros × 2 arches; see ADR 0010 for the post-pivot matrix).
 5. Add the new distro's chroots to the COPR (no chroot additions before CI is green).
 6. Update README's "Supported targets" table.
 7. Announce in the COPR project description.
