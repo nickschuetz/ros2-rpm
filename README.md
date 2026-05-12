@@ -6,7 +6,7 @@
 >
 > This COPR exists for developers who want to compile and experiment against ROS 2 Jazzy on Fedora 44+ today, before the official Lyrical packages ship. See [ADR 0010](docs/adr/0010-project-pivot-to-development-only.md) and [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md).
 
-Development-only ROS 2 Jazzy minimal subset (~85 packages, `rclcpp`, `tf2_ros`, common message packages, `rmw_fastrtps_cpp` + Fast DDS, transitive deps), built for **Fedora 44+** and **CentOS Stream 10** on **x86_64** and **aarch64**, distributed via the Fedora COPR [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2).
+Development-only ROS 2 Jazzy package set (~160 packages across Phase 1 + Phase 2 dev sandbox: `rclcpp`, `tf2_ros`, common message packages, `rmw_fastrtps_cpp` + Fast DDS, the `ros-desktop` slice of `rqt` + `ros2cli` + `launch` + demo nodes, alternate Cyclone DDS RMW, plus the O3DE Gem optional `gazebo_msgs`). Built for **Fedora 44+** and **CentOS Stream 10** on **x86_64** and **aarch64**. **3D visualization (`rviz2`) deferred** pending upstream Ogre / Assimp patches; `rqt` covers non-3D debugging. Distributed via the Fedora COPR [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2).
 
 ## Scope
 
