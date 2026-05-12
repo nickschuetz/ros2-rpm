@@ -53,7 +53,7 @@ After ADR 0010 cancelled the originally-planned ~320-package full `ros-jazzy-des
 
 ### Phase 2 metapackage
 
-- **`ros-jazzy-ros-desktop`**, License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (Qt5 via the rqt suite). Pulls in `ros-jazzy-ros-base` plus the Phase 2 surface. Users explicitly opt in to the heterogeneous license aggregate by installing this metapackage. **Does not include rviz2**, see deferral note below.
+- **`ros-jazzy-ros-desktop`**, License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only` (Qt5 via the rqt suite). Pulls in `ros-jazzy-ros-base` plus the Phase 2 surface. Users explicitly opt in to the heterogeneous license aggregate by installing this metapackage. **Does not include rviz2**, see deferral note below.
 
 ### Phase 2 build matrix caveat
 

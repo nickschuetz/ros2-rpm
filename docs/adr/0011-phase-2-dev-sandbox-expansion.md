@@ -50,7 +50,7 @@ If a developer needs one of those, they can request it as a one-off PR with just
 To preserve the license-clean default install path:
 
 - `ros-jazzy-ros-core` and `ros-jazzy-ros-base` stay permissive-only. Their `Requires:` lines never name a non-permissive package. `EPL-2.0` (Cyclone DDS) does not enter these.
-- A new metapackage `ros-jazzy-ros-desktop` is added when Phase 2 lands. Its License: field declares the heterogeneous aggregate honestly: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (Qt via rviz2) and `EPL-2.0` if Cyclone DDS is included.
+- A new metapackage `ros-jazzy-ros-desktop` is added when Phase 2 lands. Its License: field declares the heterogeneous aggregate honestly: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only` (Qt via rviz2) and `EPL-2.0` if Cyclone DDS is included.
 - All non-permissive Phase 2 packages link dynamically against system libraries (LGPL-3.0 / EPL-2.0 obligation). Static linking forbidden.
 
 ### Package-set ordering

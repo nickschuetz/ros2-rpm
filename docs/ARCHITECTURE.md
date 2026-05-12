@@ -11,13 +11,16 @@ There are exactly two public surfaces, and they are kept in lockstep:
   ─────────────────────────             ───────────────────────────
   github.com/nickschuetz/ros2-rpm   →   copr.fedorainfracloud.org/coprs/hellaenergy/ros2
 
-  - spec files (specs/*.spec)              - chroot matrix (4 distros × 2 arches = 8)
+  - spec files (specs/*.spec)              - chroot matrix (3 distros × 2 arches = 6)
   - generator (scripts/*)                  - signed RPMs
   - per-package config (packages.yaml)     - per-build SBOM
-  - rosdep override (build/local-...)      - public package index
+  - local patches (specs/patches/)         - public package index
+  - rosdep override (build/local-...)
   - documentation (docs/, README.md)
   - ADRs (docs/adr/)
-  - CI (lint + matrix-build dry-run)
+  - CI (lint + verify-specs + sbom-validate +
+        spec-dry-build + smoke-test +
+        drift-check + upstream-issues + build matrix)
 ```
 
 A user installs from COPR; a contributor reads the GitHub repo. Each artifact in COPR is reproducible from the GitHub source: the spec file is in `specs/`, the package version is recorded by the `Version:` and `Release:` fields, and the source archive is a fixed `bloom-release` tarball pinned in `Source0:`.
@@ -55,10 +58,10 @@ Any package goes through the same five stages. The generator handles 1-3 mechani
                          ↓
    ┌──────────────────────────────────────────────────────────┐
    │ 4. Binary build                                          │
-   │    - LOCAL: mock --rebuild on fedora-44-x86_64            │
+   │    - LOCAL: mock --rebuild on fedora-44-x86_64           │
    │      (validates against pulled deps from COPR)           │
    │    - REMOTE: copr-cli build → COPR builds across all     │
-   │      8 chroot/arch pairs in parallel.                    │
+   │      6 chroot/arch pairs in parallel.                    │
    └──────────────────────────────────────────────────────────┘
                          ↓
    ┌──────────────────────────────────────────────────────────┐
@@ -72,6 +75,8 @@ Any package goes through the same five stages. The generator handles 1-3 mechani
 ```
 
 `scripts/publish.sh` is the wrapper that runs steps 1-4 against any package by name. `scripts/build-one.sh` is the local-only variant (1-3 + local mock).
+
+For routine version syncs that only change `Version:` and `Source0:` (no dep shifts), `scripts/bump.py` short-circuits the pipeline: it reads `rosdistro/jazzy/distribution.yaml`, edits the spec in place, prepends a `%changelog` entry, and runs `scripts/verify-specs.py` as a guard. Pair with `scripts/check-upstream.py` (or the weekly `drift-check` workflow's sticky issue) to know which packages need bumping. See [`MAINTENANCE.md`](MAINTENANCE.md) for the full tooling reference.
 
 ## The four spec patterns
 
@@ -165,45 +170,66 @@ The dep graph is realized as the tier list in [`build-order.md`](build-order.md)
 ```
 
 - **Phase 1** (live): minimal subset, `rclcpp`, common message packages, Fast DDS, `tf2_ros`. License-clean (`Apache-2.0 AND BSD-3-Clause`). See [`SCOPE.md`](SCOPE.md) for the package list.
-- **Phase 2** (live except rviz2): the developer-tooling slice of `ros-jazzy-desktop`, rqt suite, ros2cli, alternate Cyclone DDS RMW, launch family, demo_nodes, lifecycle backfill, plus the `ros-jazzy-ros-desktop` metapackage with the heterogeneous `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0 AND EPL-2.0` aggregate. **rviz2 chain is deferred** pending upstream patches for Ogre's CMake-policy floor and Assimp's bundled `-Werror`; see [`SCOPE.md` → "rviz2 deferral side effects"](SCOPE.md#rviz2-deferral-side-effects). See [ADR 0011](adr/0011-phase-2-dev-sandbox-expansion.md).
+- **Phase 2** (live except rviz2): the developer-tooling slice of `ros-jazzy-desktop`, rqt suite, ros2cli, alternate Cyclone DDS RMW, launch family, demo_nodes, lifecycle backfill, plus the `ros-jazzy-ros-desktop` metapackage with the heterogeneous `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only AND EPL-2.0` aggregate. **rviz2 chain is deferred** pending upstream patches for Ogre's CMake-policy floor and Assimp's bundled `-Werror`; see [`SCOPE.md` → "rviz2 deferral side effects"](SCOPE.md#rviz2-deferral-side-effects). See [ADR 0011](adr/0011-phase-2-dev-sandbox-expansion.md).
 - **Phase 3** (dropped): Fedora main-repo inclusion was originally aspirational; dropped in [ADR 0010](adr/0010-project-pivot-to-development-only.md). Production distribution is now Open Robotics's lane via their official Lyrical packages.
 
 ## CI / publishing flow
 
 ```
-  contributor              GitHub                COPR
-       │                     │                     │
-       │ git push            │                     │
-       ├────────────────────►│                     │
-       │                     │                     │
-       │                     │ workflow: lint      │
-       │                     │ (rpmlint, forbidden │
-       │                     │  patterns)          │
-       │                     │                     │
-       │                     │ workflow: build     │
-       │                     │ (matrix-build       │
-       │                     │  dry-run on all 8   │
-       │                     │  chroot/arch pairs) │
-       │                     │                     │
-       │ copr-cli build      │                     │
-       ├──────────────────────────────────────────►│
-       │                     │                     │
-       │                     │                     │ build all 8
-       │                     │                     │ chroot/arch
-       │                     │                     │ in parallel
-       │                     │                     │
-       │                     │                     │ sign + publish
-       │                     │                     │
-       │ ◄──────────────────────────────────────── │
-       │   user dnf copr enable                    │
-       │   hellaenergy/ros2                        │
+  contributor              GitHub                                COPR
+       │                     │                                    │
+       │ git push / open PR  │                                    │
+       ├────────────────────►│                                    │
+       │                     │                                    │
+       │                     │ workflow: lint (per push/PR)       │
+       │                     │   ├─ rpmlint                       │
+       │                     │   ├─ license-check (legacy SPDX)   │
+       │                     │   ├─ forbidden-patterns (grep)     │
+       │                     │   ├─ verify-specs (full audit)     │
+       │                     │   └─ sbom-validate (CycloneDX)     │
+       │                     │                                    │
+       │                     │ workflow: spec-dry-build (PR only) │
+       │                     │   on PRs that touch specs/, runs   │
+       │                     │   rpmspec -P, spectool -g,         │
+       │                     │   rpmbuild -bs, dnf builddep on    │
+       │                     │   up to 3 changed specs.           │
+       │                     │                                    │
+       │                     │ workflow: build (per push/PR)      │
+       │                     │   matrix-build dry-run on all 6    │
+       │                     │   chroot/arch pairs.               │
+       │                     │                                    │
+       │                     │ workflow: smoke-test (per push/PR  │
+       │                     │   + daily 06:00 UTC). Installs     │
+       │                     │   ros-base on fresh Fedora 44,     │
+       │                     │   exercises all 22 checks.         │
+       │                     │                                    │
+       │                     │ workflow: drift-check (Sun 08:00)  │
+       │                     │   diffs local pins vs rosdistro;   │
+       │                     │   updates a sticky issue in place. │
+       │                     │                                    │
+       │                     │ workflow: upstream-issues (daily)  │
+       │                     │   queries tracked GH issues/PRs,   │
+       │                     │   pings when one closes.           │
+       │                     │                                    │
+       │ copr-cli build      │                                    │
+       ├───────────────────────────────────────────────────────► │
+       │                     │                                    │
+       │                     │                                    │ build all 6
+       │                     │                                    │ chroot/arch
+       │                     │                                    │ in parallel
+       │                     │                                    │
+       │                     │                                    │ sign + publish
+       │                     │                                    │
+       │ ◄────────────────────────────────────────────────────── │
+       │   user dnf copr enable hellaenergy/ros2                  │
 ```
 
-The CI on GitHub does *not* publish to COPR, that's an explicit `copr-cli build` action by the maintainer. CI's job is to fail PRs that would publish broken specs (lint, forbidden-pattern check, matrix-build dry-run).
+The CI on GitHub does *not* publish to COPR, that's an explicit `copr-cli build` action by the maintainer. CI's job is to fail PRs that would publish broken specs and to surface drift / upstream-blocker movement between manual builds. See [`MAINTENANCE.md`](MAINTENANCE.md) for the per-workflow knob descriptions.
 
 ## What's not here (and why)
 
 - **No bundled forks of system libs.** `tinyxml2`, `console_bridge`, `libyaml`, `spdlog`, `pybind11`, `boost`, `asio`, `openssl`, `gtest` come from Fedora's base repos. This makes Fedora's CVE pipeline cover transitive deps automatically. See [SCOPE.md](SCOPE.md) "Boundary rules".
-- **No Cyclone DDS in Phase 1.** Default RMW is Fast DDS. Cyclone DDS is EPL-2.0 (different license aggregate), so it's deferred until a deliberate License-policy decision (ADR 0003).
+- **Cyclone DDS shipped in Phase 2, not Phase 1.** Default RMW remains Fast DDS (Apache-2.0). Cyclone DDS (EPL-2.0) is a Phase 2 alternate RMW per ADR 0011; users opt in by setting `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` and installing `ros-jazzy-rmw-cyclonedds-cpp`. `ros-jazzy-ros-base` does not pull EPL-2.0 content.
 - **No ament_lint family.** `ament_lint_*` are test-only deps. We pass `disable_tests: true` per package, which strips them from `BuildRequires`. The trade-off: no upstream lint runs at build time. Phase 2 may revisit.
-- **No FHS layout in Phase 1/2.** `/opt/ros/<distro>/` matches every other distro; FHS is a Phase 3 separate effort (ADR 0007).
+- **No FHS layout in Phase 1/2.** `/opt/ros/<distro>/` matches every other distro; FHS is a Phase 3 separate effort (ADR 0007), and Phase 3 itself was dropped per ADR 0010.
+- **rviz2 chain not shipped.** Two upstream blockers: `rviz_ogre_vendor` (CMake 4.x policy floor, [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708)) and `rviz_assimp_vendor` (Fedora's stricter GCC + bundled `-Werror`, [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730)). The patch-carry infrastructure is in place at [`specs/patches/`](../specs/patches/README.md) if the deferral becomes blocking; current decision is to wait for upstream merges.

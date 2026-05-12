@@ -50,7 +50,7 @@ All of these must hold before Phase 2 work begins:
 
 **Negative**:
 - ~5× maintenance load in Phase 2 vs. Phase 1 (~1 day/week vs. ~4 hrs/week).
-- License aggregate becomes heterogeneous: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (Qt/rviz2), possibly `AND EPL-2.0` (Cyclone DDS). README/COPR/CITATION must disclose accurately. Downstream redistributors who bundle binaries face additional obligations, they handle this, not us.
+- License aggregate becomes heterogeneous: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only` (Qt/rviz2), possibly `AND EPL-2.0` (Cyclone DDS). README/COPR/CITATION must disclose accurately. Downstream redistributors who bundle binaries face additional obligations, they handle this, not us.
 - Build matrix scales linearly with package count.
 
 **Neutral**:

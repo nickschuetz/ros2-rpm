@@ -69,7 +69,7 @@ Packages install to `/opt/ros/jazzy/` per upstream ROS 2 convention. Setup envir
 
 Default metapackages `ros-jazzy-ros-core` and `ros-jazzy-ros-base` contain only **Apache-2.0** and **BSD-3-Clause** content. Installing either never pulls in non-permissive code, that path stays clean by design.
 
-`ros-jazzy-ros-desktop` (the Phase 2 dev-sandbox metapackage) declares its actual aggregate honestly: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` (Qt via `rviz2`/rqt) and `AND EPL-2.0` if Cyclone DDS is included. Installing it is an explicit opt-in to the heterogeneous license aggregate.
+`ros-jazzy-ros-desktop` (the Phase 2 dev-sandbox metapackage) declares its actual aggregate honestly: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only` (Qt via `rviz2`/rqt) and `AND EPL-2.0` if Cyclone DDS is included. Installing it is an explicit opt-in to the heterogeneous license aggregate.
 
 All non-permissive packages link dynamically against system libraries (LGPL-3.0 / EPL-2.0 obligations). Full scope and per-license-type policy: [`docs/SCOPE.md`](docs/SCOPE.md).
 
@@ -122,6 +122,7 @@ Full documentation: [`docs/SMOKE-TEST.md`](docs/SMOKE-TEST.md).
 - [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md), the broader Fedora-ROS packaging ecosystem.
 - [`docs/UPSTREAM-ISSUES.md`](docs/UPSTREAM-ISSUES.md), live tracking of upstream issues / PRs that block deferred work.
 - [`docs/PACKAGING-LESSONS.md`](docs/PACKAGING-LESSONS.md), RPM spec gotchas, generator gotchas, cross-distro gotchas, hidden runtime deps, and other research findings worth not rediscovering.
+- [`docs/MAINTENANCE.md`](docs/MAINTENANCE.md), contributor reference for the maintenance scripts and CI workflows. Where bumping versions, carrying patches, and reading drift reports is documented.
 - [`docs/adr/`](docs/adr/), architecture decision records (read these before opening scope-changing PRs).
 
 ## License

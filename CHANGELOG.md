@@ -4,6 +4,28 @@ All user-visible changes to the COPR packages live here. Per-spec `%changelog` e
 
 The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Maintenance tooling and CI hardening], 2026-05-11
+
+No user-visible package changes. Project-side improvements that close the loop on drift detection, spec quality enforcement, SBOM validation, and PR pre-flight.
+
+### Added
+
+- **`scripts/verify-specs.py`** plus `verify-specs` CI job in [`lint.yml`](.github/workflows/lint.yml). Audits every spec for forbidden patterns, SPDX-valid License: fields, em-dashes, and `Patch%N:` references with valid DEP-3 metadata. Centralized `EXEMPTIONS` register covers the 11 specs that legitimately need `debug_package %{nil}` (vendor packages with empty debugsource; rclpy pybind11; python-qt-binding). Currently 0 errors and 65 `-devel` warnings across 163 specs. The `-devel` warnings can be promoted to fatal via `--devel-strict` once each spec is retrofitted.
+- **`scripts/validate-sbom.py`** plus `sbom-validate` CI job. Asserts CycloneDX shape on every emitted SBOM. CI self-tests the validator with both a known-good and known-bad fixture so regressions surface even when no fresh RPMs are available.
+- **`scripts/bump.py`** for fast-path version bumps. Reads `rosdistro/jazzy/distribution.yaml`, edits `Version:` + `Source0:` + prepends `%changelog`, runs `verify-specs.py` as a guard. Modes: single-package, explicit version, `--all-behind` to drain the weekly drift report. `--commit` produces a conventional commit.
+- **`.github/workflows/spec-dry-build.yml`** (new). PR-only, triggers when `specs/**` changes. For up to 3 changed specs: `rpmspec -P`, `spectool -g`, `rpmbuild -bs`, and `dnf builddep --assumeno` against Fedora 44 + hellaenergy/ros2. Catches Source0 / BR breakage before the COPR build cycle.
+- **`.github/workflows/drift-check.yml`** (new). Weekly Sunday 08:00 UTC. Opens / updates one sticky issue (`upstream-drift` label) when packages are behind rosdistro; closes it with a "fully caught up" comment when drift returns to zero. Self-bootstraps the labels.
+- **`specs/patches/` scaffold** with [`README.md`](specs/patches/README.md) documenting the file naming convention (`<package>/NNNN-short-name.patch`) and required DEP-3 headers (Description, Origin, Forwarded, Last-Update). Verifier rejects `Patch%N:` lines that point at non-existent files or files missing DEP-3 metadata. No patches carried today; infrastructure is in place if the rviz2 deferral becomes blocking.
+- **[`docs/MAINTENANCE.md`](docs/MAINTENANCE.md)** (new). Contributor reference for every script and CI workflow, with routine workflows (bump, add-package, carry-patch, investigate-failed-CI) documented end-to-end.
+
+### Fixed
+
+- **`actions/checkout@v4` → `@v6`** across every workflow. Eliminates the GitHub-flagged Node 20 deprecation; runner will force Node 24 in June 2026.
+- **`upstream-issues.yml` label-bootstrap latent bug**: workflow would have failed the first time a tracked item closed because `upstream-tracker` / `maintenance` labels didn't exist. Self-bootstrap step added; same pattern as `drift-check.yml`.
+- **`upstream-drift.yml` removed** as a duplicate of the new `drift-check.yml`. The pre-existing daily-cron variant ran under a different sticky-issue label (`drift` vs `upstream-drift`); deleting it avoids dual-tracking.
+- **SPDX normalization**: `LGPL-3.0` → `LGPL-3.0-only` in `ros-jazzy-ros-desktop.spec`'s `License:` aggregate and in every doc that shows the SPDX expression (README, SCOPE, ARCHITECTURE, ADR 0006, ADR 0011, CHANGELOG). Conceptual references to "LGPL-3.0 obligations" or the license family stay as-is.
+- **Em-dash sweep**: 147 spec files plus a handful of docs / scripts / ADRs / workflow files had U+2014 characters from generator-emitted strings or hand-written prose. Fixed at the source in `generate-spec.py` (three offending strings: "no LICENSE", "tests skipped", "Message package") and mechanically replaced space-bounded U+2014 with ", " across the rest. The lone surviving instance is the `EM_DASH` pattern literal inside `verify-specs.py`, which has to stay as the actual character so the verifier can search for it.
+
 ## [O3DE Gem coverage closed: gazebo_msgs added], 2026-05-08
 
 Added `ros-jazzy-gazebo-msgs` (BSD-3-Clause, message-only). Closes the only optional dep that the [O3DE ROS 2 Gem](https://github.com/o3de/o3de-extras/tree/development/Gems/ROS2) had a `find_package(... QUIET)` for. With this in place, the Gem's optional `ContactSensor` and `ROS2 Spawner` components can be enabled at build time alongside the rest of the Gem.
@@ -21,13 +43,13 @@ License is permissive; no new ADR required (BSD-3-Clause is already in the COPR'
 - **launch infrastructure**: `osrf_pycommon`, `launch`, `launch_xml`, `launch_yaml`, `launch_testing`, `launch_ros`.
 - **lifecycle backfill** (originally deferred from Phase 1): `lifecycle_msgs`, `rcl_lifecycle`, `rclcpp_lifecycle`, `rclpy`, `pybind11_vendor`.
 - **`ros2cli` + per-domain plugins**: `ros2cli`, `ros2pkg`, `ros2run`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`.
-- **rqt + plugins** (Fedora-only, Stream 10 lacks Qt5 build deps): `qt_gui`, `qt_gui_cpp`, `qt_gui_py_common`, `qt_dotgraph`, `python_qt_binding`, `pluginlib`, `tinyxml2_vendor`, `tango_icons_vendor`, `rqt`, `rqt_gui`, `rqt_gui_cpp`, `rqt_gui_py`, `rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_action`, `rqt_plot`, `rqt_service_caller`. Adds **LGPL-3.0** to the COPR's license aggregate (Qt5).
+- **rqt + plugins** (Fedora-only, Stream 10 lacks Qt5 build deps): `qt_gui`, `qt_gui_cpp`, `qt_gui_py_common`, `qt_dotgraph`, `python_qt_binding`, `pluginlib`, `tinyxml2_vendor`, `tango_icons_vendor`, `rqt`, `rqt_gui`, `rqt_gui_cpp`, `rqt_gui_py`, `rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_action`, `rqt_plot`, `rqt_service_caller`. Adds **LGPL-3.0-only** to the COPR's license aggregate (Qt5).
 - **demo nodes**: `example_interfaces`, `demo_nodes_cpp`, `demo_nodes_py`.
 - **Cyclone DDS chain** (`cyclonedds`, `rmw_cyclonedds_cpp`): live across all 6 chroot/arch pairs. Built against system libs with `-DENABLE_SHM=OFF` (skips the iceoryx shared-memory transport which Fedora doesn't package); standard sockets transport is sufficient for development. Adds **EPL-2.0** to the COPR's license aggregate. Verified end-to-end: `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp /opt/ros/jazzy/lib/demo_nodes_cpp/talker` publishes successfully.
 
 ### Metapackage
 
-- **New `ros-jazzy-ros-desktop`**, published. License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0` honestly disclosed. Pulls in `ros-base` plus launch + ros2cli + rqt + demo_nodes. **rviz2 NOT included**, see "Deferred" below.
+- **New `ros-jazzy-ros-desktop`**, published. License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only` honestly disclosed. Pulls in `ros-base` plus launch + ros2cli + rqt + demo_nodes. **rviz2 NOT included**, see "Deferred" below.
 - `ros-jazzy-ros-core` and `ros-jazzy-ros-base` continue to be **permissive-only**. Installing those still yields only Apache-2.0 / BSD-3-Clause content.
 
 ### Build matrix caveat for Phase 2 GUI packages
