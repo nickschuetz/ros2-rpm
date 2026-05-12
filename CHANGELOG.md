@@ -74,7 +74,7 @@ After Phase 1 minimal subset shipped, the project was repositioned as **developm
 ### Changed
 
 - README, COPR description + instructions, GitHub repo description, CITATION.cff abstract, and `docs/RELATED-WORK.md` all updated to carry the **"Not the official ROS 2 packages for Fedora"** disclaimer and to point users at Open Robotics's upcoming Lyrical packages for production.
-- `docs/SCOPE.md`, Phase 2 (full `ros-jazzy-desktop` equivalent) marked **cancelled**; Phase 3 (Fedora main repo) marked **dropped**. Phase 1 minimal subset is the final scope.
+- `docs/SCOPE.md`, Phase 2 (full `ros-jazzy-desktop` equivalent) marked **cancelled**; Phase 3 (Fedora main repo) marked **dropped**. Phase 1 minimal subset was framed as the final scope at the moment of this entry; later the same day, ADR 0011 reopened a *smaller* dev-sandbox Phase 2 (see the next entry above).
 - `CLAUDE.md`, production-grade compliance language stripped; "STIG-adjacent" pitch removed; CVE-feed automation downgraded from required to optional. Added a **mandatory sync rule** that COPR description + instructions must be updated in the same change-window as any README / SCOPE / RELATED-WORK update.
 - Added [ADR 0010](docs/adr/0010-project-pivot-to-development-only.md) capturing the full pivot rationale. ADR 0001 and ADR 0006 carry retroactive notes.
 

@@ -1,8 +1,8 @@
 # ADR 0006: Full `ros-jazzy-desktop`-equivalent as eventual scope; minimal subset is Phase 1
 
-- **Status**: **CANCELLED** (2026-05-08) by ADR 0010. Open Robotics is taking on official Fedora support starting with Lyrical Luth, which will deliver the production-grade `ros-jazzy-desktop` equivalent. Continuing to expand this COPR's surface would duplicate that effort. Phase 1 minimal subset (per ADR 0001) is the project's final scope. This ADR is preserved for historical context only, none of its decisions are still active.
+- **Status**: **CANCELLED** (2026-05-08) by ADR 0010. Open Robotics is taking on official Fedora support starting with Lyrical Luth, which will deliver the production-grade `ros-jazzy-desktop` equivalent. Continuing to expand this COPR toward a full desktop would duplicate that effort. ADR 0011 (same day) then reopened a *smaller* dev-sandbox Phase 2 built on top of the Phase 1 minimal subset; that smaller scope is what's live, not the full desktop this ADR proposed. This ADR is preserved for historical context only, none of its specific scope claims (`~320 packages`, full nav2 + simulation bridges + ros2control) are still active.
 - **Date**: 2026-05-07
-- **Supersedes**: ADR 0001 in part (minimal subset becomes Phase 1, not the terminal scope), but ADR 0010 reverses that reframing, restoring the minimal subset as the terminal scope.
+- **Supersedes**: ADR 0001 in part (minimal subset becomes Phase 1, not the terminal scope). ADR 0010 cancelled the full-desktop expansion; ADR 0011 reopened a smaller dev-sandbox Phase 2 the same day. So the project today carries Phase 1 + the ADR 0011 dev-sandbox slice, not this ADR's full-desktop scope.
 
 ## Context
 
