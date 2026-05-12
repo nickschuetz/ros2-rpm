@@ -14,10 +14,14 @@
 #   1  one or more checks failed
 #   2  prerequisites missing (ros-base not installed, setup.bash missing, etc.)
 #
-# This is a *user* smoke test, not a developer regression suite. It assumes:
-# - You're on Fedora 44+ or CentOS Stream 10.
-# - You've enabled `dnf copr enable hellaenergy/ros2` and installed at
-#   minimum `ros-jazzy-ros-base`.
+# This is a *user* smoke test, not a developer regression suite. It works
+# against any /opt/ros/jazzy/ install regardless of where the RPMs came
+# from: hellaenergy/ros2 (this COPR), the Fedora Robotics SIG's repos
+# (https://docs.fedoraproject.org/en-US/robotics-sig/ros2/), or
+# packages.ros.org's RHEL 9 RPMs. The check assumptions are:
+# - You're on Fedora 44+ or CentOS Stream 10 (or a RHEL 9 derivative
+#   if you're using packages.ros.org).
+# - You've installed at minimum `ros-jazzy-ros-base`.
 # - /opt/ros/jazzy/ is writable to root only (don't run this as root;
 #   the test never needs root).
 
@@ -89,8 +93,8 @@ check "/opt/ros/jazzy/setup.bash exists" \
 check "/opt/ros/jazzy/lib/librclcpp.so* present" \
     bash -c 'compgen -G "/opt/ros/jazzy/lib/librclcpp.so*" > /dev/null'
 
-check "/opt/ros/jazzy/lib/libfoonathan_memory*.so present (not lib64)" \
-    bash -c "find /opt/ros/ -name libfoonathan* | grep -Eq 'libfoonathan_memory-[0-9\.]+.so'" > /dev/null
+check "libfoonathan_memory present under /opt/ros/jazzy (lib or lib64)" \
+    bash -c "find /opt/ros/jazzy -name 'libfoonathan_memory*' 2>/dev/null | grep -Eq 'libfoonathan_memory-[0-9.]+\.so'"
 
 check "rclpy package layout" \
     test -d /opt/ros/jazzy/lib/python${PYTHON_VERSION}/site-packages/rclpy 2>/dev/null

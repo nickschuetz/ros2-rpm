@@ -18,6 +18,7 @@ If you are reading this because you landed on the COPR page looking for a produc
 
 The [Fedora Robotics SIG](https://gitlab.com/fedora/sigs/robotics) is pursuing FHS-compliant ROS packaging for Fedora main repositories on a separate, longer timeline than Open Robotics's third-party RPM channel. Their work is complementary to both Open Robotics's official packages and to this development-only COPR.
 
+- **ROS 2 install docs:** https://docs.fedoraproject.org/en-US/robotics-sig/ros2/
 - **Group homepage:** https://gitlab.com/fedora/sigs/robotics
 - **Discussion / mailing:** https://discussion.fedoraproject.org/tag/robotics-sig
 - **Meetings:** Every other Thursday, 16:00 UTC, https://calendar.fedoraproject.org/SIGs/
@@ -38,7 +39,7 @@ The [Fedora Robotics SIG](https://gitlab.com/fedora/sigs/robotics) is pursuing F
 | **Install layout** | `/opt/ros/jazzy/` (upstream ROS 2 convention) | Targets FHS (`/usr/lib64/...`) for Fedora main eligibility |
 | **Distribution channel** | Third-party COPR | Fedora main repos (eventually) |
 | **Production posture** | None claimed; defers to Open Robotics's Lyrical | None yet; aiming at Fedora's normal review/QA gates |
-| **Scope** | Frozen at Phase 1 minimal subset (~85 packages) | Full ROS, eventually |
+| **Scope** | Phase 1 minimal subset + Phase 2 dev-sandbox (~160 packages); rviz2 chain deferred | Full ROS, eventually |
 
 ### Coordination
 
@@ -47,6 +48,8 @@ The SIG has called out concrete pain points that affect us too, `python3-flake8-
 - Open an issue in the SIG tracker (https://gitlab.com/fedora/sigs/robotics/fedora-robotics-sig/-/issues) when this repo discovers a fix that's relevant upstream.
 - Mirror useful packaging patches between repos (Apache/BSD content can move freely).
 - Show up to a meeting before opening any large coordination effort.
+
+[`scripts/smoke-test.sh`](../scripts/smoke-test.sh) is intentionally source-agnostic: it works against any `/opt/ros/jazzy/` install regardless of where the RPMs came from (this COPR, the SIG's RPMs at the install-docs URL above, or `packages.ros.org`'s RHEL builds run in a RHEL 9 container). PR [#3](https://github.com/nickschuetz/ros2-rpm/pull/3) (by SIG contributor [@odra](https://github.com/odra)) is what made the foonathan-memory check cross-source friendly.
 
 ## Upstream ROS RPM packaging
 
