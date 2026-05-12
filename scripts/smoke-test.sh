@@ -26,6 +26,8 @@ set -uo pipefail
 VERBOSE=0
 [ "${1:-}" = "-v" ] && VERBOSE=1
 
+PYTHON_VERSION=${PYTHON_VERSION:-$(python3 -c "import sys;print(f'{sys.version_info.major}.{sys.version_info.minor}')")}
+
 PASS=0
 FAIL=0
 SKIP=0
@@ -37,6 +39,7 @@ yellow(){ printf "\033[33m%s\033[0m" "$*"; }
 check() {
     local name="$1"
     shift
+
     if [ "$VERBOSE" = "1" ]; then
         printf "  ▸ %-55s ... " "$name"
         if "$@"; then
@@ -87,12 +90,11 @@ check "/opt/ros/jazzy/lib/librclcpp.so* present" \
     bash -c 'compgen -G "/opt/ros/jazzy/lib/librclcpp.so*" > /dev/null'
 
 check "/opt/ros/jazzy/lib/libfoonathan_memory*.so present (not lib64)" \
-    bash -c 'compgen -G "/opt/ros/jazzy/lib/libfoonathan_memory*.so*" > /dev/null'
+    bash -c "find /opt/ros/ -name libfoonathan* | grep -Eq 'libfoonathan_memory-[0-9\.]+.so'" > /dev/null
 
 check "rclpy package layout" \
-    test -d /opt/ros/jazzy/lib/python3.14/site-packages/rclpy 2>/dev/null \
-    || test -d /opt/ros/jazzy/lib/python3.13/site-packages/rclpy 2>/dev/null \
-    || test -d /opt/ros/jazzy/lib/python3.12/site-packages/rclpy 2>/dev/null
+    test -d /opt/ros/jazzy/lib/python${PYTHON_VERSION}/site-packages/rclpy 2>/dev/null
+
 
 if [ "$FAIL" -gt 0 ]; then
     echo
