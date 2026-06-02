@@ -1,6 +1,13 @@
 %global ros_distro       jazzy
 %global pkg_name         rcl_yaml_param_parser
-%global install_prefix   /opt/ros/jazzy
+%bcond fedora_fhs 0
+%if %{with fedora_fhs}
+# FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
+%global install_prefix   %{_prefix}
+%else
+# COPR default: upstream ROS 2 /opt convention.
+%global install_prefix   /opt/ros/%{ros_distro}
+%endif
 
 Name:           ros-%{ros_distro}-rcl-yaml-param-parser
 Version:        9.2.9
@@ -28,8 +35,12 @@ Requires:       ros-jazzy-libyaml-vendor
 Requires:       ros-jazzy-rcutils
 Requires:       ros-jazzy-rmw
 
+# Under /opt these libraries must not be exposed to the system dependency
+# solver; under FHS (--with fedora_fhs) normal auto-provides/requires apply.
+%if %{without fedora_fhs}
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
+%endif
 
 %description
 Parse a YAML parameter file and populate the C data structure.

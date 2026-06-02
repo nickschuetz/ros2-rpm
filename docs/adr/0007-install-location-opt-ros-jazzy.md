@@ -1,6 +1,6 @@
-# ADR 0007: Install to `/opt/ros/jazzy` for COPR; defer FHS layout to a separate Phase 3 effort
+# ADR 0007: Install to `/opt/ros/<distro>` for COPR; defer FHS layout to a separate Phase 3 effort
 
-- **Status**: Accepted
+- **Status**: Accepted. Amended (2026-05-27) by **ADR 0012**: the install prefix is now switchable behind `%bcond fedora_fhs`. `/opt/ros/<distro>` stays the COPR default; `--with fedora_fhs` flips it to `/usr` so specs stay liftable into Fedora dist-git for a possible future main-repo bid or as a reference implementation. FHS correctness beyond the prefix (ament index relocation, parallel-distro file collisions) is not yet validated; FHS/main-repo inclusion remains aspirational and Fedora-Robotics-SIG-coordinated.
 - **Date**: 2026-05-07
 
 ## Context

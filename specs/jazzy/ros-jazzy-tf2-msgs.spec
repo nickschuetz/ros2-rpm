@@ -1,6 +1,13 @@
 %global ros_distro       jazzy
 %global pkg_name         tf2_msgs
-%global install_prefix   /opt/ros/jazzy
+%bcond fedora_fhs 0
+%if %{with fedora_fhs}
+# FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
+%global install_prefix   %{_prefix}
+%else
+# COPR default: upstream ROS 2 /opt convention.
+%global install_prefix   /opt/ros/%{ros_distro}
+%endif
 
 Name:           ros-%{ros_distro}-tf2-msgs
 Version:        0.36.20
@@ -25,8 +32,12 @@ Requires:       ros-jazzy-builtin-interfaces
 Requires:       ros-jazzy-geometry-msgs
 Requires:       ros-jazzy-rosidl-default-runtime
 
+# Under /opt these libraries must not be exposed to the system dependency
+# solver; under FHS (--with fedora_fhs) normal auto-provides/requires apply.
+%if %{without fedora_fhs}
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
+%endif
 
 %description
 tf2_msgs

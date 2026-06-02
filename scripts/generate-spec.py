@@ -40,6 +40,28 @@ DEFAULT_PREFIX = "/opt/ros"
 DEFAULT_PACKAGER_NAME = "Nick Schuetz"
 DEFAULT_PACKAGER_EMAIL = "nschuetz@redhat.com"
 
+# install_prefix is switchable (ADR 0012): /opt/ros/<distro> for the COPR by
+# default, /usr (FHS) under `--with fedora_fhs` for a possible Fedora main-repo
+# build or as an Open Robotics reference. Kept as plain strings (single braces)
+# so they insert verbatim into the renderer f-strings.
+PREFIX_BCOND = """%bcond fedora_fhs 0
+%if %{with fedora_fhs}
+# FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
+%global install_prefix   %{_prefix}
+%else
+# COPR default: upstream ROS 2 /opt convention.
+%global install_prefix   /opt/ros/%{ros_distro}
+%endif"""
+
+# Under /opt these libraries must not be exposed to the system dependency
+# solver; under FHS normal auto-provides/requires apply, so guard the excludes.
+EXCLUDE_GUARDED = """# Hide ROS libraries from the system solver under /opt; under FHS
+# (--with fedora_fhs) normal auto-provides/requires apply.
+%if %{without fedora_fhs}
+%global __provides_exclude_from ^%{install_prefix}/.*$
+%global __requires_exclude_from ^%{install_prefix}/.*$
+%endif"""
+
 LICENSE_MAP = {
     "Apache License 2.0": "Apache-2.0",
     "Apache License, Version 2.0": "Apache-2.0",
@@ -274,7 +296,7 @@ def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
 
     return f"""%global ros_distro       {distro}
 %global pkg_name         {name}
-%global install_prefix   {install_prefix}
+{PREFIX_BCOND}
 
 Name:           ros-%{{ros_distro}}-{name_dashed}
 Version:        {version}
@@ -291,8 +313,7 @@ BuildArch:      noarch
 
 {rq_lines}
 
-%global __provides_exclude_from ^%{{install_prefix}}/.*$
-%global __requires_exclude_from ^%{{install_prefix}}/.*$
+{EXCLUDE_GUARDED}
 
 %description
 {desc}
@@ -500,7 +521,7 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
 
     return f"""%global ros_distro       {distro}
 %global pkg_name         {name}
-%global install_prefix   {install_prefix}
+{PREFIX_BCOND}
 
 Name:           ros-%{{ros_distro}}-{name_dashed}
 Version:        {version}
@@ -516,8 +537,7 @@ Source0:        {source_url}#/%{{pkg_name}}-%{{version}}.tar.gz
 
 {rq_lines}
 
-%global __provides_exclude_from ^%{{install_prefix}}/.*$
-%global __requires_exclude_from ^%{{install_prefix}}/.*$
+{EXCLUDE_GUARDED}
 
 %description
 {desc}

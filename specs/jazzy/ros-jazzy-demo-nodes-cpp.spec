@@ -1,6 +1,13 @@
 %global ros_distro       jazzy
 %global pkg_name         demo_nodes_cpp
-%global install_prefix   /opt/ros/jazzy
+%bcond fedora_fhs 0
+%if %{with fedora_fhs}
+# FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
+%global install_prefix   %{_prefix}
+%else
+# COPR default: upstream ROS 2 /opt convention.
+%global install_prefix   /opt/ros/%{ros_distro}
+%endif
 
 Name:           ros-%{ros_distro}-demo-nodes-cpp
 Version:        0.33.10
@@ -39,8 +46,12 @@ Requires:       ros-jazzy-rcutils
 Requires:       ros-jazzy-rmw
 Requires:       ros-jazzy-std-msgs
 
+# Under /opt these libraries must not be exposed to the system dependency
+# solver; under FHS (--with fedora_fhs) normal auto-provides/requires apply.
+%if %{without fedora_fhs}
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
+%endif
 
 %description
 C++ nodes which were previously in the ros2/examples repository but are now
