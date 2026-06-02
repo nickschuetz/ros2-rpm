@@ -23,8 +23,21 @@ BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
+BuildRequires:  ros-lyrical-rcpputils
+BuildRequires:  ros-lyrical-rcutils
+BuildRequires:  ros-lyrical-rosidl-runtime-c
+BuildRequires:  ros-lyrical-rosidl-typesupport-introspection-c
 
 Requires:       python3-devel
+Requires:       ros-lyrical-ament-cmake-core
+Requires:       ros-lyrical-ament-index-python
+Requires:       ros-lyrical-rcpputils
+Requires:       ros-lyrical-rcutils
+Requires:       ros-lyrical-rosidl-cli
+Requires:       ros-lyrical-rosidl-generator-c
+Requires:       ros-lyrical-rosidl-pycommon
+Requires:       ros-lyrical-rosidl-runtime-c
+Requires:       ros-lyrical-rosidl-typesupport-interface
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.

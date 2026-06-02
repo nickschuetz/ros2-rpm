@@ -25,8 +25,12 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
+BuildRequires:  ros-lyrical-ament-cmake-core
+BuildRequires:  ros-lyrical-ament-cmake-test
 
 Requires:       python3-pytest
+Requires:       ros-lyrical-ament-cmake-core
+Requires:       ros-lyrical-ament-cmake-test
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.

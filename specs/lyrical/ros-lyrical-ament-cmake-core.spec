@@ -25,9 +25,11 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-catkin_pkg
 BuildRequires:  python3-devel
+BuildRequires:  ros-lyrical-ament-package
 
 Requires:       cmake
 Requires:       python3-catkin_pkg
+Requires:       ros-lyrical-ament-package
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.

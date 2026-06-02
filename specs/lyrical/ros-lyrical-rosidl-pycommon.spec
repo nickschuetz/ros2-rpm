@@ -27,6 +27,7 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-wheel
 
 Requires:       python3
+Requires:       ros-lyrical-rosidl-parser
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.

@@ -134,13 +134,28 @@ DEP_REWRITES = {
 }
 
 
-def resolve_deps(keys: list[str], distro: str, os_version: str) -> list[str]:
-    """Resolve rosdep keys to deduplicated, sorted Fedora package names."""
+def resolve_deps(keys: list[str], distro: str, os_version: str,
+                 known_ros: set[str] | None = None) -> list[str]:
+    """Resolve rosdep keys to deduplicated, sorted Fedora package names.
+
+    rosdep only resolves system dependency keys (cmake, python3-foo, ...). ROS
+    package names are not rosdep keys, so they come back unresolved. Any
+    unresolved key that names a package we build (present in known_ros, the
+    distro's packages.yaml) maps to ros-<distro>-<dashed> so inter-package
+    BuildRequires/Requires are emitted instead of silently dropped. Unresolved
+    keys we do not recognize are warned about and skipped.
+    """
+    known_ros = known_ros or set()
     resolved = set()
     for key in keys:
         names = rosdep_resolve(key, distro, os_version)
         if names is None:
-            sys.stderr.write(f"WARNING: rosdep could not resolve '{key}' on fedora:{os_version}\n")
+            if key in known_ros:
+                resolved.add(f"ros-{distro}-{key.replace('_', '-')}")
+            else:
+                sys.stderr.write(
+                    f"WARNING: '{key}' not resolvable via rosdep and not in "
+                    f"packages.yaml; skipped (add it if it is a ROS package)\n")
             continue
         for n in names:
             resolved.add(DEP_REWRITES.get(n, n))
@@ -191,7 +206,8 @@ def parse_package_xml(path: Path) -> dict:
     return pkg
 
 
-def build_requires(pkg: dict, build_type: str, distro: str, os_version: str, include_test: bool = True) -> list[str]:
+def build_requires(pkg: dict, build_type: str, distro: str, os_version: str,
+                   known_ros: set[str] | None = None, include_test: bool = True) -> list[str]:
     """Compute BuildRequires lines."""
     keys: list[str] = []
     keys += pkg["buildtool_depends"]
@@ -199,7 +215,7 @@ def build_requires(pkg: dict, build_type: str, distro: str, os_version: str, inc
     keys += pkg["depends"]
     if include_test:
         keys += pkg["test_depends"]
-    base = resolve_deps(keys, distro, os_version)
+    base = resolve_deps(keys, distro, os_version, known_ros)
 
     # Always-on for our pipeline
     if build_type == "ament_python":
@@ -221,14 +237,15 @@ def build_requires(pkg: dict, build_type: str, distro: str, os_version: str, inc
     return sorted(set(base + always))
 
 
-def runtime_requires(pkg: dict, build_type: str, distro: str, os_version: str) -> list[str]:
+def runtime_requires(pkg: dict, build_type: str, distro: str, os_version: str,
+                     known_ros: set[str] | None = None) -> list[str]:
     keys: list[str] = (
         pkg["depends"]
         + pkg["exec_depends"]
         + pkg["build_export_depends"]
         + pkg["buildtool_export_depends"]
     )
-    base = resolve_deps(keys, distro, os_version)
+    base = resolve_deps(keys, distro, os_version, known_ros)
     if build_type == "ament_python":
         return sorted(set(base + ["python3"]))
     return sorted(set(base))
@@ -245,7 +262,8 @@ def has_console_scripts(setup_py_path: Path) -> bool:
     return "console_scripts" in text
 
 
-def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
+def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str,
+                       known_ros: set[str] | None = None) -> str:
     name = pkg["name"]
     version = pkg["version"]
     name_dashed = name.replace("_", "-")
@@ -258,8 +276,8 @@ def render_python_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     source_dir = cfg["source_dir"].format(version=version)
     build_subdir = cfg.get("build_subdir")
 
-    brs = build_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION, include_test=not cfg.get("disable_tests", False))
-    rqs = runtime_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION)
+    brs = build_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION, known_ros, include_test=not cfg.get("disable_tests", False))
+    rqs = runtime_requires(pkg, "ament_python", distro, DEFAULT_OS_VERSION, known_ros)
 
     py_src_root = pkg.get("_source_dir")
     if build_subdir:
@@ -376,7 +394,8 @@ PYEOF
 """
 
 
-def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
+def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str,
+                      known_ros: set[str] | None = None) -> str:
     name = pkg["name"]
     version = pkg["version"]
     name_dashed = name.replace("_", "-")
@@ -393,8 +412,8 @@ def render_cmake_spec(pkg: dict, cfg: dict, distro: str, prefix: str) -> str:
     # package that compiles C/C++ should set `noarch: false` in packages.yaml.
     noarch_line = "BuildArch:      noarch\n" if cfg.get("noarch", True) else ""
 
-    brs = build_requires(pkg, "ament_cmake", distro, DEFAULT_OS_VERSION, include_test=not cfg.get("disable_tests", False))
-    rqs = runtime_requires(pkg, "ament_cmake", distro, DEFAULT_OS_VERSION)
+    brs = build_requires(pkg, "ament_cmake", distro, DEFAULT_OS_VERSION, known_ros, include_test=not cfg.get("disable_tests", False))
+    rqs = runtime_requires(pkg, "ament_cmake", distro, DEFAULT_OS_VERSION, known_ros)
 
     br_lines = "\n".join(f"BuildRequires:  {b}" for b in brs)
     rq_lines = "\n".join(f"Requires:       {r}" for r in rqs)
@@ -624,14 +643,18 @@ def main():
 
     cfg = all_cfg[pkg["name"]]
 
+    # Every package named in packages.yaml is a ROS package we build; unresolved
+    # rosdep keys in this set map to ros-<distro>-<dashed> BuildRequires/Requires.
+    known_ros = set(all_cfg.keys())
+
     if pkg["build_type"] == "ament_python":
-        spec = render_python_spec(pkg, cfg, args.distro, args.prefix)
+        spec = render_python_spec(pkg, cfg, args.distro, args.prefix, known_ros)
     elif pkg["build_type"] in ("ament_cmake", "cmake"):
         # 'cmake' build_type (used by vendor packages and the occasional
         # standalone library) is a strict subset of 'ament_cmake' for spec-
         # generation purposes, no ament_index sentinels but otherwise the
         # same %prep/%build/%install/%check shape.
-        spec = render_cmake_spec(pkg, cfg, args.distro, args.prefix)
+        spec = render_cmake_spec(pkg, cfg, args.distro, args.prefix, known_ros)
     else:
         sys.stderr.write(f"ERROR: unsupported build_type '{pkg['build_type']}'\n")
         sys.exit(1)

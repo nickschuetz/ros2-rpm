@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         rosidl_generator_py
+%global pkg_name         fastcdr
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,37 +9,22 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-rosidl-generator-py
-Version:        0.27.2
+Name:           ros-%{ros_distro}-fastcdr
+Version:        2.3.6
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical rosidl_generator_py
+Summary:        ROS 2 Lyrical fastcdr
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/rosidl_python-release
-Source0:        https://github.com/ros2-gbp/rosidl_python-release/archive/refs/tags/release/lyrical/rosidl_generator_py/0.27.2-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://www.eprosima.com/
+Source0:        https://github.com/ros2-gbp/fastcdr-release/archive/refs/tags/release/lyrical/fastcdr/2.3.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
-BuildArch:      noarch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  ros-lyrical-ament-cmake
-BuildRequires:  ros-lyrical-rosidl-runtime-c
 
-Requires:       python3-numpy
-Requires:       python3-typing-extensions
-Requires:       ros-lyrical-ament-cmake
-Requires:       ros-lyrical-ament-index-python
-Requires:       ros-lyrical-rmw
-Requires:       ros-lyrical-rosidl-cli
-Requires:       ros-lyrical-rosidl-generator-c
-Requires:       ros-lyrical-rosidl-parser
-Requires:       ros-lyrical-rosidl-pycommon
-Requires:       ros-lyrical-rosidl-runtime-c
-Requires:       ros-lyrical-rosidl-typesupport-c
-Requires:       ros-lyrical-rosidl-typesupport-interface
-Requires:       ros-lyrical-rpyutils
+
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -49,10 +34,13 @@ Requires:       ros-lyrical-rpyutils
 %endif
 
 %description
-Generate the ROS interfaces in Python.
+*eProsima Fast CDR* is a C++ serialization library implementing the Common
+Data Representation (CDR) mechanism defined by the Object Management Group
+(OMG) consortium. CDR is the serialization mechanism used in DDS for the
+DDS Interoperability Wire Protocol (DDSI-RTPS).
 
 %prep
-%autosetup -p1 -n rosidl_python-release-release-lyrical-rosidl_generator_py-0.27.2-3
+%autosetup -p1 -n fastcdr-release-release-lyrical-fastcdr-2.3.6-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -85,25 +73,14 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
-# (no LICENSE file in source tree; see package.xml <license>)
-%doc CHANGELOG.rst
+%license LICENSE
+# (no CHANGELOG.rst in source tree)
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
 # need additions or trimming.
 %{install_prefix}/share/%{pkg_name}/
-# Sentinels: ament_index/resource_index/<index>/<pkg>. Glob covers
-# packages/, package_run_dependencies/, parent_prefix_path/, and any
-# member_of_group entries (rosidl_runtime_packages, etc.).
-%{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
-# Message package: multiple typesupport .so variants + Python bindings.
-%{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}__rosidl_*.so
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
 
 
 %changelog
-* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 0.27.2-1
+* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 2.3.6-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

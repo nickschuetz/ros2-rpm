@@ -24,8 +24,23 @@ BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
+BuildRequires:  ros-lyrical-ament-cmake-core
+BuildRequires:  ros-lyrical-ament-cmake-export-dependencies
 
 Requires:       cmake
+Requires:       ros-lyrical-ament-cmake-core
+Requires:       ros-lyrical-ament-cmake-export-definitions
+Requires:       ros-lyrical-ament-cmake-export-dependencies
+Requires:       ros-lyrical-ament-cmake-export-include-directories
+Requires:       ros-lyrical-ament-cmake-export-libraries
+Requires:       ros-lyrical-ament-cmake-export-link-flags
+Requires:       ros-lyrical-ament-cmake-export-targets
+Requires:       ros-lyrical-ament-cmake-gen-version-h
+Requires:       ros-lyrical-ament-cmake-libraries
+Requires:       ros-lyrical-ament-cmake-python
+Requires:       ros-lyrical-ament-cmake-target-dependencies
+Requires:       ros-lyrical-ament-cmake-test
+Requires:       ros-lyrical-ament-cmake-version
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.

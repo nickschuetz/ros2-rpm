@@ -24,6 +24,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  libatomic
 BuildRequires:  python3-devel
+BuildRequires:  ros-lyrical-ament-cmake
 
 Requires:       libatomic
 
