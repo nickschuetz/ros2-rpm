@@ -74,10 +74,15 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %files
 %license LICENSE
 %doc CHANGELOG.rst
-# TODO: review the file list against the build's "Installing:" log lines; the
-# generator emits the conventional ament_cmake set but specific packages may
-# need additions or trimming.
+# Vendor package: bundles upstream foonathan/memory under the install prefix.
+# The inner build installs the library and CMake config under lib64 regardless
+# of CMAKE_INSTALL_LIBDIR, and headers under include/foonathan/.
 %{install_prefix}/share/%{pkg_name}/
+%{install_prefix}/share/foonathan_memory/
+%{install_prefix}/include/foonathan/
+%{install_prefix}/lib64/foonathan_memory/
+%{install_prefix}/lib64/libfoonathan_memory-*.so*
+%{install_prefix}/bin/nodesize_dbg
 
 
 %changelog
