@@ -93,10 +93,7 @@ popd > /dev/null
 %files
 %license LICENSE
 %doc rosidl_pycommon/CHANGELOG.rst
-%{install_prefix}/bin/*
-
-# TODO: review the file list, generator emits a permissive glob and you may
-# need to enumerate explicit paths to avoid conflicts with sibling packages.
+# Pure-Python library, no console scripts (the generator's bin/* glob is dropped).
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}.dist-info/
 %{install_prefix}/share/ament_index/resource_index/packages/%{pkg_name}
