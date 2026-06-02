@@ -23,6 +23,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
+BuildRequires:  ros-lyrical-ament-cmake-ros-core
 BuildRequires:  ros-lyrical-rcpputils
 BuildRequires:  ros-lyrical-rcutils
 BuildRequires:  ros-lyrical-rosidl-runtime-c

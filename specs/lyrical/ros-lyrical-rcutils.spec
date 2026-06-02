@@ -25,8 +25,10 @@ BuildRequires:  gcc-c++
 BuildRequires:  libatomic
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake
+BuildRequires:  ros-lyrical-ament-cmake-ros-core
 
 Requires:       libatomic
+Requires:       ros-lyrical-ament-cmake-ros-core
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.

@@ -25,12 +25,14 @@ BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake
 BuildRequires:  ros-lyrical-ament-cmake-python
+BuildRequires:  ros-lyrical-ament-cmake-ros-core
 BuildRequires:  ros-lyrical-fastcdr
 BuildRequires:  ros-lyrical-rmw
 BuildRequires:  ros-lyrical-rosidl-runtime-c
 BuildRequires:  ros-lyrical-rosidl-runtime-cpp
 
 Requires:       python3-devel
+Requires:       ros-lyrical-ament-cmake-ros-core
 Requires:       ros-lyrical-ament-index-python
 Requires:       ros-lyrical-fastcdr
 Requires:       ros-lyrical-rmw

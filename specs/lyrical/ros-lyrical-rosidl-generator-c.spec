@@ -26,6 +26,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake
 BuildRequires:  ros-lyrical-ament-cmake-python
+BuildRequires:  ros-lyrical-ament-cmake-ros-core
 
 Requires:       python3-devel
 Requires:       ros-lyrical-ament-cmake-core

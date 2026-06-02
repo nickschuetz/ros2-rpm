@@ -30,6 +30,7 @@ Requires:       ros-lyrical-ament-cmake
 Requires:       ros-lyrical-ament-cmake-gmock
 Requires:       ros-lyrical-ament-cmake-gtest
 Requires:       ros-lyrical-ament-cmake-pytest
+Requires:       ros-lyrical-ament-cmake-ros-core
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.

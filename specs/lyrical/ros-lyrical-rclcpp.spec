@@ -26,6 +26,7 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-empy
 BuildRequires:  ros-lyrical-ament-cmake-gen-version-h
 BuildRequires:  ros-lyrical-ament-cmake-ros
+BuildRequires:  ros-lyrical-ament-cmake-ros-core
 BuildRequires:  ros-lyrical-ament-index-cpp
 BuildRequires:  ros-lyrical-builtin-interfaces
 BuildRequires:  ros-lyrical-libstatistics-collector

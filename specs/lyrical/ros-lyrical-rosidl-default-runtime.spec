@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rosidl-default-runtime
-Version:        1.6.0
+Version:        1.8.1
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rosidl_default_runtime
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rosidl_defaults-release
-Source0:        https://github.com/ros2-gbp/rosidl_defaults-release/archive/refs/tags/release/lyrical/rosidl_default_runtime/1.6.0-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rosidl_defaults-release/archive/refs/tags/release/lyrical/rosidl_default_runtime/1.8.1-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -30,8 +30,8 @@ Requires:       ros-lyrical-action-msgs
 Requires:       ros-lyrical-rosidl-core-runtime
 Requires:       ros-lyrical-service-msgs
 
-# Under /opt these libraries must not be exposed to the system dependency
-# solver; under FHS (--with fedora_fhs) normal auto-provides/requires apply.
+# Hide ROS libraries from the system solver under /opt; under FHS
+# (--with fedora_fhs) normal auto-provides/requires apply.
 %if %{without fedora_fhs}
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
@@ -41,7 +41,7 @@ Requires:       ros-lyrical-service-msgs
 A configuration package defining the runtime for the ROS interfaces.
 
 %prep
-%autosetup -p1 -n rosidl_defaults-release-release-lyrical-rosidl_default_runtime-1.6.0-3
+%autosetup -p1 -n rosidl_defaults-release-release-lyrical-rosidl_default_runtime-1.8.1-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -87,5 +87,5 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
-* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.0-1
+* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 1.8.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

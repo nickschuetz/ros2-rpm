@@ -27,6 +27,7 @@ BuildRequires:  pkgconfig
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake
 BuildRequires:  ros-lyrical-ament-cmake-gen-version-h
+BuildRequires:  ros-lyrical-ament-cmake-ros-core
 
 Requires:       lttng-tools
 Requires:       lttng-ust-devel

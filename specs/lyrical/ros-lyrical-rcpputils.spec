@@ -25,6 +25,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake
 BuildRequires:  ros-lyrical-ament-cmake-gen-version-h
+BuildRequires:  ros-lyrical-ament-cmake-ros-core
 BuildRequires:  ros-lyrical-rcutils
 
 Requires:       ros-lyrical-rcutils
