@@ -77,15 +77,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %files
 # (no LICENSE file in source tree; see package.xml <license>)
 %doc CHANGELOG.rst
-# TODO: review the file list against the build's "Installing:" log lines; the
-# generator emits the conventional ament_cmake set but specific packages may
-# need additions or trimming.
+# CMake-macro package: ships only share/ cmake config + ament index sentinels,
+# no compiled library (the generator's speculative .so line is dropped).
 %{install_prefix}/share/%{pkg_name}/
-# Sentinels: ament_index/resource_index/<index>/<pkg>. Glob covers
-# packages/, package_run_dependencies/, parent_prefix_path/, and any
-# member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
