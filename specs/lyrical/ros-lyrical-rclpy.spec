@@ -1,5 +1,6 @@
 %global ros_distro       lyrical
 %global pkg_name         rclpy
+%global debug_package %{nil}
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).

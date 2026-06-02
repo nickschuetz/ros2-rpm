@@ -132,6 +132,14 @@ EXEMPTIONS: dict[str, set[str]] = {
     # python_qt_binding is pure-Python Qt glue, no compiled artifacts;
     # debugsource list is empty.
     "ros-jazzy-python-qt-binding.spec":       {"debug_package-nil"},
+    # Lyrical counterparts of the same vendor / no-compiled-output packages:
+    # ExternalProject vendors and rclpy produce an empty debugsource list, so
+    # they disable the debug package for the same reasons as the Jazzy specs.
+    "ros-lyrical-foonathan-memory-vendor.spec": {"debug_package-nil"},
+    "ros-lyrical-console-bridge-vendor.spec":   {"debug_package-nil"},
+    "ros-lyrical-libyaml-vendor.spec":          {"debug_package-nil"},
+    "ros-lyrical-spdlog-vendor.spec":           {"debug_package-nil"},
+    "ros-lyrical-rclpy.spec":                   {"debug_package-nil"},
 }
 
 # Map each FORBIDDEN_PATTERNS regex to a short rule-id for the exemption
