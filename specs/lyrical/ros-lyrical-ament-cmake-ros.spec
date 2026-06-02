@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         rmw_implementation
+%global pkg_name         ament_cmake_ros
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,33 +9,27 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-rmw-implementation
-Version:        3.1.5
+Name:           ros-%{ros_distro}-ament-cmake-ros
+Version:        0.15.8
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical rmw_implementation
+Summary:        ROS 2 Lyrical ament_cmake_ros
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/rmw_implementation-release
-Source0:        https://github.com/ros2-gbp/rmw_implementation-release/archive/refs/tags/release/lyrical/rmw_implementation/3.1.5-6.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2-gbp/ament_cmake_ros-release
+Source0:        https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/release/lyrical/ament_cmake_ros/0.15.8-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
+BuildArch:      noarch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake
-BuildRequires:  ros-lyrical-ament-index-cpp
-BuildRequires:  ros-lyrical-rcpputils
-BuildRequires:  ros-lyrical-rcutils
-BuildRequires:  ros-lyrical-rmw
-BuildRequires:  ros-lyrical-rmw-fastrtps-cpp
-BuildRequires:  ros-lyrical-rmw-fastrtps-dynamic-cpp
-BuildRequires:  ros-lyrical-rmw-implementation-cmake
 
-Requires:       ros-lyrical-ament-index-cpp
-Requires:       ros-lyrical-rcpputils
-Requires:       ros-lyrical-rcutils
-Requires:       ros-lyrical-rmw-implementation-cmake
+Requires:       ros-lyrical-ament-cmake
+Requires:       ros-lyrical-ament-cmake-gmock
+Requires:       ros-lyrical-ament-cmake-gtest
+Requires:       ros-lyrical-ament-cmake-pytest
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -45,10 +39,10 @@ Requires:       ros-lyrical-rmw-implementation-cmake
 %endif
 
 %description
-Proxy implementation of the ROS 2 Middleware Interface.
+The ROS specific CMake bits in the ament build system.
 
 %prep
-%autosetup -p1 -n rmw_implementation-release-release-lyrical-rmw_implementation-3.1.5-6
+%autosetup -p1 -n ament_cmake_ros-release-release-lyrical-ament_cmake_ros-0.15.8-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -91,9 +85,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
-* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 3.1.5-1
+* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 0.15.8-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         rmw_implementation
+%global pkg_name         rosidl_core_runtime
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,46 +9,46 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-rmw-implementation
-Version:        3.1.5
+Name:           ros-%{ros_distro}-rosidl-core-runtime
+Version:        0.2.1
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical rmw_implementation
+Summary:        ROS 2 Lyrical rosidl_core_runtime
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/rmw_implementation-release
-Source0:        https://github.com/ros2-gbp/rmw_implementation-release/archive/refs/tags/release/lyrical/rmw_implementation/3.1.5-6.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2-gbp/rosidl_core-release
+Source0:        https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/release/lyrical/rosidl_core_runtime/0.2.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
+BuildArch:      noarch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake
-BuildRequires:  ros-lyrical-ament-index-cpp
-BuildRequires:  ros-lyrical-rcpputils
-BuildRequires:  ros-lyrical-rcutils
-BuildRequires:  ros-lyrical-rmw
-BuildRequires:  ros-lyrical-rmw-fastrtps-cpp
-BuildRequires:  ros-lyrical-rmw-fastrtps-dynamic-cpp
-BuildRequires:  ros-lyrical-rmw-implementation-cmake
 
-Requires:       ros-lyrical-ament-index-cpp
-Requires:       ros-lyrical-rcpputils
-Requires:       ros-lyrical-rcutils
-Requires:       ros-lyrical-rmw-implementation-cmake
+Requires:       ros-lyrical-rosidl-generator-py
+Requires:       ros-lyrical-rosidl-runtime-c
+Requires:       ros-lyrical-rosidl-runtime-cpp
+Requires:       ros-lyrical-rosidl-typesupport-c
+Requires:       ros-lyrical-rosidl-typesupport-cpp
+Requires:       ros-lyrical-rosidl-typesupport-fastrtps-c
+Requires:       ros-lyrical-rosidl-typesupport-fastrtps-cpp
+Requires:       ros-lyrical-rosidl-typesupport-introspection-c
+Requires:       ros-lyrical-rosidl-typesupport-introspection-cpp
 
-# Hide ROS libraries from the system solver under /opt; under FHS
-# (--with fedora_fhs) normal auto-provides/requires apply.
+# Under /opt these libraries must not be exposed to the system dependency
+# solver; under FHS (--with fedora_fhs) normal auto-provides/requires apply.
 %if %{without fedora_fhs}
 %global __provides_exclude_from ^%{install_prefix}/.*$
 %global __requires_exclude_from ^%{install_prefix}/.*$
 %endif
 
 %description
-Proxy implementation of the ROS 2 Middleware Interface.
+A configuration package defining runtime dependencies for core ROS
+interfaces.
 
 %prep
-%autosetup -p1 -n rmw_implementation-release-release-lyrical-rmw_implementation-3.1.5-6
+%autosetup -p1 -n rosidl_core-release-release-lyrical-rosidl_core_runtime-0.2.1-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -91,9 +91,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
-* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 3.1.5-1
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.2.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

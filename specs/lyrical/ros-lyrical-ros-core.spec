@@ -1,0 +1,71 @@
+%global ros_distro       lyrical
+%bcond fedora_fhs 0
+%if %{with fedora_fhs}
+# FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
+%global install_prefix   %{_prefix}
+%else
+# COPR default: upstream ROS 2 /opt convention.
+%global install_prefix   /opt/ros/%{ros_distro}
+%endif
+
+Name:           ros-%{ros_distro}-ros-core
+Version:        0.13.0
+Release:        1%{?dist}
+Summary:        ROS 2 Lyrical core libraries and runtime
+
+# Aggregate of permissive-licensed runtime packages only, Phase 1 license rule.
+License:        Apache-2.0 AND BSD-3-Clause
+URL:            https://github.com/nickschuetz/ros2-rpm
+Source0:        ros-lyrical-ros-core-%{version}.tar.gz
+
+BuildArch:      noarch
+
+# Core client library
+Requires:       ros-lyrical-rclcpp
+
+# Core RMW + Fast DDS default
+Requires:       ros-lyrical-rmw-implementation
+Requires:       ros-lyrical-rmw-fastrtps-cpp
+
+# Core message foundations
+Requires:       ros-lyrical-builtin-interfaces
+Requires:       ros-lyrical-rcl-interfaces
+Requires:       ros-lyrical-rosgraph-msgs
+
+# Core extension points used by ros-lyrical-* clients
+Requires:       ros-lyrical-rclcpp-action
+Requires:       ros-lyrical-rclcpp-components
+Requires:       ros-lyrical-rcl-action
+Requires:       ros-lyrical-class-loader
+Requires:       ros-lyrical-message-filters
+Requires:       ros-lyrical-rcl-logging-spdlog
+Requires:       ros-lyrical-libstatistics-collector
+
+# Setup environment
+Provides:       ros-lyrical-setup-env
+
+%description
+Metapackage that pulls in the runtime client library (rclcpp), the default
+RMW implementation (Fast DDS), the core message interfaces, and lifecycle/
+component infrastructure. Equivalent to upstream ROS 2 Lyrical `ros_core`.
+
+This is the minimal-runtime install. For tf2 + sensor / nav messages,
+install ros-lyrical-ros-base instead.
+
+%prep
+# No source, pure metapackage.
+
+%build
+# Nothing to build.
+
+%install
+mkdir -p %{buildroot}%{install_prefix}
+# A trivial sentinel so debuginfo machinery has something to inspect.
+echo "ros-lyrical-ros-core %{version} (metapackage)" > %{buildroot}%{install_prefix}/.ros-core-version
+
+%files
+%{install_prefix}/.ros-core-version
+
+%changelog
+* Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.0-1
+- Initial Phase 1 ros-core metapackage.
