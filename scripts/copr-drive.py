@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+"""copr-drive.py, dependency-ordered COPR build driver for one distro.
+
+Submits each spec to its distro's COPR project as soon as all of its in-tree
+ros-<distro>- dependencies have succeeded, so a full tree builds in topological
+order without hand-sequencing waves. Idempotent: packages already succeeded or
+currently building are skipped.
+
+Usage:
+    scripts/copr-drive.py --distro lyrical            # submit the ready wave
+    scripts/copr-drive.py --distro lyrical --dry-run  # show the plan only
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import subprocess
+import sys
+import urllib.request
+from pathlib import Path
+
+import distros
+
+ACTIVE = {"running", "pending", "starting", "importing", "waiting", "forked"}
+
+
+def spec_meta(spec: Path, distro: str) -> dict:
+    text = spec.read_text()
+    def find(pat, default=None):
+        m = re.search(pat, text, re.M)
+        return m.group(1) if m else default
+    pkg_name = find(r"^%global pkg_name\s+(\S+)")
+    version = find(r"^Version:\s+(\S+)")
+    name = find(r"^Name:\s+(\S+)")
+    # Resolve the RPM Name (ros-<distro>-<x>) by expanding the common macros.
+    if name:
+        name = name.replace("%{ros_distro}", distro).replace("%{pkg_name}",
+                 (pkg_name or "")).replace("-%{pkg_name}", "-" + (pkg_name or ""))
+    src0 = find(r"^Source0:\s+(\S+)")
+    src_url = src0.split("#")[0] if src0 else None
+    if src_url and version:
+        src_url = src_url.replace("%{version}", version)
+    deps = set(re.findall(rf"^(?:Requires|BuildRequires):\s+(ros-{distro}-\S+)", text, re.M))
+    return {"spec": spec, "rpm_name": name, "pkg_name": pkg_name,
+            "version": version, "src_url": src_url, "deps": deps}
+
+
+def copr_states(project: str) -> dict[str, str]:
+    r = subprocess.run(["copr-cli", "list-packages", project, "--with-latest-build"],
+                       capture_output=True, text=True, check=True)
+    out = {}
+    for p in json.loads(r.stdout):
+        lb = p.get("latest_build") or {}
+        out[p["name"]] = lb.get("state") or "none"
+    return out
+
+
+def ensure_source(meta: dict, sources: Path) -> bool:
+    """Fetch Source0 into build/SOURCES/<pkg>-<ver>.tar.gz if missing."""
+    if not (meta["src_url"] and meta["pkg_name"] and meta["version"]):
+        return False
+    target = sources / f"{meta['pkg_name']}-{meta['version']}.tar.gz"
+    if target.is_file():
+        return True
+    try:
+        data = urllib.request.urlopen(meta["src_url"], timeout=90).read()
+        target.write_bytes(data)
+        return True
+    except Exception as e:
+        sys.stderr.write(f"  fetch failed for {meta['pkg_name']}: {str(e)[:80]}\n")
+        return False
+
+
+def build_and_submit(meta: dict, project: str, build: Path, dry: bool) -> str | None:
+    sources, srpms = build / "SOURCES", build / "SRPMS"
+    sources.mkdir(parents=True, exist_ok=True)
+    srpms.mkdir(parents=True, exist_ok=True)
+    if not ensure_source(meta, sources):
+        return None
+    if dry:
+        return "would-submit"
+    r = subprocess.run(
+        ["rpmbuild", "-bs", "--define", f"_topdir {build}",
+         "--define", f"_sourcedir {sources}", "--define", f"_srcrpmdir {srpms}",
+         str(meta["spec"])], capture_output=True, text=True)
+    if r.returncode != 0:
+        sys.stderr.write(f"  SRPM build failed for {meta['rpm_name']}: {r.stderr.strip()[:120]}\n")
+        return None
+    srpm = sorted(srpms.glob(f"{meta['rpm_name']}-*.src.rpm"),
+                  key=lambda p: p.stat().st_mtime, reverse=True)
+    if not srpm:
+        return None
+    s = subprocess.run(["copr-cli", "build", "--nowait", project, str(srpm[0])],
+                       capture_output=True, text=True)
+    return "submitted" if s.returncode == 0 else None
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--distro", choices=distros.DISTROS, required=True)
+    ap.add_argument("--dry-run", action="store_true")
+    args = ap.parse_args()
+
+    project = distros.copr_project(args.distro)
+    build = distros.REPO_ROOT / "build"
+    specs = [spec_meta(s, args.distro) for s in sorted(distros.spec_dir(args.distro).glob("*.spec"))]
+    by_name = {m["rpm_name"]: m for m in specs if m["rpm_name"]}
+    states = copr_states(project)
+
+    succeeded = {n for n, s in states.items() if s == "succeeded"}
+    active = {n for n, s in states.items() if s in ACTIVE}
+    failed = {n for n, s in states.items() if s == "failed"}
+
+    ready = []
+    for m in specs:
+        n = m["rpm_name"]
+        if not n or n in succeeded or n in active:
+            continue
+        # only build deps that are in our tree; all must be succeeded
+        intree = {d for d in m["deps"] if d in by_name}
+        if intree <= succeeded:
+            ready.append(m)
+
+    submitted = []
+    for m in ready:
+        res = build_and_submit(m, project, build, args.dry_run)
+        if res:
+            submitted.append(m["rpm_name"])
+
+    total = len(specs)
+    done = len(succeeded & set(by_name))
+    print(f"[{args.distro}] succeeded {done}/{total} | building {len(active & set(by_name))} | "
+          f"failed {len(failed & set(by_name))} | {'would-submit' if args.dry_run else 'submitted'} {len(submitted)} | "
+          f"remaining {total - done}")
+    if failed & set(by_name):
+        print("FAILED:", ", ".join(sorted(failed & set(by_name))))
+    if submitted:
+        print(("WOULD SUBMIT: " if args.dry_run else "SUBMITTED: ") + ", ".join(submitted))
+    # Exit 0 normally; exit 3 signals "all done"; exit 4 signals "stuck" (failures block, nothing ready/active)
+    if done == total:
+        return 3
+    if not submitted and not (active & set(by_name)) and (failed & set(by_name)):
+        return 4
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
