@@ -74,11 +74,11 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
 %license LICENSE
-# (no CHANGELOG.rst in source tree)
-# TODO: review the file list against the build's "Installing:" log lines; the
-# generator emits the conventional ament_cmake set but specific packages may
-# need additions or trimming.
-%{install_prefix}/share/%{pkg_name}/
+# fastcdr ships a compiled library, headers, and CMake config (no share/ tree in
+# this version); enumerate the actual install layout.
+%{install_prefix}/include/%{pkg_name}/
+%{install_prefix}/lib/lib%{pkg_name}.so*
+%{install_prefix}/lib/cmake/%{pkg_name}/
 
 
 %changelog
