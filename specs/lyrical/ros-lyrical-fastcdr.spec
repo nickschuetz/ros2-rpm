@@ -74,11 +74,12 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
 %license LICENSE
-# fastcdr ships a compiled library, headers, and CMake config (no share/ tree in
-# this version); enumerate the actual install layout.
+# fastcdr ships a compiled library, headers, CMake config, and a share/ tree
+# (a bundled LICENSE copy); enumerate the actual install layout.
 %{install_prefix}/include/%{pkg_name}/
 %{install_prefix}/lib/lib%{pkg_name}.so*
 %{install_prefix}/lib/cmake/%{pkg_name}/
+%{install_prefix}/share/%{pkg_name}/
 
 
 %changelog
