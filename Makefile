@@ -1,15 +1,17 @@
 # Driver for the ros2-rpm pipeline.
 #
-# Most heavy lifting is delegated to scripts/ — this Makefile is the
+# Most heavy lifting is delegated to scripts/. This Makefile is the
 # glue that ties them together and the canonical entry-point for both
 # local development and CI.
 
 .PHONY: help manifest-fetch specs srpms build-mock copr-upload lint sbom clean
 
-DISTRO          ?= jazzy
+# DISTRO selects which per-distro tree to operate on (ADR 0012). The flagship
+# (lyrical) publishes to hellaenergy/ros2; other distros use ros2-<distro>.
+DISTRO          ?= lyrical
 CHROOT          ?= fedora-44-x86_64
-COPR_PROJECT    ?= hellaenergy/ros2
-SPEC_DIR        := specs
+COPR_PROJECT    ?= $(if $(filter lyrical,$(DISTRO)),hellaenergy/ros2,hellaenergy/ros2-$(DISTRO))
+SPEC_DIR        := specs/$(DISTRO)
 SRPM_DIR        := SRPMS
 BUILD_DIR       := build
 

@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-"""verify-specs.py — codify what good looks like for ros2-rpm specs.
+"""verify-specs.py, codify what good looks like for ros2-rpm specs.
 
-Walks specs/*.spec and asserts every spec conforms to the standards in
-CLAUDE.md (and ADR 0005). Default mode fails on forbidden patterns,
-invalid SPDX, em-dashes, and missing patch metadata. Pass
---devel-strict to additionally enforce the -devel subpackage mandate
+Walks specs/<distro>/*.spec across every distro and asserts every spec
+conforms to the standards in CLAUDE.md (and ADR 0005). Default mode fails
+on forbidden patterns, invalid SPDX, em-dashes, and missing patch metadata.
+Pass --devel-strict to additionally enforce the -devel subpackage mandate
 (currently warn-only because no spec ships a -devel yet; that's the
 known gap CLAUDE.md flags as "checked in PR review until a verifier
 script exists").
 
 Usage:
-    scripts/verify-specs.py                              # default
-    scripts/verify-specs.py --devel-strict               # promote devel to fatal
-    scripts/verify-specs.py --json                       # machine output
-    scripts/verify-specs.py specs/ros-jazzy-foo.spec ... # check a subset
+    scripts/verify-specs.py                                    # all distros
+    scripts/verify-specs.py --devel-strict                     # promote devel to fatal
+    scripts/verify-specs.py --json                             # machine output
+    scripts/verify-specs.py specs/jazzy/ros-jazzy-foo.spec ... # check a subset
 """
 from __future__ import annotations
 
@@ -24,9 +24,9 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-SPEC_DIR = REPO_ROOT / "specs"
-PATCHES_DIR = SPEC_DIR / "patches"
+import distros
+
+REPO_ROOT = distros.REPO_ROOT
 
 EM_DASH = "—"
 
@@ -36,7 +36,7 @@ FORBIDDEN_PATTERNS: list[tuple[str, str]] = [
     (r"^Group:",                  "obsolete Group: tag"),
     (r"^BuildRoot:",              "obsolete BuildRoot: tag"),
     (r"^%clean\b",                "obsolete %clean section"),
-    (r"^%defattr\b",              "obsolete %defattr(...) — RPM handles defaults"),
+    (r"^%defattr\b",              "obsolete %defattr(...), RPM handles defaults"),
     (r"^%py3_build\b",            "%py3_build deprecated; use %pyproject_wheel"),
     (r"^%py3_install\b",          "%py3_install deprecated; use raw pip with %{_pyproject_wheeldir}"),
     (r"%\{__cmake\}",             "hardcoded %{__cmake}; use %cmake / %cmake_build / %cmake_install"),
@@ -181,17 +181,23 @@ def check_spdx_license(spec_path: Path, text: str, result: Result) -> None:
 
 
 def check_patch_references(spec_path: Path, text: str, result: Result) -> None:
-    """Every Patch%N: <file> must have specs/patches/<file> with DEP-3 headers."""
+    """Every Patch%N: <file> must have <distro>/patches/<file> with DEP-3 headers.
+
+    Patches are resolved relative to the spec's own directory, so each distro
+    carries its own patch set under specs/<distro>/patches/.
+    """
+    patches_dir = spec_path.parent / "patches"
     for lineno, line in enumerate(text.splitlines(), start=1):
         m = re.match(r"^Patch\d+:\s+(\S+)", line)
         if not m:
             continue
         patch_name = m.group(1)
-        patch_path = PATCHES_DIR / patch_name
+        patch_path = patches_dir / patch_name
+        rel = patch_path.relative_to(REPO_ROOT) if patch_path.is_relative_to(REPO_ROOT) else patch_path
         if not patch_path.is_file():
             result.add(spec=spec_path, line=lineno, rule="patch-missing-file",
                        severity="error",
-                       message=f"Patch references {patch_name!r} but specs/patches/{patch_name} does not exist")
+                       message=f"Patch references {patch_name!r} but {rel} does not exist")
             continue
         head = patch_path.read_text(errors="replace").split("\n---", 1)[0]
         present = {h for h in DEP3_REQUIRED_HEADERS if re.search(rf"^{h}:", head, re.MULTILINE)}
@@ -199,8 +205,7 @@ def check_patch_references(spec_path: Path, text: str, result: Result) -> None:
         if missing:
             result.add(spec=spec_path, line=lineno, rule="patch-dep3-headers",
                        severity="error",
-                       message=(f"specs/patches/{patch_name} missing DEP-3 header(s) "
-                                f"{sorted(missing)!r}"))
+                       message=(f"{rel} missing DEP-3 header(s) {sorted(missing)!r}"))
 
 
 def check_devel_split(spec_path: Path, text: str, result: Result, strict: bool) -> None:
@@ -289,7 +294,10 @@ def render_json(results: dict[Path, Result]) -> str:
 
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("specs", nargs="*", help="spec files to check (default: specs/*.spec)")
+    p.add_argument("specs", nargs="*",
+                   help="spec files to check (default: specs/<distro>/*.spec, all distros)")
+    p.add_argument("--distro", choices=distros.DISTROS,
+                   help="Limit the default walk to one distro.")
     p.add_argument("--devel-strict", action="store_true",
                    help="Promote -devel subpackage warnings to errors.")
     p.add_argument("--json", action="store_true", help="Machine-readable output.")
@@ -298,7 +306,8 @@ def main() -> int:
     if args.specs:
         targets = [Path(s) for s in args.specs]
     else:
-        targets = sorted(SPEC_DIR.glob("*.spec"))
+        walk = (args.distro,) if args.distro else distros.DISTROS
+        targets = [spec for _, spec in distros.all_spec_files(walk)]
 
     if not targets:
         sys.stderr.write("No spec files to verify.\n")

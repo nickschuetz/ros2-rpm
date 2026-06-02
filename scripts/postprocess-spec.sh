@@ -18,7 +18,7 @@
 #   - BuildArch: noarch for ament_python and message packages
 #
 # When the next package goes through, broaden this script with the patterns
-# that turn out to repeat. See specs/ros-jazzy-ament-package.spec for the
+# that turn out to repeat. See specs/jazzy/ros-jazzy-ament-package.spec for the
 # canonical hand-tuned reference.
 
 set -euo pipefail
@@ -55,4 +55,4 @@ echo "  - Replace %files /opt/ros/<distro> with explicit per-file/per-dir entrie
 echo "    including %license and %doc"
 echo "  - Set Source0 to upstream GitHub tarball or release-repo URL"
 echo "  - Add BuildArch: noarch for pure-Python and message-only packages"
-echo "  - See specs/ros-jazzy-ament-package.spec for the canonical reference."
+echo "  - See specs/jazzy/ros-jazzy-ament-package.spec for the canonical reference."

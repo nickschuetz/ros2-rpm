@@ -55,7 +55,7 @@ Every PR that adds a new package to `manifest.yaml` / `packages.yaml` must add a
 
 When adding a new package N:
 
-1. Add stanza to `scripts/packages.yaml` with `source_url`, `source_dir`, etc.
+1. Add stanza to `distros/<distro>/packages.yaml` with `source_url`, `source_dir`, etc.
 2. Add stanza to `build/local-rosdep-jazzy.yaml` mapping `N` → `ros-jazzy-<dashed-N>`.
 3. Run `rosdep update` to refresh the cache.
 4. Run `scripts/publish.sh N`, generator now resolves N's deps correctly.

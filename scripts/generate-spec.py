@@ -2,7 +2,7 @@
 """generate-spec.py, render an RPM spec from a ROS 2 package source.
 
 Reads package.xml (for version, description, license, deps) and
-scripts/packages.yaml (for the source URL and build layout) and emits
+distros/<distro>/packages.yaml (for the source URL and build layout) and emits
 a draft spec to stdout. Output requires human review for %files and
 description quality before committing to specs/.
 
@@ -12,7 +12,7 @@ Usage:
     scripts/generate-spec.py <path-to-package-source> [options]
 
 Examples:
-    scripts/generate-spec.py build/ament_package > specs/ros-jazzy-ament-package.spec
+    scripts/generate-spec.py --distro jazzy build/ament_package > specs/jazzy/ros-jazzy-ament-package.spec
     scripts/generate-spec.py build/ament_cmake_core_pkg/ament_cmake/ament_cmake_core
 """
 from __future__ import annotations
@@ -31,8 +31,10 @@ except ImportError:
     sys.stderr.write("ERROR: PyYAML required. pip install --user pyyaml\n")
     sys.exit(2)
 
+import distros
 
-DEFAULT_DISTRO = "jazzy"
+
+DEFAULT_DISTRO = distros.FLAGSHIP
 DEFAULT_OS_VERSION = "44"
 DEFAULT_PREFIX = "/opt/ros"
 DEFAULT_PACKAGER_NAME = "Nick Schuetz"
@@ -591,7 +593,7 @@ def main():
     pkg = parse_package_xml(pkg_xml)
     pkg["_source_dir"] = args.source_dir
 
-    config_path = args.config or Path(__file__).parent / "packages.yaml"
+    config_path = args.config or distros.packages_yaml(args.distro)
     with config_path.open() as f:
         all_cfg = yaml.safe_load(f)
 

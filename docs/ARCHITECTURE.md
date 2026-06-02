@@ -11,10 +11,12 @@ There are exactly two public surfaces, and they are kept in lockstep:
   ─────────────────────────             ───────────────────────────
   github.com/nickschuetz/ros2-rpm   →   copr.fedorainfracloud.org/coprs/hellaenergy/ros2
 
-  - spec files (specs/*.spec)              - chroot matrix (3 distros × 2 arches = 6)
+  - spec files (specs/<distro>/*.spec)     - chroot matrix (3 distros × 2 arches = 6)
   - generator (scripts/*)                  - signed RPMs
-  - per-package config (packages.yaml)     - per-build SBOM
-  - local patches (specs/patches/)         - public package index
+  - per-package config                     - per-build SBOM
+    (distros/<distro>/packages.yaml)
+  - local patches                          - public package index
+    (specs/<distro>/patches/)
   - rosdep override (build/local-...)
   - documentation (docs/, README.md)
   - ADRs (docs/adr/)
@@ -251,4 +253,4 @@ The CI on GitHub does *not* publish to COPR, that's an explicit `copr-cli build`
 - **Cyclone DDS shipped in Phase 2, not Phase 1.** Default RMW remains Fast DDS (Apache-2.0). Cyclone DDS (EPL-2.0) is a Phase 2 alternate RMW per ADR 0011; users opt in by setting `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` and installing `ros-jazzy-rmw-cyclonedds-cpp`. `ros-jazzy-ros-base` does not pull EPL-2.0 content.
 - **No ament_lint family.** `ament_lint_*` are test-only deps. We pass `disable_tests: true` per package, which strips them from `BuildRequires`. The trade-off: no upstream lint runs at build time. Phase 2 may revisit.
 - **No FHS layout in Phase 1/2.** `/opt/ros/<distro>/` matches every other distro; FHS is a Phase 3 separate effort (ADR 0007), and Phase 3 itself was dropped per ADR 0010.
-- **rviz2 chain not shipped.** Two upstream blockers: `rviz_ogre_vendor` (CMake 4.x policy floor, [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708)) and `rviz_assimp_vendor` (Fedora's stricter GCC + bundled `-Werror`, [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730)). The patch-carry infrastructure is in place at [`specs/patches/`](../specs/patches/README.md) if the deferral becomes blocking; current decision is to wait for upstream merges.
+- **rviz2 chain not shipped.** Two upstream blockers: `rviz_ogre_vendor` (CMake 4.x policy floor, [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708)) and `rviz_assimp_vendor` (Fedora's stricter GCC + bundled `-Werror`, [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730)). The patch-carry infrastructure is in place at [`specs/<distro>/patches/`](../specs/jazzy/patches/README.md) if the deferral becomes blocking; current decision is to wait for upstream merges.

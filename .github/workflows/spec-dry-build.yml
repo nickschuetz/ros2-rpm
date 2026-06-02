@@ -4,7 +4,12 @@ name: spec-dry-build
 # common COPR-breaks-on-publish failure modes (spec syntax errors, broken
 # Source0 URLs, BuildRequires that won't resolve on Fedora 44) BEFORE the
 # COPR build cycle. Cheap and high-signal: spec parse + source fetch + BR
-# resolvability against hellaenergy/ros2 itself.
+# resolvability against the distro's own COPR.
+#
+# Specs live under specs/<distro>/; the distro is parsed from the path and the
+# matching COPR is enabled (lyrical -> hellaenergy/ros2, others ->
+# hellaenergy/ros2-<distro>; see ADR 0012). The per-distro COPR project must
+# exist for the BR-resolve step to pass.
 #
 # Limits the dry-build to the first 3 changed specs per PR so the job stays
 # under ~5 minutes even on a sweeping rebase. PRs that touch more than 3
@@ -37,9 +42,6 @@ jobs:
             git findutils \
             curl
 
-      - name: Enable hellaenergy/ros2 (so cross-package BRs resolve)
-        run: dnf copr enable -y hellaenergy/ros2
-
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
@@ -50,7 +52,7 @@ jobs:
           set -euo pipefail
           BASE="${{ github.event.pull_request.base.sha }}"
           HEAD="${{ github.event.pull_request.head.sha }}"
-          mapfile -t specs < <(git diff --name-only --diff-filter=AM "$BASE" "$HEAD" -- 'specs/*.spec' | head -3)
+          mapfile -t specs < <(git diff --name-only --diff-filter=AM "$BASE" "$HEAD" -- 'specs/*/*.spec' | head -3)
           if [ ${#specs[@]} -eq 0 ]; then
             echo "No spec files changed in this PR."
             echo "have_specs=0" >> "$GITHUB_OUTPUT"
@@ -63,6 +65,23 @@ jobs:
             printf '%s\n' "${specs[@]}"
             echo EOF
           } >> "$GITHUB_OUTPUT"
+
+      - name: Enable the COPR(s) matching the changed distros (so cross-package BRs resolve)
+        if: steps.changed.outputs.have_specs == '1'
+        run: |
+          set -euo pipefail
+          # Path layout is specs/<distro>/<spec>; map distro -> COPR project.
+          distros=$(printf '%s\n' "${{ steps.changed.outputs.specs }}" \
+                    | awk -F/ 'NF>=2 {print $2}' | sort -u)
+          for d in $distros; do
+            if [ "$d" = "lyrical" ]; then
+              proj="hellaenergy/ros2"
+            else
+              proj="hellaenergy/ros2-$d"
+            fi
+            echo "Enabling COPR $proj for distro $d"
+            dnf copr enable -y "$proj"
+          done
 
       - name: Parse + source-fetch + BR-resolve check
         if: steps.changed.outputs.have_specs == '1'

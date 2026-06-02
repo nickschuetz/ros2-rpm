@@ -1,0 +1,17 @@
+# Per-package configuration for scripts/generate-spec.py, Lyrical Luth (the
+# 2026 LTS, ROS 2). Mirrors distros/jazzy/packages.yaml. See ADR 0012.
+#
+# Each entry tells the generator how to fetch and unpack the upstream source.
+# package.xml metadata (version, license, deps) is read from the source itself.
+# Add a new entry every time a new package enters the Lyrical build tree.
+#
+# Fields:
+#   source_url:    Source0 URL. {version} substitutes the version from package.xml.
+#   source_dir:    Top-level dir name after tarball extraction (for %autosetup -n).
+#                  {version} substitutes here too.
+#   build_subdir:  Optional. If the source tarball is a monorepo, the package's
+#                  subdirectory inside it.
+#   release_tag:   Optional. Override the version string for the source URL.
+#
+# Bootstrap starts with the minimal ros-core / ros-base set, same tiering as
+# Jazzy Phase 1. Populate via scripts/generate-spec.py --distro lyrical.

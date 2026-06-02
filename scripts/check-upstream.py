@@ -1,57 +1,60 @@
 #!/usr/bin/env python3
-"""scripts/check-upstream.py, diff packages.yaml against rosdistro/jazzy.
+"""scripts/check-upstream.py, diff each distro's packages.yaml against rosdistro.
 
-Fetches https://raw.githubusercontent.com/ros/rosdistro/master/jazzy/distribution.yaml
-and compares the `version:` field for every package present in
-scripts/packages.yaml against the version we have locally registered (parsed
-from the spec's Source0 URL).
+For every distro in scripts/distros.py (jazzy, lyrical, ...), fetches
+https://raw.githubusercontent.com/ros/rosdistro/master/<distro>/distribution.yaml
+and compares the `version:` field for every package present in that distro's
+distros/<distro>/packages.yaml against the version we have locally registered
+(parsed from the spec's Version: field under specs/<distro>/).
 
-Outputs a Markdown-formatted report. Intended to run in CI nightly so a
-GitHub Action can post the report to a tracking issue when drift is
-detected; runs locally too.
+Outputs a Markdown-formatted report. Intended to run in CI weekly so a GitHub
+Action can post the report to a tracking issue when drift is detected; runs
+locally too.
 
 Usage:
-  python3 scripts/check-upstream.py            # report to stdout, exit 0 always
-  python3 scripts/check-upstream.py --strict   # exit 1 if any package is behind
-  python3 scripts/check-upstream.py --json     # machine-readable output
+  python3 scripts/check-upstream.py              # all distros, report to stdout
+  python3 scripts/check-upstream.py --distro jazzy
+  python3 scripts/check-upstream.py --strict     # exit 1 if any package is behind
+  python3 scripts/check-upstream.py --json       # machine-readable output
 """
 
 import argparse
 import json
-import re
 import sys
-from pathlib import Path
 from typing import Any
 from urllib.request import urlopen
 
-ROSDISTRO_URL = "https://raw.githubusercontent.com/ros/rosdistro/master/jazzy/distribution.yaml"
-SPEC_DIR = Path(__file__).resolve().parent.parent / "specs"
-PACKAGES_YAML = Path(__file__).resolve().parent / "packages.yaml"
+import distros
 
 
-def fetch_distribution_yaml() -> dict[str, Any]:
+def _require_yaml():
     try:
         import yaml
+        return yaml
     except ImportError:
         sys.stderr.write("ERROR: PyYAML required. dnf install python3-pyyaml\n")
         sys.exit(2)
-    with urlopen(ROSDISTRO_URL, timeout=30) as r:
+
+
+def fetch_distribution_yaml(distro: str) -> dict[str, Any]:
+    yaml = _require_yaml()
+    with urlopen(distros.rosdistro_url(distro), timeout=30) as r:
         return yaml.safe_load(r.read())
 
 
-def load_packages_yaml() -> dict[str, dict]:
-    try:
-        import yaml
-    except ImportError:
-        sys.stderr.write("ERROR: PyYAML required. dnf install python3-pyyaml\n")
-        sys.exit(2)
-    with PACKAGES_YAML.open() as f:
+def load_packages_yaml(distro: str) -> dict[str, dict]:
+    yaml = _require_yaml()
+    path = distros.packages_yaml(distro)
+    if not path.is_file():
+        return {}
+    with path.open() as f:
         return yaml.safe_load(f) or {}
 
 
-def parse_local_version(pkg: str) -> str | None:
+def parse_local_version(pkg: str, distro: str) -> str | None:
     """Read the live version we built by inspecting the spec file."""
-    spec = SPEC_DIR / f"ros-jazzy-{pkg.replace('_', '-')}.spec"
+    import re
+    spec = distros.spec_path(distro, pkg)
     if not spec.is_file():
         return None
     for line in spec.read_text().splitlines():
@@ -61,19 +64,20 @@ def parse_local_version(pkg: str) -> str | None:
     return None
 
 
-def compare(distro_yaml: dict, our_packages: dict) -> list[dict]:
+def compare(distro_yaml: dict, our_packages: dict, distro: str) -> list[dict]:
     repos = distro_yaml.get("repositories") or {}
 
     report: list[dict] = []
     for pkg_name in sorted(our_packages.keys()):
-        local_version = parse_local_version(pkg_name)
+        local_version = parse_local_version(pkg_name, distro)
         if local_version is None:
             report.append({
+                "distro": distro,
                 "package": pkg_name,
                 "local": None,
                 "upstream": None,
                 "status": "no-spec",
-                "note": "no spec file in specs/",
+                "note": f"no spec file in specs/{distro}/",
             })
             continue
 
@@ -84,7 +88,7 @@ def compare(distro_yaml: dict, our_packages: dict) -> list[dict]:
         #         packages: [<pkg1>, <pkg2>, ...]
         #         version: <version>-<bloom_release>
         #         tags:
-        #           release: release/jazzy/{package}/{version}
+        #           release: release/<distro>/{package}/{version}
         upstream_version = None
         upstream_repo = None
         for repo_name, repo in repos.items():
@@ -103,44 +107,36 @@ def compare(distro_yaml: dict, our_packages: dict) -> list[dict]:
 
         if upstream_version is None:
             report.append({
+                "distro": distro,
                 "package": pkg_name,
                 "local": local_version,
                 "upstream": None,
                 "status": "not-in-rosdistro",
-                "note": "no entry in jazzy/distribution.yaml, upstream may have removed or renamed",
+                "note": f"no entry in {distro}/distribution.yaml, upstream may have removed or renamed",
             })
             continue
 
-        if upstream_version == local_version:
-            report.append({
-                "package": pkg_name,
-                "local": local_version,
-                "upstream": upstream_version,
-                "status": "current",
-                "repo": upstream_repo,
-            })
-        else:
-            report.append({
-                "package": pkg_name,
-                "local": local_version,
-                "upstream": upstream_version,
-                "status": "behind",
-                "repo": upstream_repo,
-            })
+        status = "current" if upstream_version == local_version else "behind"
+        report.append({
+            "distro": distro,
+            "package": pkg_name,
+            "local": local_version,
+            "upstream": upstream_version,
+            "status": status,
+            "repo": upstream_repo,
+        })
 
     return report
 
 
-def render_markdown(report: list[dict]) -> str:
+def render_distro_section(report: list[dict], distro: str) -> list[str]:
     behind = [r for r in report if r["status"] == "behind"]
     current = [r for r in report if r["status"] == "current"]
     no_spec = [r for r in report if r["status"] == "no-spec"]
     not_in_rosdistro = [r for r in report if r["status"] == "not-in-rosdistro"]
 
     lines: list[str] = []
-    lines.append("# Upstream drift report, `hellaenergy/ros2`")
-    lines.append("")
-    lines.append(f"Snapshot of upstream `rosdistro/jazzy/distribution.yaml` versus this COPR's published spec versions.")
+    lines.append(f"## `{distros.copr_project(distro)}` ({distro})")
     lines.append("")
     lines.append(f"- **{len(current)}** packages current")
     lines.append(f"- **{len(behind)}** packages behind upstream")
@@ -149,51 +145,73 @@ def render_markdown(report: list[dict]) -> str:
     lines.append("")
 
     if behind:
-        lines.append("## Packages behind upstream")
+        lines.append("### Packages behind upstream")
         lines.append("")
         lines.append("| Package | Local | Upstream | Repo |")
         lines.append("|---|---|---|---|")
         for r in behind:
             lines.append(f"| `{r['package']}` | `{r['local']}` | `{r['upstream']}` | `{r['repo']}` |")
         lines.append("")
-        lines.append("Action: bump the entry in `scripts/packages.yaml`, regenerate the spec, push to COPR.")
+        lines.append(f"Action: bump the entry in `distros/{distro}/packages.yaml`, "
+                     f"regenerate the spec, push to COPR (`scripts/bump.py --distro {distro} --all-behind`).")
         lines.append("")
 
     if not_in_rosdistro:
-        lines.append("## No longer in rosdistro")
+        lines.append("### No longer in rosdistro")
         lines.append("")
-        lines.append("These packages we ship are no longer enumerated in jazzy/distribution.yaml. They may have been removed or renamed upstream.")
+        lines.append(f"These packages we ship are no longer enumerated in {distro}/distribution.yaml. "
+                     "They may have been removed or renamed upstream.")
         lines.append("")
         for r in not_in_rosdistro:
             lines.append(f"- `{r['package']}` (we ship `{r['local']}`)")
         lines.append("")
 
     if no_spec:
-        lines.append("## Registered without spec")
+        lines.append("### Registered without spec")
         lines.append("")
         for r in no_spec:
             lines.append(f"- `{r['package']}`: {r['note']}")
         lines.append("")
 
+    return lines
+
+
+def render_markdown(report: list[dict], selected: tuple[str, ...]) -> str:
+    lines: list[str] = []
+    lines.append("# Upstream drift report")
+    lines.append("")
+    lines.append("Snapshot of upstream `rosdistro/<distro>/distribution.yaml` versus this "
+                 "repo's published spec versions, per distro.")
+    lines.append("")
+    for distro in selected:
+        section = [r for r in report if r["distro"] == distro]
+        lines.extend(render_distro_section(section, distro))
     return "\n".join(lines)
 
 
 def main() -> int:
-    p = argparse.ArgumentParser(description=__doc__)
+    p = argparse.ArgumentParser(description=__doc__,
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--distro", choices=distros.DISTROS,
+                   help="Limit to one distro (default: all).")
     p.add_argument("--strict", action="store_true",
                    help="Exit non-zero if any package is behind upstream.")
     p.add_argument("--json", action="store_true",
                    help="Emit JSON instead of Markdown.")
     args = p.parse_args()
 
-    distro_yaml = fetch_distribution_yaml()
-    our_packages = load_packages_yaml()
-    report = compare(distro_yaml, our_packages)
+    selected = (args.distro,) if args.distro else distros.DISTROS
+
+    report: list[dict] = []
+    for distro in selected:
+        distro_yaml = fetch_distribution_yaml(distro)
+        our_packages = load_packages_yaml(distro)
+        report.extend(compare(distro_yaml, our_packages, distro))
 
     if args.json:
         print(json.dumps(report, indent=2))
     else:
-        print(render_markdown(report))
+        print(render_markdown(report, selected))
 
     if args.strict and any(r["status"] == "behind" for r in report):
         return 1

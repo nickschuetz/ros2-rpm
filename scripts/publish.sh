@@ -3,24 +3,35 @@
 #
 # Usage:
 #   scripts/publish.sh <package_name> [<source_path>]
+#   DISTRO=jazzy scripts/publish.sh <package_name>      # target a non-flagship distro
 #
+# - DISTRO defaults to the flagship (lyrical); override via the DISTRO env var.
 # - Auto-derives <source_path> from build/ament_cmake_full/ament_cmake-*/<package_name>
 #   if not supplied (works for ament_cmake monorepo packages).
 # - Generates spec via generate-spec.py.
 # - Local mock build on fedora-44-x86_64 to catch errors fast.
-# - Pushes to all 6 COPR chroots.
+# - Pushes to all 6 COPR chroots of the distro's project (ADR 0012).
 #
-# Skips if specs/ros-jazzy-<dashed>.spec already exists (manual hand-tuned spec).
+# Skips if specs/<distro>/ros-<distro>-<dashed>.spec already exists (hand-tuned).
 
 set -euo pipefail
 
 PKG="${1:?usage: publish.sh <package_name> [<source_path>]}"
 SOURCE_PATH="${2:-}"
+DISTRO="${DISTRO:-lyrical}"
+
+# hellaenergy/ros2 tracks the flagship distro; others use ros2-<distro>.
+if [ "$DISTRO" = "lyrical" ]; then
+    COPR_PROJECT="hellaenergy/ros2"
+else
+    COPR_PROJECT="hellaenergy/ros2-${DISTRO}"
+fi
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 PKG_DASHED="${PKG//_/-}"
-SPEC_NAME="ros-jazzy-${PKG_DASHED}"
-SPEC="$REPO/specs/${SPEC_NAME}.spec"
+SPEC_NAME="ros-${DISTRO}-${PKG_DASHED}"
+SPEC="$REPO/specs/${DISTRO}/${SPEC_NAME}.spec"
+mkdir -p "$REPO/specs/${DISTRO}"
 
 # Auto-derive source path from ament_cmake monorepo layout.
 if [ -z "$SOURCE_PATH" ]; then
@@ -48,7 +59,7 @@ if [ -f "$SPEC" ]; then
     echo "    spec already exists, skipping generation (hand-tuned?)"
 else
     echo "==> Generating spec"
-    "$REPO/scripts/generate-spec.py" "$SOURCE_PATH" > "$SPEC"
+    "$REPO/scripts/generate-spec.py" --distro "$DISTRO" "$SOURCE_PATH" > "$SPEC"
 fi
 
 # Ensure the source tarball exists in build/SOURCES/ for rpmbuild.
@@ -68,7 +79,7 @@ echo "==> Local mock build (fedora-44-x86_64)"
 "$REPO/scripts/build-one.sh" "$SPEC_NAME" >/dev/null
 echo "    local build OK"
 
-echo "==> Pushing to all 6 COPR chroots"
+echo "==> Pushing to all 6 COPR chroots of $COPR_PROJECT"
 SRPM=$(ls -t "$REPO/build/SRPMS/${SPEC_NAME}-${VERSION}-"*.src.rpm | head -1)
 copr-cli build \
     --chroot fedora-44-x86_64 \
@@ -77,6 +88,6 @@ copr-cli build \
     --chroot fedora-rawhide-aarch64 \
     --chroot centos-stream-10-x86_64 \
     --chroot centos-stream-10-aarch64 \
-    hellaenergy/ros2 "$SRPM" | tail -10
+    "$COPR_PROJECT" "$SRPM" | tail -10
 
 echo "==> $PKG: published"

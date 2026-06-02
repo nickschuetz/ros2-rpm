@@ -5,11 +5,11 @@
 #   scripts/build-one.sh <spec-name-without-extension> [chroot]
 #
 # Examples:
-#   scripts/build-one.sh ros-jazzy-ament-package
+#   scripts/build-one.sh ros-lyrical-ament-package
 #   scripts/build-one.sh ros-jazzy-ament-package fedora-44-aarch64
 #
 # Expects:
-#   - specs/<name>.spec to exist
+#   - specs/<distro>/<name>.spec to exist (distro parsed from the spec name)
 #   - The corresponding source tarball already in build/SOURCES/
 #
 # Output:
@@ -22,8 +22,11 @@ set -euo pipefail
 SPEC_NAME="${1:?usage: build-one.sh <spec-name> [chroot]}"
 CHROOT="${2:-fedora-44-x86_64}"
 
+# The distro is encoded in the spec name (ros-<distro>-<pkg>); see ADR 0012.
+DISTRO="$(printf '%s\n' "$SPEC_NAME" | sed -E 's/^ros-([a-z]+)-.*/\1/')"
+
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SPEC="$REPO_ROOT/specs/${SPEC_NAME}.spec"
+SPEC="$REPO_ROOT/specs/${DISTRO}/${SPEC_NAME}.spec"
 BUILD="$REPO_ROOT/build"
 SOURCES="$BUILD/SOURCES"
 SRPMS="$BUILD/SRPMS"
@@ -46,12 +49,19 @@ rpmbuild -bs \
 SRPM=$(ls -t "$SRPMS"/${SPEC_NAME}-*.src.rpm | head -1)
 echo "==> SRPM: $SRPM"
 
+# hellaenergy/ros2 tracks the flagship distro; others use ros2-<distro>. See ADR 0012.
+if [ "$DISTRO" = "lyrical" ]; then
+    COPR_PROJECT="hellaenergy/ros2"
+else
+    COPR_PROJECT="hellaenergy/ros2-$DISTRO"
+fi
+
 # Use the direct pulp URL, download.copr.fedorainfracloud.org now redirects
 # to packages.redhat.com/api/pulp-content, and mock's dnf doesn't always
 # follow the redirect when fetching repodata.
-COPR_REPO="https://packages.redhat.com/api/pulp-content/public-copr/hellaenergy/ros2/$CHROOT/"
+COPR_REPO="https://packages.redhat.com/api/pulp-content/public-copr/$COPR_PROJECT/$CHROOT/"
 
-echo "==> mock --rebuild on $CHROOT (with hellaenergy/ros2 COPR enabled)"
+echo "==> mock --rebuild on $CHROOT (with $COPR_PROJECT COPR enabled)"
 sg mock -c "mock -r '$CHROOT' \
     --addrepo='$COPR_REPO' \
     --resultdir='$RESULTS' \

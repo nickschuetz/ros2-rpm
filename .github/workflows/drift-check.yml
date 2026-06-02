@@ -18,7 +18,8 @@ on:
   push:
     paths:
       - 'scripts/check-upstream.py'
-      - 'scripts/packages.yaml'
+      - 'scripts/distros.py'
+      - 'distros/**/packages.yaml'
       - '.github/workflows/drift-check.yml'
 
 permissions:

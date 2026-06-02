@@ -20,8 +20,8 @@ jobs:
       - uses: actions/checkout@v6
       - name: Run rpmlint
         run: |
-          if compgen -G "specs/*.spec" > /dev/null; then
-            rpmlint --rpmlintrc .rpmlintrc specs/*.spec
+          if compgen -G "specs/*/*.spec" > /dev/null; then
+            rpmlint --rpmlintrc .rpmlintrc specs/*/*.spec
           else
             echo "No specs to lint."
           fi
@@ -36,8 +36,8 @@ jobs:
       - uses: actions/checkout@v6
       - name: Verify SPDX expressions in specs
         run: |
-          if compgen -G "specs/*.spec" > /dev/null; then
-            for spec in specs/*.spec; do
+          if compgen -G "specs/*/*.spec" > /dev/null; then
+            for spec in specs/*/*.spec; do
               # Reject legacy Fedora license shortnames per ADR 0005.
               if grep -E '^License:.*(ASL 2.0|BSD( |$)|MIT( |$))' "$spec"; then
                 echo "ERROR: $spec uses legacy license shortname; use SPDX." >&2
@@ -52,7 +52,7 @@ jobs:
       - uses: actions/checkout@v6
       - name: Reject obsolete spec patterns
         run: |
-          if compgen -G "specs/*.spec" > /dev/null; then
+          if compgen -G "specs/*/*.spec" > /dev/null; then
             FAIL=0
             for pat in '^Group:' '^BuildRoot:' '^%clean' '^%defattr' '^%py3_build' '^%py3_install' '%setup -q' '%{__cmake}' '%pyproject_buildrequires -w'; do
               if grep -RnE "$pat" specs/; then

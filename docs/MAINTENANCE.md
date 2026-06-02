@@ -24,7 +24,7 @@ Reference for the scripts and CI workflows that keep `hellaenergy/ros2` healthy 
 | Workflow | Trigger | What it does |
 |---|---|---|
 | [`lint.yml`](../.github/workflows/lint.yml) | push, PR | rpmlint, license-check (legacy SPDX shortname rejection), forbidden-patterns (grep), verify-specs (full audit), sbom-validate (CycloneDX self-test). |
-| [`spec-dry-build.yml`](../.github/workflows/spec-dry-build.yml) | PR (only when specs/ changes) | For up to 3 changed specs: rpmspec parse, spectool fetch, rpmbuild SRPM, dnf builddep --assumeno against Fedora 44 + hellaenergy/ros2. Catches Source0 / BR breakage before the COPR build cycle. |
+| [`spec-dry-build.yml`](../.github/workflows/spec-dry-build.yml) | PR (only when specs/ changes) | For up to 3 changed specs: rpmspec parse, spectool fetch, rpmbuild SRPM, dnf builddep --assumeno against Fedora 44 + the changed distro's COPR (parsed from the spec path). Catches Source0 / BR breakage before the COPR build cycle. |
 | [`build.yml`](../.github/workflows/build.yml) | push, PR | Matrix-build dry-run on all 6 chroot/arch pairs. |
 | [`smoke-test.yml`](../.github/workflows/smoke-test.yml) | push, PR, daily 06:00 UTC | Installs `ros-base` + extras on a fresh Fedora 44 container and runs `scripts/smoke-test.sh -v`. |
 | [`drift-check.yml`](../.github/workflows/drift-check.yml) | weekly (Sunday 08:00 UTC), push to relevant paths | Runs `scripts/check-upstream.py`. Opens / updates a single sticky issue labeled `upstream-drift` when packages are behind; closes it with a "fully caught up" comment when drift returns to zero. |
@@ -54,15 +54,15 @@ scripts/bump.py --all-behind --commit
 
 ### Add a new package
 
-1. Add an entry to [`scripts/packages.yaml`](../scripts/packages.yaml) with `source_url`, `source_dir`, optional `build_subdir`.
-2. Download the source: bloom-release tarball, then run `scripts/generate-spec.py <source-dir>` to emit a draft spec.
+1. Add an entry to the distro's [`distros/<distro>/packages.yaml`](../distros/jazzy/packages.yaml) with `source_url`, `source_dir`, optional `build_subdir`.
+2. Download the source: bloom-release tarball, then run `scripts/generate-spec.py --distro <distro> <source-dir>` to emit a draft spec into `specs/<distro>/`.
 3. Hand-finish the `%files` section against the actual install layout (`mock --shell` if you need to introspect).
-4. `scripts/build-one.sh ros-jazzy-<pkg>` to local-build, then `copr-cli build hellaenergy/ros2 build/SRPMS/...` for the matrix build.
+4. `scripts/build-one.sh ros-<distro>-<pkg>` to local-build (the distro and its COPR are parsed from the spec name), then `copr-cli build <project> build/SRPMS/...` for the matrix build, where `<project>` is `hellaenergy/ros2` for the flagship or `hellaenergy/ros2-<distro>` otherwise.
 5. Update [`SCOPE.md`](SCOPE.md), [`build-order.md`](build-order.md), and [`CHANGELOG.md`](../CHANGELOG.md).
 
 ### Carry an upstream patch locally
 
-Used when an upstream blocker is days-or-more from merging and the deferral has become blocking. See [`specs/patches/README.md`](../specs/patches/README.md) for the file naming convention and required DEP-3 header set. The verifier rejects `Patch%N:` lines that point at non-existent files or files missing DEP-3 metadata.
+Used when an upstream blocker is days-or-more from merging and the deferral has become blocking. See [`specs/<distro>/patches/README.md`](../specs/jazzy/patches/README.md) for the file naming convention and required DEP-3 header set. Patches are per-distro. The verifier rejects `Patch%N:` lines that point at non-existent files or files missing DEP-3 metadata.
 
 When the upstream PR finally merges:
 1. The nightly `upstream-issues` workflow opens a sticky tracker issue.
