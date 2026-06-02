@@ -1,17 +1,881 @@
 # Per-package configuration for scripts/generate-spec.py, Lyrical Luth (the
-# 2026 LTS, ROS 2). Mirrors distros/jazzy/packages.yaml. See ADR 0012.
+# 2026 LTS, ROS 2). Derived from distros/jazzy/packages.yaml by retargeting the
+# gbp release URLs from release/jazzy to release/lyrical; upstream-archive
+# entries are distro-agnostic and unchanged. See ADR 0012.
 #
-# Each entry tells the generator how to fetch and unpack the upstream source.
-# package.xml metadata (version, license, deps) is read from the source itself.
-# Add a new entry every time a new package enters the Lyrical build tree.
+# Versions are resolved from each package's package.xml at generate time, so no
+# version is pinned here. Publish the minimal ros-core / ros-base tier first.
 #
-# Fields:
-#   source_url:    Source0 URL. {version} substitutes the version from package.xml.
-#   source_dir:    Top-level dir name after tarball extraction (for %autosetup -n).
-#                  {version} substitutes here too.
-#   build_subdir:  Optional. If the source tarball is a monorepo, the package's
-#                  subdirectory inside it.
-#   release_tag:   Optional. Override the version string for the source URL.
+ament_package:
+  source_url: https://github.com/ament/ament_package/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_package-{version}
+
+ament_cmake_core:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_core
+
+# ament_cmake family, all share the same monorepo and tag.
+ament_cmake:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake
+
+ament_cmake_export_definitions:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_definitions
+
+ament_cmake_export_dependencies:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_dependencies
+
+ament_cmake_export_include_directories:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_include_directories
+
+
+ament_cmake_export_libraries:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_libraries
+
+ament_cmake_export_link_flags:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_link_flags
+
+ament_cmake_export_targets:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_export_targets
+
+ament_cmake_gen_version_h:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_gen_version_h
+  # Tests require ament_cmake_gtest which is not yet packaged; skip until the
+  # test stack is in place.
+  disable_tests: true
+
+ament_cmake_include_directories:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_include_directories
+
+ament_cmake_libraries:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_libraries
+
+ament_cmake_python:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_python
+
+ament_cmake_target_dependencies:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_target_dependencies
+
+ament_cmake_test:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_test
+
+ament_cmake_version:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_version
+
+ament_cmake_gtest:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_gtest
+  disable_tests: true
+
+ament_cmake_gmock:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_gmock
+  disable_tests: true
+
+ament_cmake_pytest:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_pytest
+  disable_tests: true
+
+ament_cmake_vendor_package:
+  source_url: https://github.com/ament/ament_cmake/archive/refs/tags/{version}.tar.gz
+  source_dir: ament_cmake-{version}
+  build_subdir: ament_cmake_vendor_package
+  disable_tests: true
+
+# ROS 2 core build extension on top of ament_cmake. Single-package repo.
+# Jazzy is at 0.12.0; upstream master is 0.9.x, use the bloom release tag.
+ament_cmake_ros:
+  source_url: https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/release/lyrical/ament_cmake_ros/{version}-1.tar.gz
+  source_dir: ament_cmake_ros-release-release-lyrical-ament_cmake_ros-{version}-1
+  disable_tests: true
+
+# ROS 2 C utilities. Compiled library (so noarch: false). Single-package repo.
+rcutils:
+  source_url: https://github.com/ros2-gbp/rcutils-release/archive/refs/tags/release/lyrical/rcutils/{version}-3.tar.gz
+  source_dir: rcutils-release-release-lyrical-rcutils-{version}-3
+  noarch: false
+  disable_tests: true
+
+# C++ utilities, compiled library.
+rcpputils:
+  source_url: https://github.com/ros2-gbp/rcpputils-release/archive/refs/tags/release/lyrical/rcpputils/{version}-1.tar.gz
+  source_dir: rcpputils-release-release-lyrical-rcpputils-{version}-1
+  noarch: false
+  disable_tests: true
+
+# ament_index_python (Python bindings for the ament resource index).
+ament_index_python:
+  source_url: https://github.com/ros2-gbp/ament_index-release/archive/refs/tags/release/lyrical/ament_index_python/{version}-3.tar.gz
+  source_dir: ament_index-release-release-lyrical-ament_index_python-{version}-3
+  disable_tests: true
+
+# rosidl_python, only rosidl_generator_py lives here (jazzy branch).
+rosidl_generator_py:
+  source_url: https://github.com/ros2-gbp/rosidl_python-release/archive/refs/tags/release/lyrical/rosidl_generator_py/{version}-3.tar.gz
+  source_dir: rosidl_python-release-release-lyrical-rosidl_generator_py-{version}-3
+  # No native code, pure-Python generator + cmake macros.
+  disable_tests: true
+
+# rosidl_typesupport, generates per-language bindings, separate repo.
+rosidl_typesupport_c:
+  source_url: https://github.com/ros2-gbp/rosidl_typesupport-release/archive/refs/tags/release/lyrical/rosidl_typesupport_c/{version}-3.tar.gz
+  source_dir: rosidl_typesupport-release-release-lyrical-rosidl_typesupport_c-{version}-3
+  noarch: false  # ships librosidl_typesupport_c.so
+  disable_tests: true
+
+rosidl_typesupport_cpp:
+  source_url: https://github.com/ros2-gbp/rosidl_typesupport-release/archive/refs/tags/release/lyrical/rosidl_typesupport_cpp/{version}-3.tar.gz
+  source_dir: rosidl_typesupport-release-release-lyrical-rosidl_typesupport_cpp-{version}-3
+  noarch: false  # ships librosidl_typesupport_cpp.so
+  disable_tests: true
+
+# Fast DDS chain, eProsima's DDS implementation. Multiple compiled C++ libs.
+foonathan_memory_vendor:
+  source_url: https://github.com/ros2-gbp/foonathan_memory_vendor-release/archive/refs/tags/release/lyrical/foonathan_memory_vendor/{version}-1.tar.gz
+  source_dir: foonathan_memory_vendor-release-release-lyrical-foonathan_memory_vendor-{version}-1
+  noarch: false
+  disable_tests: true
+
+fastcdr:
+  source_url: https://github.com/ros2-gbp/fastcdr-release/archive/refs/tags/release/lyrical/fastcdr/{version}-1.tar.gz
+  source_dir: fastcdr-release-release-lyrical-fastcdr-{version}-1
+  noarch: false
+  disable_tests: true
+
+
+rosidl_typesupport_fastrtps_c:
+  source_url: https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/release/lyrical/rosidl_typesupport_fastrtps_c/{version}-3.tar.gz
+  source_dir: rosidl_typesupport_fastrtps-release-release-lyrical-rosidl_typesupport_fastrtps_c-{version}-3
+  noarch: false
+  disable_tests: true
+
+rosidl_typesupport_fastrtps_cpp:
+  source_url: https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/release/lyrical/rosidl_typesupport_fastrtps_cpp/{version}-3.tar.gz
+  source_dir: rosidl_typesupport_fastrtps-release-release-lyrical-rosidl_typesupport_fastrtps_cpp-{version}-3
+  noarch: false
+  disable_tests: true
+
+# rmw, the ROS 2 middleware abstraction layer.
+rmw:
+  source_url: https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/lyrical/rmw/{version}-5.tar.gz
+  source_dir: rmw-release-release-lyrical-rmw-{version}-5
+  noarch: false
+  disable_tests: true
+
+# rosidl_dynamic_typesupport, runtime introspection layer for messages.
+rosidl_dynamic_typesupport:
+  source_url: https://github.com/ros2-gbp/rosidl_dynamic_typesupport-release/archive/refs/tags/release/lyrical/rosidl_dynamic_typesupport/{version}-3.tar.gz
+  source_dir: rosidl_dynamic_typesupport-release-release-lyrical-rosidl_dynamic_typesupport-{version}-3
+  noarch: false
+  disable_tests: true
+
+# fastrtps_cmake_module, eProsima Fast-DDS CMake helper, in
+# rosidl_typesupport_fastrtps-release (per rosdistro/jazzy/distribution.yaml).
+
+# python_cmake_module, CMake helper for finding system Python.
+python_cmake_module:
+  source_url: https://github.com/ros2-gbp/python_cmake_module-release/archive/refs/tags/release/lyrical/python_cmake_module/{version}-3.tar.gz
+  source_dir: python_cmake_module-release-release-lyrical-python_cmake_module-{version}-3
+  disable_tests: true
+
+# rpyutils, Python utilities used by rosidl_generator_py at code-gen time.
+rpyutils:
+  source_url: https://github.com/ros2-gbp/rpyutils-release/archive/refs/tags/release/lyrical/rpyutils/{version}-3.tar.gz
+  source_dir: rpyutils-release-release-lyrical-rpyutils-{version}-3
+  disable_tests: true
+
+# rosidl_core umbrellas, pull in the whole generation/runtime stack.
+rosidl_core_generators:
+  source_url: https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/release/lyrical/rosidl_core_generators/{version}-3.tar.gz
+  source_dir: rosidl_core-release-release-lyrical-rosidl_core_generators-{version}-3
+  disable_tests: true
+
+rosidl_core_runtime:
+  source_url: https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/release/lyrical/rosidl_core_runtime/{version}-3.tar.gz
+  source_dir: rosidl_core-release-release-lyrical-rosidl_core_runtime-{version}-3
+  disable_tests: true
+
+# Message packages
 #
-# Bootstrap starts with the minimal ros-core / ros-base set, same tiering as
-# Jazzy Phase 1. Populate via scripts/generate-spec.py --distro lyrical.
+# rcl_interfaces uses bloom-release tags (the upstream monorepo's master is
+# always ahead of the jazzy pin). Use the release-repo tarball to track the
+# rosdistro pin exactly.
+builtin_interfaces:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/builtin_interfaces/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-lyrical-builtin_interfaces-{version}-1
+  noarch: false  # generates compiled type-support libraries
+  disable_tests: true  # ament_lint_common not yet packaged
+
+# Tier 0: rosidl_defaults umbrellas (alongside the rosidl_core ones we already
+# have). Distinct from core: defaults pulls in additional generators.
+rosidl_default_generators:
+  source_url: https://github.com/ros2-gbp/rosidl_defaults-release/archive/refs/tags/release/lyrical/rosidl_default_generators/{version}-3.tar.gz
+  source_dir: rosidl_defaults-release-release-lyrical-rosidl_default_generators-{version}-3
+  disable_tests: true
+
+rosidl_default_runtime:
+  source_url: https://github.com/ros2-gbp/rosidl_defaults-release/archive/refs/tags/release/lyrical/rosidl_default_runtime/{version}-3.tar.gz
+  source_dir: rosidl_defaults-release-release-lyrical-rosidl_default_runtime-{version}-3
+  disable_tests: true
+
+unique_identifier_msgs:
+  source_url: https://github.com/ros2-gbp/unique_identifier_msgs-release/archive/refs/tags/release/lyrical/unique_identifier_msgs/{version}-3.tar.gz
+  source_dir: unique_identifier_msgs-release-release-lyrical-unique_identifier_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+# Tier 1: in-repo siblings of builtin_interfaces, no msg deps.
+service_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/service_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-lyrical-service_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+std_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/std_msgs/{version}-3.tar.gz
+  source_dir: common_interfaces-release-release-lyrical-std_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+# Tier 2.
+action_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/action_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-lyrical-action_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+geometry_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/geometry_msgs/{version}-3.tar.gz
+  source_dir: common_interfaces-release-release-lyrical-geometry_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+ackermann_msgs:
+  source_url: https://github.com/ros2-gbp/ackermann_msgs-release/archive/refs/tags/release/lyrical/ackermann_msgs/{version}-7.tar.gz
+  source_dir: ackermann_msgs-release-release-lyrical-ackermann_msgs-{version}-7
+  noarch: false
+  disable_tests: true
+
+trajectory_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/trajectory_msgs/{version}-3.tar.gz
+  source_dir: common_interfaces-release-release-lyrical-trajectory_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+# Tier 3.
+sensor_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/sensor_msgs/{version}-3.tar.gz
+  source_dir: common_interfaces-release-release-lyrical-sensor_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+nav_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/nav_msgs/{version}-3.tar.gz
+  source_dir: common_interfaces-release-release-lyrical-nav_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+vision_msgs:
+  source_url: https://github.com/ros2-gbp/vision_msgs-release/archive/refs/tags/release/lyrical/vision_msgs/{version}-3.tar.gz
+  source_dir: vision_msgs-release-release-lyrical-vision_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+# Tier 4.
+control_msgs:
+  source_url: https://github.com/ros2-gbp/control_msgs-release/archive/refs/tags/release/lyrical/control_msgs/{version}-3.tar.gz
+  source_dir: control_msgs-release-release-lyrical-control_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+# rclcpp + tf2_ros chain, final layer of Phase 1 minimal subset.
+ament_index_cpp:
+  source_url: https://github.com/ros2-gbp/ament_index-release/archive/refs/tags/release/lyrical/ament_index_cpp/{version}-3.tar.gz
+  source_dir: ament_index-release-release-lyrical-ament_index_cpp-{version}-3
+  noarch: false
+  disable_tests: true
+
+type_description_interfaces:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/type_description_interfaces/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-lyrical-type_description_interfaces-{version}-1
+  noarch: false
+  disable_tests: true
+
+rcl_interfaces:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/rcl_interfaces/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-lyrical-rcl_interfaces-{version}-1
+  noarch: false
+  disable_tests: true
+
+rosgraph_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/rosgraph_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-lyrical-rosgraph_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+composition_interfaces:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/composition_interfaces/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-lyrical-composition_interfaces-{version}-1
+  noarch: false
+  disable_tests: true
+
+statistics_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/statistics_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-lyrical-statistics_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+
+libyaml_vendor:
+  source_url: https://github.com/ros2-gbp/libyaml_vendor-release/archive/refs/tags/release/lyrical/libyaml_vendor/{version}-3.tar.gz
+  source_dir: libyaml_vendor-release-release-lyrical-libyaml_vendor-{version}-3
+  noarch: false
+  disable_tests: true
+
+libstatistics_collector:
+  source_url: https://github.com/ros2-gbp/libstatistics_collector-release/archive/refs/tags/release/lyrical/libstatistics_collector/{version}-1.tar.gz
+  source_dir: libstatistics_collector-release-release-lyrical-libstatistics_collector-{version}-1
+  noarch: false
+  disable_tests: true
+
+tracetools:
+  source_url: https://github.com/ros2-gbp/ros2_tracing-release/archive/refs/tags/release/lyrical/tracetools/{version}-1.tar.gz
+  source_dir: ros2_tracing-release-release-lyrical-tracetools-{version}-1
+  noarch: false
+  disable_tests: true
+
+rcl_logging_interface:
+  source_url: https://github.com/ros2-gbp/rcl_logging-release/archive/refs/tags/release/lyrical/rcl_logging_interface/{version}-3.tar.gz
+  source_dir: rcl_logging-release-release-lyrical-rcl_logging_interface-{version}-3
+  noarch: false
+  disable_tests: true
+
+rcl_logging_spdlog:
+  source_url: https://github.com/ros2-gbp/rcl_logging-release/archive/refs/tags/release/lyrical/rcl_logging_spdlog/{version}-3.tar.gz
+  source_dir: rcl_logging-release-release-lyrical-rcl_logging_spdlog-{version}-3
+  noarch: false
+  disable_tests: true
+
+rmw_dds_common:
+  source_url: https://github.com/ros2-gbp/rmw_dds_common-release/archive/refs/tags/release/lyrical/rmw_dds_common/{version}-3.tar.gz
+  source_dir: rmw_dds_common-release-release-lyrical-rmw_dds_common-{version}-3
+  noarch: false
+  disable_tests: true
+
+rmw_fastrtps_shared_cpp:
+  source_url: https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/lyrical/rmw_fastrtps_shared_cpp/{version}-1.tar.gz
+  source_dir: rmw_fastrtps-release-release-lyrical-rmw_fastrtps_shared_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+rmw_fastrtps_cpp:
+  source_url: https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/lyrical/rmw_fastrtps_cpp/{version}-1.tar.gz
+  source_dir: rmw_fastrtps-release-release-lyrical-rmw_fastrtps_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+rmw_fastrtps_dynamic_cpp:
+  source_url: https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/lyrical/rmw_fastrtps_dynamic_cpp/{version}-1.tar.gz
+  source_dir: rmw_fastrtps-release-release-lyrical-rmw_fastrtps_dynamic_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+rmw_implementation:
+  source_url: https://github.com/ros2-gbp/rmw_implementation-release/archive/refs/tags/release/lyrical/rmw_implementation/{version}-6.tar.gz
+  source_dir: rmw_implementation-release-release-lyrical-rmw_implementation-{version}-6
+  noarch: false
+  disable_tests: true
+
+rcl_yaml_param_parser:
+  source_url: https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/lyrical/rcl_yaml_param_parser/{version}-1.tar.gz
+  source_dir: rcl-release-release-lyrical-rcl_yaml_param_parser-{version}-1
+  noarch: false
+  disable_tests: true
+
+rcl:
+  source_url: https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/lyrical/rcl/{version}-1.tar.gz
+  source_dir: rcl-release-release-lyrical-rcl-{version}-1
+  noarch: false
+  disable_tests: true
+
+rcl_action:
+  source_url: https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/lyrical/rcl_action/{version}-1.tar.gz
+  source_dir: rcl-release-release-lyrical-rcl_action-{version}-1
+  noarch: false
+  disable_tests: true
+
+rcl_lifecycle:
+  source_url: https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/lyrical/rcl_lifecycle/{version}-1.tar.gz
+  source_dir: rcl-release-release-lyrical-rcl_lifecycle-{version}-1
+  noarch: false
+  disable_tests: true
+
+message_filters:
+  source_url: https://github.com/ros2-gbp/ros2_message_filters-release/archive/refs/tags/release/lyrical/message_filters/{version}-1.tar.gz
+  source_dir: ros2_message_filters-release-release-lyrical-message_filters-{version}-1
+  noarch: false
+  disable_tests: true
+
+rclcpp:
+  source_url: https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp/{version}-1.tar.gz
+  source_dir: rclcpp-release-release-lyrical-rclcpp-{version}-1
+  noarch: false
+  disable_tests: true
+
+rclcpp_action:
+  source_url: https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp_action/{version}-1.tar.gz
+  source_dir: rclcpp-release-release-lyrical-rclcpp_action-{version}-1
+  noarch: false
+  disable_tests: true
+
+rclcpp_components:
+  source_url: https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp_components/{version}-1.tar.gz
+  source_dir: rclcpp-release-release-lyrical-rclcpp_components-{version}-1
+  noarch: false
+  disable_tests: true
+
+# tf2 chain.
+tf2:
+  source_url: https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/lyrical/tf2/{version}-3.tar.gz
+  source_dir: geometry2-release-release-lyrical-tf2-{version}-3
+  noarch: false
+  disable_tests: true
+
+tf2_msgs:
+  source_url: https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/lyrical/tf2_msgs/{version}-3.tar.gz
+  source_dir: geometry2-release-release-lyrical-tf2_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
+tf2_ros:
+  source_url: https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/lyrical/tf2_ros/{version}-3.tar.gz
+  source_dir: geometry2-release-release-lyrical-tf2_ros-{version}-3
+  noarch: false
+  disable_tests: true
+
+# Additional deps surfaced by the rclcpp/tf2_ros research:
+rmw_implementation_cmake:
+  source_url: https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/lyrical/rmw_implementation_cmake/{version}-5.tar.gz
+  source_dir: rmw-release-release-lyrical-rmw_implementation_cmake-{version}-5
+  disable_tests: true
+
+rosidl_dynamic_typesupport_fastrtps:
+  source_url: https://github.com/ros2-gbp/rosidl_dynamic_typesupport_fastrtps-release/archive/refs/tags/release/lyrical/rosidl_dynamic_typesupport_fastrtps/{version}-3.tar.gz
+  source_dir: rosidl_dynamic_typesupport_fastrtps-release-release-lyrical-rosidl_dynamic_typesupport_fastrtps-{version}-3
+  noarch: false
+  disable_tests: true
+
+class_loader:
+  source_url: https://github.com/ros2-gbp/class_loader-release/archive/refs/tags/release/lyrical/class_loader/{version}-3.tar.gz
+  source_dir: class_loader-release-release-lyrical-class_loader-{version}-3
+  noarch: false
+  disable_tests: true
+
+console_bridge_vendor:
+  source_url: https://github.com/ros2-gbp/console_bridge_vendor-release/archive/refs/tags/release/lyrical/console_bridge_vendor/{version}-3.tar.gz
+  source_dir: console_bridge_vendor-release-release-lyrical-console_bridge_vendor-{version}-3
+  noarch: false
+  disable_tests: true
+
+spdlog_vendor:
+  source_url: https://github.com/ros2-gbp/spdlog_vendor-release/archive/refs/tags/release/lyrical/spdlog_vendor/{version}-3.tar.gz
+  source_dir: spdlog_vendor-release-release-lyrical-spdlog_vendor-{version}-3
+  noarch: false
+  disable_tests: true
+
+# rosidl monorepo (https://github.com/ros2/rosidl, tag 4.6.7 for jazzy).
+# Pure-Python packages stay noarch; CMake packages that compile flip the flag.
+# All entries inherit version 4.6.7 from each package.xml.
+rosidl_adapter:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_adapter
+  disable_tests: true
+
+rosidl_cli:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_cli
+  disable_tests: true
+
+rosidl_cmake:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_cmake
+  disable_tests: true
+
+rosidl_parser:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_parser
+  disable_tests: true
+
+rosidl_pycommon:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_pycommon
+  disable_tests: true
+
+rosidl_typesupport_interface:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_typesupport_interface
+  disable_tests: true
+
+rosidl_runtime_c:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_runtime_c
+  noarch: false
+  disable_tests: true
+
+rosidl_runtime_cpp:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_runtime_cpp
+  # Header-only C++ library, no .so produced.
+  disable_tests: true
+
+rosidl_generator_c:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_generator_c
+  # Python-based code generator (emits C, doesn't compile any).
+  disable_tests: true
+
+rosidl_generator_cpp:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_generator_cpp
+  # Python-based code generator (emits C++, doesn't compile any).
+  disable_tests: true
+
+rosidl_generator_type_description:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_generator_type_description
+  disable_tests: true
+
+rosidl_typesupport_introspection_c:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_typesupport_introspection_c
+  noarch: false  # compiles librosidl_typesupport_introspection_c.so
+  disable_tests: true
+
+rosidl_typesupport_introspection_cpp:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_typesupport_introspection_cpp
+  noarch: false  # compiles librosidl_typesupport_introspection_cpp.so
+  disable_tests: true
+cyclonedds:
+  source_url: https://github.com/ros2-gbp/cyclonedds-release/archive/refs/tags/release/lyrical/cyclonedds/{version}-4.tar.gz
+  source_dir: cyclonedds-release-release-lyrical-cyclonedds-{version}-4
+  noarch: false
+  disable_tests: true
+rmw_cyclonedds_cpp:
+  source_url: https://github.com/ros2-gbp/rmw_cyclonedds-release/archive/refs/tags/release/lyrical/rmw_cyclonedds_cpp/{version}-3.tar.gz
+  source_dir: rmw_cyclonedds-release-release-lyrical-rmw_cyclonedds_cpp-{version}-3
+  noarch: false
+  disable_tests: true
+osrf_pycommon:
+  source_url: https://github.com/ros2-gbp/osrf_pycommon-release/archive/refs/tags/release/lyrical/osrf_pycommon/{version}-3.tar.gz
+  source_dir: osrf_pycommon-release-release-lyrical-osrf_pycommon-{version}-3
+  noarch: true
+  disable_tests: true
+launch:
+  source_url: https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/lyrical/launch/{version}-3.tar.gz
+  source_dir: launch-release-release-lyrical-launch-{version}-3
+  noarch: true
+  disable_tests: true
+launch_xml:
+  source_url: https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/lyrical/launch_xml/{version}-3.tar.gz
+  source_dir: launch-release-release-lyrical-launch_xml-{version}-3
+  noarch: true
+  disable_tests: true
+launch_yaml:
+  source_url: https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/lyrical/launch_yaml/{version}-3.tar.gz
+  source_dir: launch-release-release-lyrical-launch_yaml-{version}-3
+  noarch: true
+  disable_tests: true
+launch_testing:
+  source_url: https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/lyrical/launch_testing/{version}-3.tar.gz
+  source_dir: launch-release-release-lyrical-launch_testing-{version}-3
+  noarch: true
+  disable_tests: true
+lifecycle_msgs:
+  source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/lifecycle_msgs/{version}-1.tar.gz
+  source_dir: rcl_interfaces-release-release-lyrical-lifecycle_msgs-{version}-1
+  noarch: false
+  disable_tests: true
+pybind11_vendor:
+  source_url: https://github.com/ros2-gbp/pybind11_vendor-release/archive/refs/tags/release/lyrical/pybind11_vendor/{version}-3.tar.gz
+  source_dir: pybind11_vendor-release-release-lyrical-pybind11_vendor-{version}-3
+  noarch: false
+  disable_tests: true
+rclpy:
+  source_url: https://github.com/ros2-gbp/rclpy-release/archive/refs/tags/release/lyrical/rclpy/{version}-1.tar.gz
+  source_dir: rclpy-release-release-lyrical-rclpy-{version}-1
+  noarch: false
+  disable_tests: true
+rclcpp_lifecycle:
+  source_url: https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp_lifecycle/{version}-1.tar.gz
+  source_dir: rclcpp-release-release-lyrical-rclcpp_lifecycle-{version}-1
+  noarch: false
+  disable_tests: true
+launch_ros:
+  source_url: https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/lyrical/launch_ros/{version}-1.tar.gz
+  source_dir: launch_ros-release-release-lyrical-launch_ros-{version}-1
+  noarch: true
+  disable_tests: true
+ros2cli:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2cli/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2cli-{version}-1
+  noarch: true
+  disable_tests: true
+ros2pkg:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2pkg/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2pkg-{version}-1
+  noarch: true
+  disable_tests: true
+ros2run:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2run/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2run-{version}-1
+  noarch: true
+  disable_tests: true
+ros2node:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2node/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2node-{version}-1
+  noarch: true
+  disable_tests: true
+ros2topic:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2topic/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2topic-{version}-1
+  noarch: true
+  disable_tests: true
+ros2service:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2service/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2service-{version}-1
+  noarch: true
+  disable_tests: true
+ros2interface:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2interface/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2interface-{version}-1
+  noarch: true
+  disable_tests: true
+ros2action:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2action/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2action-{version}-1
+  noarch: true
+  disable_tests: true
+ros2lifecycle:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2lifecycle/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2lifecycle-{version}-1
+  noarch: true
+  disable_tests: true
+ros2param:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2param/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2param-{version}-1
+  noarch: true
+  disable_tests: true
+ros2component:
+  source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2component/{version}-1.tar.gz
+  source_dir: ros2cli-release-release-lyrical-ros2component-{version}-1
+  noarch: true
+  disable_tests: true
+python_qt_binding:
+  source_url: https://github.com/ros2-gbp/python_qt_binding-release/archive/refs/tags/release/lyrical/python_qt_binding/{version}-3.tar.gz
+  source_dir: python_qt_binding-release-release-lyrical-python_qt_binding-{version}-3
+  noarch: false
+  disable_tests: true
+pluginlib:
+  source_url: https://github.com/ros2-gbp/pluginlib-release/archive/refs/tags/release/lyrical/pluginlib/{version}-3.tar.gz
+  source_dir: pluginlib-release-release-lyrical-pluginlib-{version}-3
+  noarch: false
+  disable_tests: true
+tinyxml2_vendor:
+  source_url: https://github.com/ros2-gbp/tinyxml2_vendor-release/archive/refs/tags/release/lyrical/tinyxml2_vendor/{version}-3.tar.gz
+  source_dir: tinyxml2_vendor-release-release-lyrical-tinyxml2_vendor-{version}-3
+  noarch: false
+  disable_tests: true
+tango_icons_vendor:
+  source_url: https://github.com/ros2-gbp/tango_icons_vendor-release/archive/refs/tags/release/lyrical/tango_icons_vendor/{version}-3.tar.gz
+  source_dir: tango_icons_vendor-release-release-lyrical-tango_icons_vendor-{version}-3
+  noarch: false
+  disable_tests: true
+qt_gui:
+  source_url: https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/lyrical/qt_gui/{version}-1.tar.gz
+  source_dir: qt_gui_core-release-release-lyrical-qt_gui-{version}-1
+  noarch: true
+  disable_tests: true
+qt_gui_cpp:
+  source_url: https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/lyrical/qt_gui_cpp/{version}-1.tar.gz
+  source_dir: qt_gui_core-release-release-lyrical-qt_gui_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+qt_gui_py_common:
+  source_url: https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/lyrical/qt_gui_py_common/{version}-1.tar.gz
+  source_dir: qt_gui_core-release-release-lyrical-qt_gui_py_common-{version}-1
+  noarch: true
+  disable_tests: true
+qt_dotgraph:
+  source_url: https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/lyrical/qt_dotgraph/{version}-1.tar.gz
+  source_dir: qt_gui_core-release-release-lyrical-qt_dotgraph-{version}-1
+  noarch: true
+  disable_tests: true
+rqt:
+  source_url: https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt/{version}-1.tar.gz
+  source_dir: rqt-release-release-lyrical-rqt-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_gui:
+  source_url: https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui/{version}-1.tar.gz
+  source_dir: rqt-release-release-lyrical-rqt_gui-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_gui_cpp:
+  source_url: https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui_cpp/{version}-1.tar.gz
+  source_dir: rqt-release-release-lyrical-rqt_gui_cpp-{version}-1
+  noarch: false
+  disable_tests: true
+rqt_gui_py:
+  source_url: https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui_py/{version}-1.tar.gz
+  source_dir: rqt-release-release-lyrical-rqt_gui_py-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_graph:
+  source_url: https://github.com/ros2-gbp/rqt_graph-release/archive/refs/tags/release/lyrical/rqt_graph/{version}-1.tar.gz
+  source_dir: rqt_graph-release-release-lyrical-rqt_graph-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_topic:
+  source_url: https://github.com/ros2-gbp/rqt_topic-release/archive/refs/tags/release/lyrical/rqt_topic/{version}-1.tar.gz
+  source_dir: rqt_topic-release-release-lyrical-rqt_topic-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_console:
+  source_url: https://github.com/ros2-gbp/rqt_console-release/archive/refs/tags/release/lyrical/rqt_console/{version}-3.tar.gz
+  source_dir: rqt_console-release-release-lyrical-rqt_console-{version}-3
+  noarch: true
+  disable_tests: true
+rqt_publisher:
+  source_url: https://github.com/ros2-gbp/rqt_publisher-release/archive/refs/tags/release/lyrical/rqt_publisher/{version}-1.tar.gz
+  source_dir: rqt_publisher-release-release-lyrical-rqt_publisher-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_action:
+  source_url: https://github.com/ros2-gbp/rqt_action-release/archive/refs/tags/release/lyrical/rqt_action/{version}-1.tar.gz
+  source_dir: rqt_action-release-release-lyrical-rqt_action-{version}-1
+  noarch: true
+  disable_tests: true
+rqt_plot:
+  source_url: https://github.com/ros2-gbp/rqt_plot-release/archive/refs/tags/release/lyrical/rqt_plot/{version}-3.tar.gz
+  source_dir: rqt_plot-release-release-lyrical-rqt_plot-{version}-3
+  noarch: true
+  disable_tests: true
+rqt_service_caller:
+  source_url: https://github.com/ros2-gbp/rqt_service_caller-release/archive/refs/tags/release/lyrical/rqt_service_caller/{version}-3.tar.gz
+  source_dir: rqt_service_caller-release-release-lyrical-rqt_service_caller-{version}-3
+  noarch: true
+  disable_tests: true
+rviz_ogre_vendor:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz_ogre_vendor/{version}-1.tar.gz
+  source_dir: rviz-release-release-lyrical-rviz_ogre_vendor-{version}-1
+  noarch: false
+  disable_tests: true
+rviz_rendering:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz_rendering/{version}-1.tar.gz
+  source_dir: rviz-release-release-lyrical-rviz_rendering-{version}-1
+  noarch: false
+  disable_tests: true
+rviz_common:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz_common/{version}-1.tar.gz
+  source_dir: rviz-release-release-lyrical-rviz_common-{version}-1
+  noarch: false
+  disable_tests: true
+rviz_default_plugins:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz_default_plugins/{version}-1.tar.gz
+  source_dir: rviz-release-release-lyrical-rviz_default_plugins-{version}-1
+  noarch: false
+  disable_tests: true
+rviz2:
+  source_url: https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz2/{version}-1.tar.gz
+  source_dir: rviz-release-release-lyrical-rviz2-{version}-1
+  noarch: false
+  disable_tests: true
+example_interfaces:
+  source_url: https://github.com/ros2-gbp/example_interfaces-release/archive/refs/tags/release/lyrical/example_interfaces/{version}-3.tar.gz
+  source_dir: example_interfaces-release-release-lyrical-example_interfaces-{version}-3
+  noarch: false
+  disable_tests: true
+demo_nodes_cpp:
+  source_url: https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/lyrical/demo_nodes_cpp/{version}-3.tar.gz
+  source_dir: demos-release-release-lyrical-demo_nodes_cpp-{version}-3
+  noarch: false
+  disable_tests: true
+demo_nodes_py:
+  source_url: https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/lyrical/demo_nodes_py/{version}-3.tar.gz
+  source_dir: demos-release-release-lyrical-demo_nodes_py-{version}-3
+  noarch: true
+  disable_tests: true
+ros_environment:
+  source_url: https://github.com/ros2-gbp/ros_environment-release/archive/refs/tags/release/lyrical/ros_environment/{version}-1.tar.gz
+  source_dir: ros_environment-release-release-lyrical-ros_environment-{version}-1
+  noarch: true
+  disable_tests: true
+ros_workspace:
+  source_url: https://github.com/ros2-gbp/ros_workspace-release/archive/refs/tags/release/lyrical/ros_workspace/{version}-9.tar.gz
+  source_dir: ros_workspace-release-release-lyrical-ros_workspace-{version}-9
+  noarch: true
+  disable_tests: true
+rosidl_runtime_py:
+  source_url: https://github.com/ros2-gbp/rosidl_runtime_py-release/archive/refs/tags/release/lyrical/rosidl_runtime_py/{version}-3.tar.gz
+  source_dir: rosidl_runtime_py-release-release-lyrical-rosidl_runtime_py-{version}-3
+  noarch: true
+  disable_tests: true
+ament_copyright:
+  source_url: https://github.com/ros2-gbp/ament_lint-release/archive/refs/tags/release/lyrical/ament_copyright/{version}-1.tar.gz
+  source_dir: ament_lint-release-release-lyrical-ament_copyright-{version}-1
+  noarch: true
+  disable_tests: true
+
+# fastrtps was renamed to fastdds in Lyrical (eProsima Fast DDS). gbp counter
+# from rosdistro/lyrical (3.6.1-3). ament_cmake_export_interfaces was dropped;
+# ament_cmake_export_targets (already listed above) is its successor.
+fastdds:
+  disable_tests: true
+  noarch: false
+  source_dir: fastdds-release-release-lyrical-fastdds-{version}-3
+  source_url: https://github.com/ros2-gbp/fastdds-release/archive/refs/tags/release/lyrical/fastdds/{version}-3.tar.gz
