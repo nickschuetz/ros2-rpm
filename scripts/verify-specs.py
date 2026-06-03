@@ -140,6 +140,10 @@ EXEMPTIONS: dict[str, set[str]] = {
     "ros-lyrical-libyaml-vendor.spec":          {"debug_package-nil"},
     "ros-lyrical-spdlog-vendor.spec":           {"debug_package-nil"},
     "ros-lyrical-rclpy.spec":                   {"debug_package-nil"},
+    "ros-lyrical-tinyxml2-vendor.spec":         {"debug_package-nil"},
+    "ros-lyrical-pybind11-vendor.spec":         {"debug_package-nil"},
+    "ros-lyrical-tango-icons-vendor.spec":      {"debug_package-nil"},
+    "ros-lyrical-python-qt-binding.spec":       {"debug_package-nil"},
 }
 
 # Map each FORBIDDEN_PATTERNS regex to a short rule-id for the exemption

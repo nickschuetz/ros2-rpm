@@ -8,6 +8,7 @@
 # COPR default: upstream ROS 2 /opt convention.
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
+%global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-python-qt-binding
 Version:        2.5.4

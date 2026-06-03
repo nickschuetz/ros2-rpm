@@ -8,6 +8,7 @@
 # COPR default: upstream ROS 2 /opt convention.
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
+%global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-tango-icons-vendor
 Version:        0.5.1

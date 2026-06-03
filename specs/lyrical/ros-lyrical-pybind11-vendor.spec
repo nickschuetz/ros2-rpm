@@ -8,6 +8,7 @@
 # COPR default: upstream ROS 2 /opt convention.
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
+%global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-pybind11-vendor
 Version:        3.3.1

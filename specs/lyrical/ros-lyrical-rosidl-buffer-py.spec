@@ -18,7 +18,6 @@ License:        Apache-2.0
 URL:            https://github.com/ros2/rosidl
 Source0:        https://github.com/ros2/rosidl/archive/refs/tags/5.2.0.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
-BuildArch:      noarch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -90,9 +89,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# The Python module installs under the rosidl_buffer namespace (not the package
+# name); the pybind11 extension _rosidl_buffer_py.cpython-*.so lives inside it.
+%{install_prefix}/lib/python%{python3_version}/site-packages/rosidl_buffer/
+%{install_prefix}/lib/python%{python3_version}/site-packages/rosidl_buffer-%{version}-py%{python3_version}.egg-info/
 
 
 %changelog
