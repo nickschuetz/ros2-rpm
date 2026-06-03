@@ -102,6 +102,11 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 %{install_prefix}/include/%{pkg_name}/
 %{install_prefix}/lib/lib%{pkg_name}.so*
+# tf2_ros also ships the static_transform_broadcaster_node component lib and the
+# CLI tools (tf2_echo, tf2_monitor, static_transform_publisher, buffer_server)
+# under lib/tf2_ros/.
+%{install_prefix}/lib/libstatic_transform_broadcaster_node.so*
+%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog
