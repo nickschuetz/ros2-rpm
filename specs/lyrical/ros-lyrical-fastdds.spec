@@ -17,7 +17,7 @@ Summary:        ROS 2 Lyrical fastdds
 License:        Apache-2.0
 URL:            https://www.eprosima.com/
 Source0:        https://github.com/ros2-gbp/fastdds-release/archive/refs/tags/release/lyrical/fastdds/3.6.1-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
-Patch0:         fastdds/0001-cachechange-maybe-unused-offset.patch
+Patch0:         fastdds/0001-disable-werror.patch
 
 
 BuildRequires:  asio-devel
@@ -90,11 +90,16 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
 %license LICENSE
-# (no CHANGELOG.rst in source tree)
-# TODO: review the file list against the build's "Installing:" log lines; the
-# generator emits the conventional ament_cmake set but specific packages may
-# need additions or trimming.
+# Fast DDS ships the library, headers, CMake config (under share/), the
+# discovery-server tools (bin/), and a tools/ data dir.
+%{install_prefix}/bin/fastdds
+%{install_prefix}/bin/fast-discovery-server
+%{install_prefix}/bin/fast-discovery-server-1.0.1
+%{install_prefix}/bin/ros-discovery
+%{install_prefix}/include/%{pkg_name}/
+%{install_prefix}/lib/lib%{pkg_name}.so*
 %{install_prefix}/share/%{pkg_name}/
+%{install_prefix}/tools/%{pkg_name}/
 
 
 %changelog
