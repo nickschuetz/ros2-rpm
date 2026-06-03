@@ -17,12 +17,41 @@ import json
 import re
 import subprocess
 import sys
+import time
 import urllib.request
 from pathlib import Path
 
 import distros
 
 ACTIVE = {"running", "pending", "starting", "importing", "waiting", "forked"}
+
+# A freshly-submitted build does not appear in `copr-cli list-packages
+# --with-latest-build` (or `monitor`) until COPR finishes importing its SRPM and
+# registers the package, which can lag several minutes. Without a memory of what
+# we just submitted, the driver would see such packages as neither succeeded nor
+# active and re-submit them every tick (thrash + duplicate builds). A local
+# ledger records the submit time per package; a package submitted within
+# SUBMIT_COOLDOWN seconds is skipped unless COPR already reports it as failed
+# (in which case we want to resubmit the fix).
+SUBMIT_COOLDOWN = 1800
+
+
+def _ledger_path(build: Path, distro: str) -> Path:
+    return build / f".copr-submitted-{distro}.json"
+
+
+def load_ledger(build: Path, distro: str) -> dict:
+    p = _ledger_path(build, distro)
+    try:
+        return json.loads(p.read_text())
+    except Exception:
+        return {}
+
+
+def save_ledger(build: Path, distro: str, ledger: dict) -> None:
+    p = _ledger_path(build, distro)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(ledger))
 
 
 def spec_meta(spec: Path, distro: str) -> dict:
@@ -164,10 +193,21 @@ def main() -> int:
     active = {n for n, s in states.items() if s in ACTIVE}
     failed = {n for n, s in states.items() if s == "failed"}
 
+    ledger = load_ledger(build, args.distro)
+    now = time.time()
+    # A package we submitted recently but that COPR has not registered yet (so it
+    # is absent from `states`) is treated as in-flight, not re-submitted. Once it
+    # surfaces as failed, drop it from the ledger so a fix can be resubmitted.
+    cooling = {n for n, t in ledger.items()
+               if now - t < SUBMIT_COOLDOWN and n not in succeeded and n not in failed}
+    for n in list(ledger):
+        if n in succeeded or n in failed:
+            ledger.pop(n, None)
+
     ready = []
     for m in specs:
         n = m["rpm_name"]
-        if not n or n in succeeded or n in active:
+        if not n or n in succeeded or n in active or n in cooling:
             continue
         # only build deps that are in our tree; all must be succeeded
         intree = {d for d in m["deps"] if d in by_name}
@@ -179,20 +219,28 @@ def main() -> int:
         res = build_and_submit(m, project, build, args.dry_run)
         if res:
             submitted.append(m["rpm_name"])
+            if not args.dry_run:
+                ledger[m["rpm_name"]] = time.time()
+
+    if not args.dry_run:
+        save_ledger(build, args.distro, ledger)
 
     total = len(specs)
     done = len(succeeded & set(by_name))
-    print(f"[{args.distro}] succeeded {done}/{total} | building {len(active & set(by_name))} | "
+    # In-flight = COPR-reported active plus packages just submitted this run and
+    # those still cooling down (submitted recently, not yet registered by COPR).
+    inflight = (active & set(by_name)) | cooling | set(submitted)
+    print(f"[{args.distro}] succeeded {done}/{total} | building {len(inflight)} | "
           f"failed {len(failed & set(by_name))} | {'would-submit' if args.dry_run else 'submitted'} {len(submitted)} | "
           f"remaining {total - done}")
     if failed & set(by_name):
         print("FAILED:", ", ".join(sorted(failed & set(by_name))))
     if submitted:
         print(("WOULD SUBMIT: " if args.dry_run else "SUBMITTED: ") + ", ".join(submitted))
-    # Exit 0 normally; exit 3 signals "all done"; exit 4 signals "stuck" (failures block, nothing ready/active)
+    # Exit 0 normally; exit 3 signals "all done"; exit 4 signals "stuck" (failures block, nothing in flight)
     if done == total:
         return 3
-    if not submitted and not (active & set(by_name)) and (failed & set(by_name)):
+    if not inflight and (failed & set(by_name)):
         return 4
     return 0
 
