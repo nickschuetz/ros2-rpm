@@ -895,3 +895,25 @@ rosidl_buffer:
   build_subdir: rosidl_buffer
   noarch: false
   disable_tests: true
+
+# rosidl buffer subsystem, split into more packages in Lyrical; needed by the
+# fastrtps typesupport packages.
+rosidl_buffer_backend:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_buffer_backend
+  noarch: false
+  disable_tests: true
+
+rosidl_buffer_backend_registry:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_buffer_backend_registry
+  noarch: false
+  disable_tests: true
+
+rosidl_buffer_py:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_buffer_py
+  disable_tests: true
