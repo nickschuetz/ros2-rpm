@@ -905,15 +905,22 @@ rosidl_buffer_backend:
   noarch: false
   disable_tests: true
 
+# Phase 2 (deferred): not required by any minimal-set package. The registry
+# pulls in pluginlib (plugin backend loading) and buffer_py ships an arch
+# Python extension under the rosidl_buffer namespace. The core only needs
+# rosidl_buffer and rosidl_buffer_backend (for rosidl_typesupport_fastrtps_cpp
+# and rosidl_runtime_c). Kept out of the minimal set; no spec generated.
 rosidl_buffer_backend_registry:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_buffer_backend_registry
   noarch: false
   disable_tests: true
+  phase2: true
 
 rosidl_buffer_py:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
   source_dir: rosidl-{version}
   build_subdir: rosidl_buffer_py
   disable_tests: true
+  phase2: true
