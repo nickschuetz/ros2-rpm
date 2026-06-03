@@ -99,7 +99,11 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# demo_nodes_cpp ships one component library per demo node (lib<node>_library.so)
+# plus the standalone node executables under lib/demo_nodes_cpp/; there is no
+# plain libdemo_nodes_cpp.so. Matches the jazzy spec.
+%{install_prefix}/lib/lib*_library.so*
+%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog
