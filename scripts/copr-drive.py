@@ -86,6 +86,16 @@ def ensure_source(meta: dict, sources: Path) -> bool:
     same-version tarball from another distro can collide. Validate the cached
     tarball's top-dir against the spec's %autosetup -n and refetch on mismatch.
     """
+    # Metapackages (ros_core/ros_base) carry a local Source0 with no URL scheme:
+    # a stub tarball rpmbuild requires to exist but %prep ignores. Stage an empty
+    # one at the Source0 basename so the driver can build them like any other.
+    if meta["src_url"] and "://" not in meta["src_url"]:
+        import io, tarfile
+        stub = sources / Path(meta["src_url"]).name
+        if not stub.is_file():
+            with tarfile.open(stub, "w:gz"):
+                pass
+        return True
     if not (meta["src_url"] and meta["pkg_name"] and meta["version"]):
         return False
     target = sources / f"{meta['pkg_name']}-{meta['version']}.tar.gz"
