@@ -31,6 +31,7 @@ BuildRequires:  ros-lyrical-rcutils
 BuildRequires:  ros-lyrical-rmw
 BuildRequires:  ros-lyrical-rmw-dds-common
 BuildRequires:  ros-lyrical-rmw-fastrtps-shared-cpp
+BuildRequires:  ros-lyrical-rosidl-buffer-backend-registry
 BuildRequires:  ros-lyrical-rosidl-dynamic-typesupport
 BuildRequires:  ros-lyrical-rosidl-dynamic-typesupport-fastrtps
 BuildRequires:  ros-lyrical-rosidl-runtime-c
@@ -46,6 +47,7 @@ Requires:       ros-lyrical-rcutils
 Requires:       ros-lyrical-rmw
 Requires:       ros-lyrical-rmw-dds-common
 Requires:       ros-lyrical-rmw-fastrtps-shared-cpp
+Requires:       ros-lyrical-rosidl-buffer-backend-registry
 Requires:       ros-lyrical-rosidl-dynamic-typesupport
 Requires:       ros-lyrical-rosidl-dynamic-typesupport-fastrtps
 Requires:       ros-lyrical-rosidl-runtime-c
