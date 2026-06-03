@@ -75,10 +75,19 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %files
 %license LICENSE
 %doc CHANGELOG.rst
-# TODO: review the file list against the build's "Installing:" log lines; the
-# generator emits the conventional ament_cmake set but specific packages may
-# need additions or trimming.
 %{install_prefix}/share/%{pkg_name}/
+%{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# ros_workspace generates the canonical workspace setup files at the install
+# prefix root (this is what makes `source /opt/ros/lyrical/setup.bash` work).
+%{install_prefix}/setup.bash
+%{install_prefix}/setup.fish
+%{install_prefix}/setup.sh
+%{install_prefix}/setup.zsh
+%{install_prefix}/local_setup.bash
+%{install_prefix}/local_setup.fish
+%{install_prefix}/local_setup.sh
+%{install_prefix}/local_setup.zsh
+%{install_prefix}/_local_setup_util.py
 
 
 %changelog
