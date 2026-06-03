@@ -95,13 +95,12 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# Python generator package: Python module + egg-info + the lib/<pkg>/ codegen
+# templates. No top-level include/ or typesupport .so of its own (those are
+# produced per message package that uses this generator).
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
-# Message package: multiple typesupport .so variants + Python bindings.
-%{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}__rosidl_*.so
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
+%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog

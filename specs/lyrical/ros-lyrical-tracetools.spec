@@ -87,7 +87,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 %{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# tracetools ships several libraries (libtracetools, _provider, _status) plus a
+# lib/tracetools/ data dir.
+%{install_prefix}/lib/lib%{pkg_name}*.so*
+%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog
