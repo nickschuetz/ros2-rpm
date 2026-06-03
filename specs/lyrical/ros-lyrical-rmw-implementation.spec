@@ -36,6 +36,11 @@ Requires:       ros-lyrical-ament-index-cpp
 Requires:       ros-lyrical-rcpputils
 Requires:       ros-lyrical-rcutils
 Requires:       ros-lyrical-rmw-implementation-cmake
+# Ship Fast DDS as the default RMW; pulling it in here makes the default RMW
+# available wherever rmw_implementation is installed, including the buildroots
+# of consumers like rcl whose configure calls get_default_rmw_implementation.
+# Cyclone DDS and other rmw_implementation_packages stay deferred.
+Requires:       ros-lyrical-rmw-fastrtps-cpp
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
