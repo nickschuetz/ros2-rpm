@@ -41,9 +41,15 @@ def spec_meta(spec: Path, distro: str) -> dict:
     src_url = src0.split("#")[0] if src0 else None
     if src_url and version:
         src_url = src_url.replace("%{version}", version)
+    # The %autosetup -n dir is the tarball top-dir the build cd's into; cache
+    # validation compares against it so a stale same-named tarball (e.g. a Jazzy
+    # tarball cached under the same <pkg>-<version> name) is detected + refetched.
+    topdir = find(r"^%autosetup[^\n]*-n\s+(\S+)")
+    if topdir and version:
+        topdir = topdir.replace("%{version}", version).replace("%{pkg_name}", pkg_name or "")
     deps = set(re.findall(rf"^(?:Requires|BuildRequires):\s+(ros-{distro}-\S+)", text, re.M))
     return {"spec": spec, "rpm_name": name, "pkg_name": pkg_name,
-            "version": version, "src_url": src_url, "deps": deps}
+            "version": version, "src_url": src_url, "topdir": topdir, "deps": deps}
 
 
 def copr_states(project: str) -> dict[str, str]:
@@ -56,12 +62,30 @@ def copr_states(project: str) -> dict[str, str]:
     return out
 
 
+def _topdir_matches(target: Path, expected: str | None) -> bool:
+    """True if the tarball's top-level dir matches the expected %autosetup -n dir."""
+    if not expected:
+        return True  # nothing to check against; trust the cache
+    import tarfile
+    try:
+        with tarfile.open(target) as t:
+            first = next((m.name for m in t), "")
+        return first.split("/")[0] == expected
+    except Exception:
+        return False
+
+
 def ensure_source(meta: dict, sources: Path) -> bool:
-    """Fetch Source0 into build/SOURCES/<pkg>-<ver>.tar.gz if missing."""
+    """Fetch Source0 into build/SOURCES/<pkg>-<ver>.tar.gz, refetching if stale.
+
+    The cache key (<pkg>-<version>.tar.gz) omits the distro/release counter, so a
+    same-version tarball from another distro can collide. Validate the cached
+    tarball's top-dir against the spec's %autosetup -n and refetch on mismatch.
+    """
     if not (meta["src_url"] and meta["pkg_name"] and meta["version"]):
         return False
     target = sources / f"{meta['pkg_name']}-{meta['version']}.tar.gz"
-    if target.is_file():
+    if target.is_file() and _topdir_matches(target, meta.get("topdir")):
         return True
     try:
         data = urllib.request.urlopen(meta["src_url"], timeout=90).read()
