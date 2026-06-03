@@ -1,22 +1,24 @@
-Description: Do not treat warnings as errors in the vendored Fast DDS library
- Fedora injects -Werror, turning benign upstream warnings (unused-but-set
- variables in CacheChange.hpp, the bundled sqlite3 amalgamation, etc.) into hard
- errors on Fedora's GCC. Apply -Wno-error as a target_compile_options on the
- fastdds library (after add_library) so it overrides the inherited -Werror for
- that target. Upstream keeps -Werror only in its own CI.
+Description: Do not treat compiler warnings as errors
+ Fast DDS sets CMAKE_COMPILE_WARNING_AS_ERROR ON in its top-level CMakeLists,
+ which makes CMake append -Werror as the final compile flag on every target.
+ That last-position -Werror overrides any -Wno-error supplied via the command
+ line, CMAKE_CXX_FLAGS, or add_compile_options/target_compile_options, and turns
+ benign upstream warnings (an unused-but-set variable in CacheChange.hpp, the
+ bundled sqlite3 amalgamation, etc.) into hard build failures on Fedora's GCC.
+ Flip the flag OFF so the COPR build is not blocked by upstream warnings.
+ Upstream keeps -Werror for its own CI; this is a downstream packaging
+ relaxation only.
 Origin: vendor-specific
 Forwarded: not-needed, downstream packaging relaxation of warnings-as-errors
 Last-Update: 2026-06-03
---- a/src/cpp/CMakeLists.txt	2026-06-02 21:25:48.552995167 -0500
-+++ b/src/cpp/CMakeLists.txt	2026-06-02 21:25:48.563515504 -0500
-@@ -118,6 +118,10 @@
+--- a/CMakeLists.txt	2026-06-02 21:42:03.590231817 -0500
++++ b/CMakeLists.txt	2026-06-02 21:42:03.601200409 -0500
+@@ -178,7 +178,7 @@
+ string(FIND ${CMAKE_CXX_FLAGS} "-fsanitize=thread" SANITIZER_THREAD)
+ if (${SANITIZER_THREAD} EQUAL -1)
+     message(STATUS "Setting warnings as errors...")
+-    set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
++    set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
+ endif()
  
- #Create library
- add_library(${PROJECT_NAME} ${${PROJECT_NAME}_source_files})
-+# Fedora injects -Werror; relax it for this vendored library target so benign
-+# upstream warnings do not fail the build (applied as a target option so it
-+# overrides the inherited -Werror).
-+target_compile_options(${PROJECT_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wno-error>)
- set_target_properties(${PROJECT_NAME} PROPERTIES
-     VERSION ${PROJECT_VERSION}
-     SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+ ###############################################################################
