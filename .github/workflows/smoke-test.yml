@@ -1,8 +1,8 @@
 name: smoke-test
 
-# Validates the published hellaenergy/ros2 contents on a fresh Fedora 44
-# container. PRs that break the smoke test against ros-jazzy-ros-base are
-# blocked from merging.
+# Validates the published COPR contents on a fresh Fedora 44 container:
+# Lyrical (flagship) from hellaenergy/ros2 and Jazzy (maintenance) from
+# hellaenergy/ros2-jazzy. PRs that break either smoke test are blocked.
 
 on:
   push:
@@ -23,12 +23,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  smoke-test-fedora-44:
-    name: Smoke test, Fedora 44 (x86_64)
+  smoke-test:
+    name: Smoke test ${{ matrix.distro }}, Fedora 44 (x86_64)
     runs-on: ubuntu-latest
     # Pull from registry.fedoraproject.org (reliable), not the bare docker.io
     # name, which intermittently times out on pull.
     container: registry.fedoraproject.org/fedora:44
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Flagship: Lyrical ships the minimal headless set, so the ros2cli /
+          # demo_nodes / gazebo_msgs sections SKIP (expected).
+          - distro: lyrical
+            copr: hellaenergy/ros2
+            packages: ros-lyrical-ros-base
+          # Maintenance: Jazzy carries the full dev sandbox.
+          - distro: jazzy
+            copr: hellaenergy/ros2-jazzy
+            packages: >-
+              ros-jazzy-ros-base
+              ros-jazzy-ros2cli
+              ros-jazzy-ros2node
+              ros-jazzy-ros2topic
+              ros-jazzy-demo-nodes-cpp
+              ros-jazzy-gazebo-msgs
 
     steps:
       - name: Checkout
@@ -42,19 +61,13 @@ jobs:
           dnf -y install dnf-plugins-core which procps-ng diffutils \
                          rpm-build cmake gcc gcc-c++ python3-devel \
                          findutils
-          dnf copr enable -y hellaenergy/ros2
-          dnf -y install \
-            ros-jazzy-ros-base \
-            ros-jazzy-ros2cli \
-            ros-jazzy-ros2node \
-            ros-jazzy-ros2topic \
-            ros-jazzy-demo-nodes-cpp \
-            ros-jazzy-gazebo-msgs
+          dnf copr enable -y ${{ matrix.copr }}
+          dnf -y install ${{ matrix.packages }}
 
       - name: Run smoke test
-        run: bash scripts/smoke-test.sh -v
+        run: bash scripts/smoke-test.sh ${{ matrix.distro }} -v
 
-  # We only run x86_64 against the COPR in CI; aarch64 + Stream 10 are
+  # We only run x86_64 against the COPRs in CI; aarch64 + Stream 10 are
   # exercised by the COPR build matrix itself. Adding them here would
   # quintuple CI time for marginal additional coverage given the build
   # matrix already gates publishing.

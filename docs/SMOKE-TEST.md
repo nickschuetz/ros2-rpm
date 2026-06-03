@@ -1,6 +1,8 @@
 # Smoke test
 
-After installing from the [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2) COPR, run [`scripts/smoke-test.sh`](../scripts/smoke-test.sh) to verify your install is functional.
+After installing from the [`hellaenergy/ros2`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2) (Lyrical, flagship) or [`hellaenergy/ros2-jazzy`](https://copr.fedorainfracloud.org/coprs/hellaenergy/ros2-jazzy) (Jazzy, maintenance) COPR, run [`scripts/smoke-test.sh`](../scripts/smoke-test.sh) to verify your install is functional.
+
+The script takes the target distro as its first argument: `lyrical` (the default) or `jazzy`. The examples below use `jazzy`; for Lyrical, pass `lyrical` and read `/opt/ros/lyrical` wherever a path shows `/opt/ros/jazzy`. Lyrical currently ships the minimal headless set, so its `ros2cli` / `demo_nodes` / `gazebo_msgs` sections SKIP.
 
 It is a **user** smoke test, not a developer regression suite, it doesn't run upstream test suites, doesn't measure performance, and doesn't try to reach a public DDS network. It checks that:
 
@@ -24,9 +26,16 @@ sudo dnf install -y ros-jazzy-ros-base
 sudo dnf install -y ros-jazzy-ros2cli ros-jazzy-ros2node ros-jazzy-ros2topic \
                     ros-jazzy-demo-nodes-cpp
 
-# 3. Run the smoke test.
-curl -fsSL https://raw.githubusercontent.com/nickschuetz/ros2-rpm/main/scripts/smoke-test.sh \
-    | bash
+# 3. Run the smoke test (pass the distro; default is lyrical).
+bash <(curl -fsSL https://raw.githubusercontent.com/nickschuetz/ros2-rpm/main/scripts/smoke-test.sh) jazzy
+```
+
+For the flagship Lyrical COPR instead:
+
+```bash
+sudo dnf copr enable -y hellaenergy/ros2
+sudo dnf install -y ros-lyrical-ros-base
+bash <(curl -fsSL https://raw.githubusercontent.com/nickschuetz/ros2-rpm/main/scripts/smoke-test.sh) lyrical
 ```
 
 Expected output (with all optional packages installed): **20 passed, 0 failed**.
