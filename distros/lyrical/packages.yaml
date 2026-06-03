@@ -887,3 +887,11 @@ ament_cmake_ros_core:
   disable_tests: true
   source_dir: ament_cmake_ros-release-release-lyrical-ament_cmake_ros_core-{version}-1
   source_url: https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/release/lyrical/ament_cmake_ros_core/{version}-1.tar.gz
+
+# rosidl repo added rosidl_buffer in Lyrical; rosidl_runtime_c build-depends on it.
+rosidl_buffer:
+  source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
+  source_dir: rosidl-{version}
+  build_subdir: rosidl_buffer
+  noarch: false
+  disable_tests: true
