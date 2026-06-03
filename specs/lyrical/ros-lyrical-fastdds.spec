@@ -73,7 +73,8 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
     -DLIB_INSTALL_DIR=%{install_prefix}/lib \
     -DSYSCONF_INSTALL_DIR=%{install_prefix}/etc \
     -DSHARE_INSTALL_PREFIX=%{install_prefix}/share \
-    -DSETUPTOOLS_DEB_LAYOUT=OFF -DBUILD_TESTING=OFF
+    -DSETUPTOOLS_DEB_LAYOUT=OFF -DBUILD_TESTING=OFF \
+    -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF
 %cmake_build
 
 
