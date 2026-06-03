@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         pluginlib
+%global pkg_name         diagnostic_msgs
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,14 +9,14 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-pluginlib
-Version:        5.8.4
+Name:           ros-%{ros_distro}-diagnostic-msgs
+Version:        5.9.2
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical pluginlib
+Summary:        ROS 2 Lyrical diagnostic_msgs
 
-License:        BSD-3-Clause
-URL:            https://github.com/ros/pluginlib/issues
-Source0:        https://github.com/ros2-gbp/pluginlib-release/archive/refs/tags/release/lyrical/pluginlib/5.8.4-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+License:        Apache-2.0
+URL:            https://github.com/ros2-gbp/common_interfaces-release
+Source0:        https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/diagnostic_msgs/5.9.2-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -24,17 +24,15 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake
-BuildRequires:  ros-lyrical-ament-index-cpp
-BuildRequires:  ros-lyrical-class-loader
-BuildRequires:  ros-lyrical-rcpputils
-BuildRequires:  ros-lyrical-rcutils
-BuildRequires:  tinyxml2-devel
+BuildRequires:  ros-lyrical-builtin-interfaces
+BuildRequires:  ros-lyrical-geometry-msgs
+BuildRequires:  ros-lyrical-rosidl-default-generators
+BuildRequires:  ros-lyrical-std-msgs
 
-Requires:       ros-lyrical-ament-index-cpp
-Requires:       ros-lyrical-class-loader
-Requires:       ros-lyrical-rcpputils
-Requires:       ros-lyrical-rcutils
-Requires:       tinyxml2-devel
+Requires:       ros-lyrical-builtin-interfaces
+Requires:       ros-lyrical-geometry-msgs
+Requires:       ros-lyrical-rosidl-default-runtime
+Requires:       ros-lyrical-std-msgs
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -44,13 +42,11 @@ Requires:       tinyxml2-devel
 %endif
 
 %description
-The pluginlib package provides tools for writing and dynamically loading
-plugins using the ROS build infrastructure. To work, these tools require
-plugin providers to register their plugins in the package.xml of their
-package.
+A package containing some diagnostics related message and service
+definitions.
 
 %prep
-%autosetup -p1 -n pluginlib-release-release-lyrical-pluginlib-5.8.4-3
+%autosetup -p1 -n common_interfaces-release-release-lyrical-diagnostic_msgs-5.9.2-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -83,7 +79,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
-# (no LICENSE file in source tree; see package.xml <license>)
+%license LICENSE
 %doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
@@ -93,12 +89,13 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# Message package: multiple typesupport .so variants + Python bindings.
 %{install_prefix}/include/%{pkg_name}/
-# pluginlib is a header-only template library (no lib<pkg>.so); the only
-# compiled artifact is the list_plugins tool under lib/<pkg>/.
-%{install_prefix}/lib/%{pkg_name}/
+%{install_prefix}/lib/lib%{pkg_name}__rosidl_*.so
+%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
+%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
 
 
 %changelog
-* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 5.8.4-1
+* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 5.9.2-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

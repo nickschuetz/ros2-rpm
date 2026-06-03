@@ -26,6 +26,7 @@ BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-action-msgs
 BuildRequires:  ros-lyrical-ament-cmake
 BuildRequires:  ros-lyrical-builtin-interfaces
+BuildRequires:  ros-lyrical-diagnostic-msgs
 BuildRequires:  ros-lyrical-geometry-msgs
 BuildRequires:  ros-lyrical-rosidl-default-generators
 BuildRequires:  ros-lyrical-sensor-msgs
@@ -34,6 +35,7 @@ BuildRequires:  ros-lyrical-trajectory-msgs
 
 Requires:       ros-lyrical-action-msgs
 Requires:       ros-lyrical-builtin-interfaces
+Requires:       ros-lyrical-diagnostic-msgs
 Requires:       ros-lyrical-geometry-msgs
 Requires:       ros-lyrical-rosidl-default-runtime
 Requires:       ros-lyrical-sensor-msgs

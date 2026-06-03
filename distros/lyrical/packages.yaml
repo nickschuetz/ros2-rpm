@@ -302,6 +302,12 @@ trajectory_msgs:
   disable_tests: true
 
 # Tier 3.
+diagnostic_msgs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/diagnostic_msgs/{version}-3.tar.gz
+  source_dir: common_interfaces-release-release-lyrical-diagnostic_msgs-{version}-3
+  noarch: false
+  disable_tests: true
+
 sensor_msgs:
   source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/sensor_msgs/{version}-3.tar.gz
   source_dir: common_interfaces-release-release-lyrical-sensor_msgs-{version}-3
