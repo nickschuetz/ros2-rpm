@@ -94,7 +94,6 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %{install_prefix}/lib/lib%{pkg_name}__rosidl_*.so
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
-%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
