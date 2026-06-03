@@ -75,10 +75,24 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %files
 %license LICENSE
 %doc CHANGELOG.rst
-# TODO: review the file list against the build's "Installing:" log lines; the
-# generator emits the conventional ament_cmake set but specific packages may
-# need additions or trimming.
-%{install_prefix}/share/%{pkg_name}/
+# Eclipse Cyclone DDS is a plain-CMake upstream (not an ament package): no
+# share/<pkg> or ament_index sentinel. Headers, the core + idl + idlc libs, the
+# DDS Security plugins, CMake/pkg-config, and the idlc/ddsperf tools.
+%{install_prefix}/include/dds/
+%{install_prefix}/include/ddsc/
+%{install_prefix}/include/idl/
+%{install_prefix}/include/idlc/
+%{install_prefix}/include/libidlc/
+%{install_prefix}/lib/libddsc.so*
+%{install_prefix}/lib/libcycloneddsidl.so*
+%{install_prefix}/lib/libcycloneddsidlc.so*
+%{install_prefix}/lib/libdds_security_ac.so*
+%{install_prefix}/lib/libdds_security_auth.so*
+%{install_prefix}/lib/libdds_security_crypto.so*
+%{install_prefix}/lib/cmake/CycloneDDS/
+%{install_prefix}/lib/pkgconfig/CycloneDDS.pc
+%{install_prefix}/bin/idlc
+%{install_prefix}/bin/ddsperf
 
 
 %changelog

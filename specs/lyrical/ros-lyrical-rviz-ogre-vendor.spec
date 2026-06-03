@@ -94,6 +94,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# rviz_ogre_vendor builds a bundled Ogre and installs it under a package-owned
+# opt/ subtree of the prefix; claim the whole tree (libs, plugins, headers, data).
+%{install_prefix}/opt/rviz_ogre_vendor/
 
 
 %changelog
