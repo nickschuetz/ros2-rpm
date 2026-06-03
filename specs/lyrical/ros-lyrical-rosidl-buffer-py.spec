@@ -90,9 +90,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# CMake-config package (buffer-py codegen macros): ships only share/, no Python
+# module, egg-info, or compiled library of its own.
 
 
 %changelog

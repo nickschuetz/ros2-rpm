@@ -18,6 +18,8 @@ License:        Apache-2.0
 URL:            https://github.com/ros2/rosidl
 Source0:        https://github.com/ros2/rosidl/archive/refs/tags/5.2.0.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
+# Headers + CMake config only (no compiled artifacts).
+BuildArch:      noarch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -86,8 +88,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# Headers + CMake config only, no compiled library.
 %{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
