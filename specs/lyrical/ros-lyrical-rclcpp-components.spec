@@ -95,7 +95,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 %{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# The library is libcomponent_manager.so (not librclcpp_components.so); the
+# component_container executables live under lib/rclcpp_components/.
+%{install_prefix}/lib/libcomponent_manager.so*
+%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog
