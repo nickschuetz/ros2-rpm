@@ -1,22 +1,23 @@
-Description: Do not treat warnings as errors in the vendored Fast DDS build
- Fedora's build injects -Werror via CMAKE_CXX_FLAGS_INIT, which turns benign
- upstream warnings (unused-but-set variables in CacheChange.hpp, the bundled
- sqlite3 amalgamation, etc.) into hard errors on Fedora's GCC. Add
- add_compile_options(-Wno-error) (a directory option applied after
- CMAKE_CXX_FLAGS) so the vendored build is not gated on upstream's warning
- cleanliness. Upstream keeps -Werror only in its own CI.
+Description: Do not treat warnings as errors in the vendored Fast DDS library build
+ Fedora injects -Werror via CMAKE_CXX_FLAGS_INIT, turning benign upstream
+ warnings (unused-but-set variables in CacheChange.hpp, the bundled sqlite3
+ amalgamation, etc.) into hard errors on Fedora's GCC. Add
+ add_compile_options(-Wno-error) at the top of the library's own CMakeLists so
+ it is applied after the inherited flags and overrides -Werror for the fastdds
+ target. Upstream keeps -Werror only in its own CI.
 Origin: vendor-specific
 Forwarded: not-needed, downstream packaging relaxation of warnings-as-errors
 Last-Update: 2026-06-03
---- a/CMakeLists.txt	2026-06-02 20:38:00.542123484 -0500
-+++ b/CMakeLists.txt	2026-06-02 20:38:00.552157760 -0500
-@@ -73,6 +73,9 @@
-     # Add some generic warnings common to all compilers
-     set(CMAKE_CXX_FLAGS
-         "${CMAKE_CXX_FLAGS} -Wall -Wpedantic -Wextra -Wno-unknown-pragmas -Wno-error=deprecated-declarations -Wno-switch-bool")
-+    # Fedora injects -Werror via CMAKE_CXX_FLAGS_INIT; relax it (downstream
-+    # vendored build, not upstream CI) so unused-but-set warnings do not fail.
-+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-error>)
-     # Add compiler specific options
-     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-psabi")
+--- a/src/cpp/CMakeLists.txt	2026-06-02 20:52:25.050197655 -0500
++++ b/src/cpp/CMakeLists.txt	2026-06-02 20:52:25.061007316 -0500
+@@ -12,6 +12,10 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
++# Fedora injects -Werror (via CMAKE_CXX_FLAGS_INIT); relax it for this
++# vendored library target so benign upstream warnings do not fail the build.
++add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-error>)
++
+ include(CheckCXXSourceCompiles)
+ 
+ # Set source files
