@@ -48,8 +48,12 @@ def spec_meta(spec: Path, distro: str) -> dict:
     if topdir and version:
         topdir = topdir.replace("%{version}", version).replace("%{pkg_name}", pkg_name or "")
     deps = set(re.findall(rf"^(?:Requires|BuildRequires):\s+(ros-{distro}-\S+)", text, re.M))
+    # Patch files (relative paths under specs/<distro>/patches/) get staged into
+    # _sourcedir so rpmbuild -bs can include them in the SRPM.
+    patches = re.findall(r"^Patch\d+:\s+(\S+)", text, re.M)
     return {"spec": spec, "rpm_name": name, "pkg_name": pkg_name,
-            "version": version, "src_url": src_url, "topdir": topdir, "deps": deps}
+            "version": version, "src_url": src_url, "topdir": topdir,
+            "patches": patches, "deps": deps}
 
 
 def copr_states(project: str) -> dict[str, str]:
@@ -102,6 +106,19 @@ def build_and_submit(meta: dict, project: str, build: Path, dry: bool) -> str | 
     srpms.mkdir(parents=True, exist_ok=True)
     if not ensure_source(meta, sources):
         return None
+    # Stage Patch files into _sourcedir (preserving their relative path) so
+    # rpmbuild -bs includes them in the SRPM.
+    import shutil
+    patches_root = meta["spec"].parent / "patches"
+    for rel in meta.get("patches", []):
+        src = patches_root / rel
+        dst = sources / rel
+        if src.is_file():
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dst)
+        else:
+            sys.stderr.write(f"  patch missing for {meta['rpm_name']}: {src}\n")
+            return None
     if dry:
         return "would-submit"
     r = subprocess.run(

@@ -1,0 +1,18 @@
+Description: Silence -Werror=unused-but-set-variable on offset in CacheChange.hpp
+ Fedora's GCC plus Fast DDS's own -Werror flags `offset` (advanced in the loop
+ increment but never read) as a build error. Mark it [[maybe_unused]] so the
+ vendored Fast DDS build passes under Fedora hardening flags.
+Origin: vendor-specific
+Forwarded: no, to be filed at https://github.com/eProsima/Fast-DDS
+Last-Update: 2026-06-03
+--- a/include/fastdds/rtps/common/CacheChange.hpp
++++ b/include/fastdds/rtps/common/CacheChange.hpp
+@@ -267,7 +267,7 @@
+             {
+                 // Keep index of next fragment on the payload portion at the beginning of each fragment. Last
+                 // fragment will have fragment_count_ as 'next fragment index'
+-                size_t offset = 0;
++                [[maybe_unused]] size_t offset = 0;
+                 for (uint32_t i = 1; i <= fragment_count_; i++, offset += fragment_size_)
+                 {
+                     set_next_missing_fragment(i - 1, i);  // index to next fragment in missing list

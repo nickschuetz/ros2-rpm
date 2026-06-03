@@ -17,6 +17,7 @@ Summary:        ROS 2 Lyrical fastdds
 License:        Apache-2.0
 URL:            https://www.eprosima.com/
 Source0:        https://github.com/ros2-gbp/fastdds-release/archive/refs/tags/release/lyrical/fastdds/3.6.1-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Patch0:         fastdds/0001-cachechange-maybe-unused-offset.patch
 
 
 BuildRequires:  asio-devel
