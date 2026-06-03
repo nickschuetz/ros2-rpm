@@ -121,7 +121,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# rclpy is a Python package with a pybind11 C extension; the .so lives inside
+# site-packages/rclpy/ as _rclpy_pybind11.cpython-*.so, not at lib/lib*.so.
 
 
 %changelog
