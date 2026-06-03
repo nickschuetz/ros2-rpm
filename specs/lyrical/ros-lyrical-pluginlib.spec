@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         rmw_fastrtps_shared_cpp
+%global pkg_name         pluginlib
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,46 +9,32 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-rmw-fastrtps-shared-cpp
-Version:        9.4.8
+Name:           ros-%{ros_distro}-pluginlib
+Version:        5.8.4
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical rmw_fastrtps_shared_cpp
+Summary:        ROS 2 Lyrical pluginlib
 
-License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/rmw_fastrtps-release
-Source0:        https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/lyrical/rmw_fastrtps_shared_cpp/9.4.8-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+License:        BSD-3-Clause
+URL:            https://github.com/ros/pluginlib/issues
+Source0:        https://github.com/ros2-gbp/pluginlib-release/archive/refs/tags/release/lyrical/pluginlib/5.8.4-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  ros-lyrical-ament-cmake-ros-core
-BuildRequires:  ros-lyrical-fastcdr
-BuildRequires:  ros-lyrical-fastdds
+BuildRequires:  ros-lyrical-ament-cmake
+BuildRequires:  ros-lyrical-ament-index-cpp
+BuildRequires:  ros-lyrical-class-loader
 BuildRequires:  ros-lyrical-rcpputils
 BuildRequires:  ros-lyrical-rcutils
-BuildRequires:  ros-lyrical-rmw
-BuildRequires:  ros-lyrical-rmw-dds-common
-BuildRequires:  ros-lyrical-rmw-security-common
-BuildRequires:  ros-lyrical-rosidl-buffer-backend-registry
-BuildRequires:  ros-lyrical-rosidl-dynamic-typesupport
-BuildRequires:  ros-lyrical-rosidl-runtime-c
-BuildRequires:  ros-lyrical-rosidl-typesupport-introspection-c
-BuildRequires:  ros-lyrical-rosidl-typesupport-introspection-cpp
-BuildRequires:  ros-lyrical-tracetools
+BuildRequires:  tinyxml2-devel
 
-Requires:       ros-lyrical-fastcdr
-Requires:       ros-lyrical-fastdds
+Requires:       ros-lyrical-ament-index-cpp
+Requires:       ros-lyrical-class-loader
 Requires:       ros-lyrical-rcpputils
 Requires:       ros-lyrical-rcutils
-Requires:       ros-lyrical-rmw
-Requires:       ros-lyrical-rmw-dds-common
-Requires:       ros-lyrical-rmw-security-common
-Requires:       ros-lyrical-rosidl-dynamic-typesupport
-Requires:       ros-lyrical-rosidl-typesupport-introspection-c
-Requires:       ros-lyrical-rosidl-typesupport-introspection-cpp
-Requires:       ros-lyrical-tracetools
+Requires:       tinyxml2-devel
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -58,10 +44,13 @@ Requires:       ros-lyrical-tracetools
 %endif
 
 %description
-Code shared on static and dynamic type support of rmw_fastrtps_cpp.
+The pluginlib package provides tools for writing and dynamically loading
+plugins using the ROS build infrastructure. To work, these tools require
+plugin providers to register their plugins in the package.xml of their
+package.
 
 %prep
-%autosetup -p1 -n rmw_fastrtps-release-release-lyrical-rmw_fastrtps_shared_cpp-9.4.8-1
+%autosetup -p1 -n pluginlib-release-release-lyrical-pluginlib-5.8.4-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -109,5 +98,5 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
-* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 9.4.8-1
+* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 5.8.4-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

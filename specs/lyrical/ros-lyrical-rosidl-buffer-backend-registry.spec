@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         rmw_fastrtps_shared_cpp
+%global pkg_name         rosidl_buffer_backend_registry
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,46 +9,30 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-rmw-fastrtps-shared-cpp
-Version:        9.4.8
+Name:           ros-%{ros_distro}-rosidl-buffer-backend-registry
+Version:        5.2.0
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical rmw_fastrtps_shared_cpp
+Summary:        ROS 2 Lyrical rosidl_buffer_backend_registry
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/rmw_fastrtps-release
-Source0:        https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/lyrical/rmw_fastrtps_shared_cpp/9.4.8-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2/rosidl
+Source0:        https://github.com/ros2/rosidl/archive/refs/tags/5.2.0.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  ros-lyrical-ament-cmake-ros-core
-BuildRequires:  ros-lyrical-fastcdr
-BuildRequires:  ros-lyrical-fastdds
-BuildRequires:  ros-lyrical-rcpputils
-BuildRequires:  ros-lyrical-rcutils
+BuildRequires:  ros-lyrical-ament-cmake
+BuildRequires:  ros-lyrical-pluginlib
 BuildRequires:  ros-lyrical-rmw
-BuildRequires:  ros-lyrical-rmw-dds-common
-BuildRequires:  ros-lyrical-rmw-security-common
-BuildRequires:  ros-lyrical-rosidl-buffer-backend-registry
-BuildRequires:  ros-lyrical-rosidl-dynamic-typesupport
-BuildRequires:  ros-lyrical-rosidl-runtime-c
-BuildRequires:  ros-lyrical-rosidl-typesupport-introspection-c
-BuildRequires:  ros-lyrical-rosidl-typesupport-introspection-cpp
-BuildRequires:  ros-lyrical-tracetools
+BuildRequires:  ros-lyrical-rosidl-buffer-backend
+BuildRequires:  ros-lyrical-rosidl-runtime-cpp
 
-Requires:       ros-lyrical-fastcdr
-Requires:       ros-lyrical-fastdds
-Requires:       ros-lyrical-rcpputils
-Requires:       ros-lyrical-rcutils
+Requires:       ros-lyrical-pluginlib
 Requires:       ros-lyrical-rmw
-Requires:       ros-lyrical-rmw-dds-common
-Requires:       ros-lyrical-rmw-security-common
-Requires:       ros-lyrical-rosidl-dynamic-typesupport
-Requires:       ros-lyrical-rosidl-typesupport-introspection-c
-Requires:       ros-lyrical-rosidl-typesupport-introspection-cpp
-Requires:       ros-lyrical-tracetools
+Requires:       ros-lyrical-rosidl-buffer-backend
+Requires:       ros-lyrical-rosidl-runtime-cpp
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -58,15 +42,16 @@ Requires:       ros-lyrical-tracetools
 %endif
 
 %description
-Code shared on static and dynamic type support of rmw_fastrtps_cpp.
+Backend discovery and plugin loading for ROS2 buffer types
 
 %prep
-%autosetup -p1 -n rmw_fastrtps-release-release-lyrical-rmw_fastrtps_shared_cpp-9.4.8-1
+%autosetup -p1 -n rosidl-5.2.0
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
 # execute_process invocations of python3.
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
+pushd rosidl_buffer_backend_registry > /dev/null
 %cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
@@ -82,11 +67,14 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
     -DSHARE_INSTALL_PREFIX=%{install_prefix}/share \
     -DSETUPTOOLS_DEB_LAYOUT=OFF -DBUILD_TESTING=OFF
 %cmake_build
+popd > /dev/null
 
 
 %install
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
+pushd rosidl_buffer_backend_registry > /dev/null
 %cmake_install
+popd > /dev/null
 
 
 %check
@@ -94,8 +82,8 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
-# (no LICENSE file in source tree; see package.xml <license>)
-%doc CHANGELOG.rst
+%license LICENSE
+# (no CHANGELOG.rst in source tree)
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
 # need additions or trimming.
@@ -109,5 +97,5 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
-* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 9.4.8-1
+* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 5.2.0-1
 - Initial Fedora COPR build for ROS 2 Lyrical.
