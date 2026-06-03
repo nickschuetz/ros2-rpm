@@ -194,6 +194,13 @@ rmw:
   noarch: false
   disable_tests: true
 
+# Split out of the rmw repo in Lyrical; required by rmw_dds_common (find_package).
+rmw_security_common:
+  source_url: https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/lyrical/rmw_security_common/{version}-5.tar.gz
+  source_dir: rmw-release-release-lyrical-rmw_security_common-{version}-5
+  noarch: false
+  disable_tests: true
+
 # rosidl_dynamic_typesupport, runtime introspection layer for messages.
 rosidl_dynamic_typesupport:
   source_url: https://github.com/ros2-gbp/rosidl_dynamic_typesupport-release/archive/refs/tags/release/lyrical/rosidl_dynamic_typesupport/{version}-3.tar.gz

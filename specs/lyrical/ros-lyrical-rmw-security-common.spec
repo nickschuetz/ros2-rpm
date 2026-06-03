@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         rmw_dds_common
+%global pkg_name         rmw_security_common
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,14 +9,14 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-rmw-dds-common
-Version:        6.0.0
+Name:           ros-%{ros_distro}-rmw-security-common
+Version:        7.10.1
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical rmw_dds_common
+Summary:        ROS 2 Lyrical rmw_security_common
 
 License:        Apache-2.0
-URL:            https://github.com/ros2-gbp/rmw_dds_common-release
-Source0:        https://github.com/ros2-gbp/rmw_dds_common-release/archive/refs/tags/release/lyrical/rmw_dds_common/6.0.0-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            https://github.com/ros2-gbp/rmw-release
+Source0:        https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/lyrical/rmw_security_common/7.10.1-5.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -24,21 +24,11 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake
-BuildRequires:  ros-lyrical-rcpputils
 BuildRequires:  ros-lyrical-rcutils
 BuildRequires:  ros-lyrical-rmw
-BuildRequires:  ros-lyrical-rmw-security-common
-BuildRequires:  ros-lyrical-rosidl-default-generators
-BuildRequires:  ros-lyrical-rosidl-runtime-c
-BuildRequires:  ros-lyrical-rosidl-runtime-cpp
 
-Requires:       ros-lyrical-rcpputils
 Requires:       ros-lyrical-rcutils
 Requires:       ros-lyrical-rmw
-Requires:       ros-lyrical-rmw-security-common
-Requires:       ros-lyrical-rosidl-default-runtime
-Requires:       ros-lyrical-rosidl-runtime-c
-Requires:       ros-lyrical-rosidl-runtime-cpp
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -48,10 +38,10 @@ Requires:       ros-lyrical-rosidl-runtime-cpp
 %endif
 
 %description
-Define a common interface between DDS implementations of ROS middleware.
+Define a common rmw secutiry utils
 
 %prep
-%autosetup -p1 -n rmw_dds_common-release-release-lyrical-rmw_dds_common-6.0.0-3
+%autosetup -p1 -n rmw-release-release-lyrical-rmw_security_common-7.10.1-5
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -94,14 +84,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-# Message package: multiple typesupport .so variants + Python bindings.
 %{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}__rosidl_*.so
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
 %{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
-* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 6.0.0-1
+* Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 7.10.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.
