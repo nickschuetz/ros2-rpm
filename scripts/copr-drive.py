@@ -33,7 +33,7 @@ ACTIVE = {"running", "pending", "starting", "importing", "waiting", "forked"}
 # ledger records the submit time per package; a package submitted within
 # SUBMIT_COOLDOWN seconds is skipped unless COPR already reports it as failed
 # (in which case we want to resubmit the fix).
-SUBMIT_COOLDOWN = 1800
+SUBMIT_COOLDOWN = 3600
 
 
 def _ledger_path(build: Path, distro: str) -> Path:
