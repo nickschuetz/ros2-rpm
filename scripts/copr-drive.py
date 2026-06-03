@@ -112,9 +112,10 @@ def build_and_submit(meta: dict, project: str, build: Path, dry: bool) -> str | 
     patches_root = meta["spec"].parent / "patches"
     for rel in meta.get("patches", []):
         src = patches_root / rel
-        dst = sources / rel
+        # rpm resolves Patch paths by basename in _sourcedir, so stage flat even
+        # though the Patch tag and verify-specs use the patches/<pkg>/ subpath.
+        dst = sources / Path(rel).name
         if src.is_file():
-            dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dst)
         else:
             sys.stderr.write(f"  patch missing for {meta['rpm_name']}: {src}\n")
