@@ -76,13 +76,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
 # need additions or trimming.
-# Header-only (INTERFACE target, no compiled lib). Installs the urdf_* header
-# trees directly under include/, plus a CMake package config and pkg-config.
-%{install_prefix}/share/%{pkg_name}/
-%{install_prefix}/include/urdf_exception/
-%{install_prefix}/include/urdf_model/
-%{install_prefix}/include/urdf_sensor/
-%{install_prefix}/include/urdf_world/
+# Header-only plain-CMake (INTERFACE target, no compiled lib, no ament sentinel).
+# Headers nest under include/urdfdom_headers/; CMake config + pkg-config only.
+%{install_prefix}/include/%{pkg_name}/
 %{install_prefix}/lib/%{pkg_name}/
 %{install_prefix}/lib/pkgconfig/%{pkg_name}.pc
 
