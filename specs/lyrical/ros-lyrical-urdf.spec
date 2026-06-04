@@ -31,7 +31,7 @@ BuildRequires:  tinyxml2-devel
 # Fedora ships no urdfdom library package (only urdfdom-headers-devel), so the
 # parser library comes from our ros-lyrical-urdfdom build.
 BuildRequires:  ros-lyrical-urdfdom
-BuildRequires:  urdfdom-headers-devel
+BuildRequires:  ros-lyrical-urdfdom-headers
 
 Requires:       ros-lyrical-pluginlib
 Requires:       ros-lyrical-rcutils

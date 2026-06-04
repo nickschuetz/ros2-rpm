@@ -87,6 +87,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# Vendor package: ament_cmake_vendor_package stages the bundled gz-cmake
+# (CMake modules + pkg-config only, no compiled code) under a package-owned
+# opt/ subtree of the prefix.
+%{install_prefix}/opt/%{pkg_name}/
 
 
 %changelog

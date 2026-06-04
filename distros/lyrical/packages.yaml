@@ -1017,3 +1017,9 @@ gz_utils_vendor:
   disable_tests: true
   source_url: https://github.com/ros2-gbp/gz_utils_vendor-release/archive/refs/tags/release/lyrical/gz_utils_vendor/{version}-3.tar.gz
   source_dir: gz_utils_vendor-release-release-lyrical-gz_utils_vendor-{version}-3
+
+# urdfdom 6.0.0 needs urdfdom_headers 3.x; Fedora only ships 1.1.2, so build the rosdistro one.
+urdfdom_headers:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/urdfdom_headers-release/archive/refs/tags/release/lyrical/urdfdom_headers/{version}-3.tar.gz
+  source_dir: urdfdom_headers-release-release-lyrical-urdfdom_headers-{version}-3

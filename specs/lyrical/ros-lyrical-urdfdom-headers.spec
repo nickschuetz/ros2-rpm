@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         urdfdom
+%global pkg_name         urdfdom_headers
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,29 +9,23 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-urdfdom
-Version:        6.0.0
+Name:           ros-%{ros_distro}-urdfdom-headers
+Version:        3.0.0
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical urdfdom
+Summary:        ROS 2 Lyrical urdfdom_headers
 
 License:        BSD-3-Clause
-URL:            https://github.com/ros2-gbp/urdfdom-release
-Source0:        https://github.com/ros2-gbp/urdfdom-release/archive/refs/tags/release/lyrical/urdfdom/6.0.0-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            http://ros.org/wiki/urdf
+Source0:        https://github.com/ros2-gbp/urdfdom_headers-release/archive/refs/tags/release/lyrical/urdfdom_headers/3.0.0-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+
+BuildArch:      noarch
 
 BuildRequires:  cmake
-BuildRequires:  console-bridge-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  ros-lyrical-console-bridge-vendor
-# urdfdom 6.0.0 requires urdfdom_headers 3.x; Fedora's urdfdom-headers-devel is
-# only 1.1.2, so use our ros-lyrical-urdfdom-headers (3.0.0) instead.
-BuildRequires:  ros-lyrical-urdfdom-headers
-BuildRequires:  tinyxml2-devel
 
-Requires:       console-bridge-devel
-Requires:       ros-lyrical-console-bridge-vendor
-Requires:       tinyxml2-devel
+
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -41,10 +35,10 @@ Requires:       tinyxml2-devel
 %endif
 
 %description
-A library to access URDFs using the DOM model.
+C++ headers for URDF.
 
 %prep
-%autosetup -p1 -n urdfdom-release-release-lyrical-urdfdom-6.0.0-3
+%autosetup -p1 -n urdfdom_headers-release-release-lyrical-urdfdom_headers-3.0.0-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -79,17 +73,20 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %files
 %license LICENSE
 %doc CHANGELOG.rst
-# Plain-CMake upstream (not ament): compiled parser libraries, urdf_parser
-# headers, CMake package config, pkg-config, and the check_urdf / urdf_to_graphviz
-# tools. The urdf_model headers come from the system urdfdom-headers-devel.
-%{install_prefix}/lib/liburdfdom*.so*
-%{install_prefix}/include/urdf_parser/
-%{install_prefix}/lib/cmake/urdfdom/
-%{install_prefix}/lib/pkgconfig/urdfdom.pc
-%{install_prefix}/bin/*
+# TODO: review the file list against the build's "Installing:" log lines; the
+# generator emits the conventional ament_cmake set but specific packages may
+# need additions or trimming.
+# Header-only (INTERFACE target, no compiled lib). Installs the urdf_* header
+# trees directly under include/, plus a CMake package config and pkg-config.
 %{install_prefix}/share/%{pkg_name}/
+%{install_prefix}/include/urdf_exception/
+%{install_prefix}/include/urdf_model/
+%{install_prefix}/include/urdf_sensor/
+%{install_prefix}/include/urdf_world/
+%{install_prefix}/lib/%{pkg_name}/
+%{install_prefix}/lib/pkgconfig/%{pkg_name}.pc
 
 
 %changelog
-* Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 6.0.0-1
+* Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 3.0.0-1
 - Initial Fedora COPR build for ROS 2 Lyrical.
