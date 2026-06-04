@@ -29,6 +29,10 @@ BuildRequires:  libXaw-devel
 BuildRequires:  libXrandr-devel
 BuildRequires:  mesa-libGL-devel mesa-libGLU-devel
 BuildRequires:  python3-devel
+# ogre_vendor's ExternalProject download/configure helper imports pkg_resources;
+# on Fedora rawhide (fc45) it is no longer pulled in transitively, so require
+# setuptools explicitly. Harmless on fedora-44 and centos-stream-10.
+BuildRequires:  python3-setuptools
 BuildRequires:  ros-lyrical-ament-cmake
 BuildRequires:  ros-lyrical-ament-cmake-vendor-package
 

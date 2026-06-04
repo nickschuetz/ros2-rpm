@@ -96,7 +96,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
 %{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# Lyrical installs the C++ pluginlib module as lib/qt_gui_cpp.so (no "lib"
+# prefix, unversioned); the sip binding ships inside the site-packages tree
+# claimed above.
+%{install_prefix}/lib/%{pkg_name}.so
 
 
 %changelog
