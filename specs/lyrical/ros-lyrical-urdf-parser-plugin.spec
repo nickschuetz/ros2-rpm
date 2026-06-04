@@ -18,6 +18,10 @@ License:        BSD-3-Clause
 URL:            https://github.com/ros2/urdf
 Source0:        https://github.com/ros2-gbp/urdf-release/archive/refs/tags/release/lyrical/urdf_parser_plugin/2.13.2-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
+# Header-only plugin interface: ships headers + CMake config only, no compiled
+# library, so it is architecture-independent.
+BuildArch:      noarch
+
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -82,8 +86,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# Header-only: ships headers + CMake config, no compiled library.
 %{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
