@@ -1,9 +1,10 @@
 name: drift-check
 
-# Weekly check of local spec versions versus upstream rosdistro/jazzy.
-# When drift is detected, open (or update in place) a single sticky issue
-# labeled `upstream-drift` with the full drift report. When drift returns
-# to zero, close the sticky issue with a "fully caught up" comment.
+# Weekly check of local spec versions versus upstream rosdistro for every
+# distro in scripts/distros.py (lyrical + jazzy). When drift is detected,
+# open (or update in place) a single sticky issue labeled `upstream-drift`
+# with the full per-distro drift report. When drift returns to zero, close
+# the sticky issue with a "fully caught up" comment.
 #
 # Weekly rather than nightly: rosdistro pushes are frequent and on a
 # dev-only COPR most individual bumps aren't urgent. Batching is cleaner
@@ -47,7 +48,7 @@ jobs:
           REPO="${{ github.repository }}"
           gh label create upstream-drift --repo "$REPO" \
             --color BFD4F2 \
-            --description "Local specs behind upstream rosdistro/jazzy" 2>/dev/null || true
+            --description "Local specs behind upstream rosdistro (lyrical + jazzy)" 2>/dev/null || true
           gh label create maintenance --repo "$REPO" \
             --color CCCCCC \
             --description "Repo maintenance / housekeeping" 2>/dev/null || true
@@ -80,7 +81,7 @@ jobs:
         run: |
           set -euo pipefail
           REPO="${{ github.repository }}"
-          TITLE="Upstream drift: ${{ steps.drift.outputs.behind }} package(s) behind rosdistro/jazzy"
+          TITLE="Upstream drift: ${{ steps.drift.outputs.behind }} package(s) behind rosdistro (lyrical + jazzy)"
 
           EXISTING=$(gh issue list --repo "$REPO" --state open --label upstream-drift \
                        --json number --jq '.[0].number' || echo "")
@@ -105,6 +106,6 @@ jobs:
                        --json number --jq '.[0].number' || echo "")
           if [ -n "$EXISTING" ]; then
             gh issue comment "$EXISTING" --repo "$REPO" \
-              --body "Fully caught up with rosdistro/jazzy, closing. Next check: weekly cron."
+              --body "Fully caught up with rosdistro (lyrical + jazzy), closing. Next check: weekly cron."
             gh issue close "$EXISTING" --repo "$REPO"
           fi
