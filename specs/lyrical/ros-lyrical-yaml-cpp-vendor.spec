@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         rviz_common
+%global pkg_name         yaml_cpp_vendor
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,58 +9,26 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-rviz-common
-Version:        15.2.3
+Name:           ros-%{ros_distro}-yaml-cpp-vendor
+Version:        9.2.1
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical rviz_common
+Summary:        ROS 2 Lyrical yaml_cpp_vendor
 
-License:        BSD-3-Clause
-URL:            https://github.com/ros2/rviz/blob/ros2/README.md
-Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz_common/15.2.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+License:        Apache-2.0
+URL:            https://github.com/jbeder/yaml-cpp
+Source0:        https://github.com/ros2-gbp/yaml_cpp_vendor-release/archive/refs/tags/release/lyrical/yaml_cpp_vendor/9.2.1-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
+BuildArch:      noarch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  qt6-qtsvg-devel
 BuildRequires:  ros-lyrical-ament-cmake
-# Lyrical-split build deps that rviz_common find_package()s (same set as
-# rviz_rendering): ament_cmake_ros_core, eigen3_cmake_module, resource_retriever.
-BuildRequires:  ros-lyrical-ament-cmake-ros-core
-BuildRequires:  ros-lyrical-eigen3-cmake-module
-BuildRequires:  ros-lyrical-resource-retriever
-BuildRequires:  ros-lyrical-std-srvs
-BuildRequires:  ros-lyrical-urdf
-BuildRequires:  ros-lyrical-yaml-cpp-vendor
-BuildRequires:  ros-lyrical-geometry-msgs
-BuildRequires:  ros-lyrical-message-filters
-BuildRequires:  ros-lyrical-pluginlib
-BuildRequires:  ros-lyrical-rclcpp
-BuildRequires:  ros-lyrical-rviz-ogre-vendor
-BuildRequires:  ros-lyrical-rviz-rendering
-BuildRequires:  ros-lyrical-sensor-msgs
-BuildRequires:  ros-lyrical-std-msgs
-BuildRequires:  ros-lyrical-tf2
-BuildRequires:  ros-lyrical-tf2-ros
-BuildRequires:  tinyxml2-devel
+BuildRequires:  ros-lyrical-ament-cmake-vendor-package
+BuildRequires:  yaml-cpp-devel
 
-Requires:       qt6-qtbase
-Requires:       qt6-qtbase-devel
-Requires:       qt6-qtbase-gui
-Requires:       qt6-qtsvg
-Requires:       ros-lyrical-geometry-msgs
-Requires:       ros-lyrical-message-filters
-Requires:       ros-lyrical-pluginlib
-Requires:       ros-lyrical-rclcpp
-Requires:       ros-lyrical-rviz-ogre-vendor
-Requires:       ros-lyrical-rviz-rendering
-Requires:       ros-lyrical-sensor-msgs
-Requires:       ros-lyrical-std-msgs
-Requires:       ros-lyrical-tf2
-Requires:       ros-lyrical-tf2-ros
-Requires:       tinyxml2-devel
+Requires:       yaml-cpp-devel
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -70,10 +38,11 @@ Requires:       tinyxml2-devel
 %endif
 
 %description
-Common rviz API, used by rviz plugins and applications.
+Wrapper around yaml-cpp, it provides a fixed CMake module and an
+ExternalProject build of it.
 
 %prep
-%autosetup -p1 -n rviz-release-release-lyrical-rviz_common-15.2.3-1
+%autosetup -p1 -n yaml_cpp_vendor-release-release-lyrical-yaml_cpp_vendor-9.2.1-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -116,10 +85,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
-* Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 15.2.3-1
+* Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 9.2.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

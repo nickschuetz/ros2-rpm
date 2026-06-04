@@ -955,3 +955,17 @@ rosidl_buffer_py:
   build_subdir: rosidl_buffer_py
   disable_tests: true
   phase2: true
+
+# rviz_common -> urdf -> urdf_parser_plugin (urdf-release repo); rviz_common -> yaml_cpp_vendor.
+urdf_parser_plugin:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/urdf-release/archive/refs/tags/release/lyrical/urdf_parser_plugin/{version}-3.tar.gz
+  source_dir: urdf-release-release-lyrical-urdf_parser_plugin-{version}-3
+urdf:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/urdf-release/archive/refs/tags/release/lyrical/urdf/{version}-3.tar.gz
+  source_dir: urdf-release-release-lyrical-urdf-{version}-3
+yaml_cpp_vendor:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/yaml_cpp_vendor-release/archive/refs/tags/release/lyrical/yaml_cpp_vendor/{version}-3.tar.gz
+  source_dir: yaml_cpp_vendor-release-release-lyrical-yaml_cpp_vendor-{version}-3
