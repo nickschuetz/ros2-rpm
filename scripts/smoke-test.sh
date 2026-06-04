@@ -198,13 +198,18 @@ int main(int argc, char ** argv) {
 }
 EOF
 
+    # Link with the modern ${rclcpp_TARGETS} form rather than the legacy
+    # ament_target_dependencies() macro: the latter was deprecated in Jazzy and
+    # removed upstream by Lyrical (ament_cmake_target_dependencies no longer
+    # ships ament_target_dependencies.cmake), so it is "Unknown CMake command"
+    # there. ${rclcpp_TARGETS} works on both Jazzy and Lyrical.
     cat > "$BUILD_DIR/CMakeLists.txt" <<'EOF'
 cmake_minimum_required(VERSION 3.10)
 project(smoketest)
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 add_executable(smoketest main.cpp)
-ament_target_dependencies(smoketest rclcpp)
+target_link_libraries(smoketest ${rclcpp_TARGETS})
 EOF
 
     check "rclcpp CMake configure" \
