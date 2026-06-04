@@ -26,6 +26,11 @@ BuildRequires:  python3-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtsvg-devel
 BuildRequires:  ros-lyrical-ament-cmake
+# Lyrical-split build deps that rviz_common find_package()s (same set as
+# rviz_rendering): ament_cmake_ros_core, eigen3_cmake_module, resource_retriever.
+BuildRequires:  ros-lyrical-ament-cmake-ros-core
+BuildRequires:  ros-lyrical-eigen3-cmake-module
+BuildRequires:  ros-lyrical-resource-retriever
 BuildRequires:  ros-lyrical-geometry-msgs
 BuildRequires:  ros-lyrical-message-filters
 BuildRequires:  ros-lyrical-pluginlib
