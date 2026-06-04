@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         rviz_rendering
+%global pkg_name         eigen3_cmake_module
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,39 +9,24 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-rviz-rendering
-Version:        15.2.3
+Name:           ros-%{ros_distro}-eigen3-cmake-module
+Version:        0.5.1
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical rviz_rendering
+Summary:        ROS 2 Lyrical eigen3_cmake_module
 
-License:        BSD-3-Clause
-URL:            https://github.com/ros2/rviz/blob/ros2/README.md
-Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz_rendering/15.2.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+License:        Apache-2.0
+URL:            https://github.com/ros2-gbp/eigen3_cmake_module-release
+Source0:        https://github.com/ros2-gbp/eigen3_cmake_module-release/archive/refs/tags/release/lyrical/eigen3_cmake_module/0.5.1-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
+BuildArch:      noarch
 
-BuildRequires:  assimp-devel
 BuildRequires:  cmake
-BuildRequires:  eigen3-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  ros-lyrical-ament-cmake-ros
-# ament_cmake_ros's exported extras transitively find_package(ament_cmake_ros_core);
-# Lyrical split it into its own package, so name it explicitly as a build dep.
-BuildRequires:  ros-lyrical-ament-cmake-ros-core
-BuildRequires:  ros-lyrical-ament-index-cpp
-BuildRequires:  ros-lyrical-eigen3-cmake-module
-BuildRequires:  ros-lyrical-rviz-ogre-vendor
+BuildRequires:  ros-lyrical-ament-cmake
 
-Requires:       assimp
-Requires:       eigen3-devel
-Requires:       qt6-qtbase
-Requires:       qt6-qtbase-devel
-Requires:       qt6-qtbase-gui
-Requires:       qt6-qtsvg
-Requires:       ros-lyrical-ament-index-cpp
-Requires:       ros-lyrical-rviz-ogre-vendor
+
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -51,10 +36,10 @@ Requires:       ros-lyrical-rviz-ogre-vendor
 %endif
 
 %description
-Library which provides the 3D rendering functionality in rviz.
+Exports a custom CMake module to find Eigen3.
 
 %prep
-%autosetup -p1 -n rviz-release-release-lyrical-rviz_rendering-15.2.3-1
+%autosetup -p1 -n eigen3_cmake_module-release-release-lyrical-eigen3_cmake_module-0.5.1-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -87,7 +72,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
-# (no LICENSE file in source tree; see package.xml <license>)
+%license LICENSE
 %doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
@@ -97,10 +82,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
-* Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 15.2.3-1
+* Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 0.5.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.
