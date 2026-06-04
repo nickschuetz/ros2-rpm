@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         rviz_rendering
+%global pkg_name         resource_retriever
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,40 +9,29 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-rviz-rendering
-Version:        15.2.3
+Name:           ros-%{ros_distro}-resource-retriever
+Version:        3.9.3
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical rviz_rendering
+Summary:        ROS 2 Lyrical resource_retriever
 
 License:        BSD-3-Clause
-URL:            https://github.com/ros2/rviz/blob/ros2/README.md
-Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz_rendering/15.2.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+URL:            http://ros.org/wiki/resource_retriever
+Source0:        https://github.com/ros2-gbp/resource_retriever-release/archive/refs/tags/release/lyrical/resource_retriever/3.9.3-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
-
-BuildRequires:  assimp-devel
 BuildRequires:  cmake
-BuildRequires:  eigen3-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
+BuildRequires:  libcurl-devel
 BuildRequires:  python3-devel
-BuildRequires:  qt6-qtbase-devel
 BuildRequires:  ros-lyrical-ament-cmake-ros
-# ament_cmake_ros's exported extras transitively find_package(ament_cmake_ros_core);
-# Lyrical split it into its own package, so name it explicitly as a build dep.
+# ament_cmake_ros exported extras transitively find_package(ament_cmake_ros_core).
 BuildRequires:  ros-lyrical-ament-cmake-ros-core
 BuildRequires:  ros-lyrical-ament-index-cpp
-BuildRequires:  ros-lyrical-eigen3-cmake-module
-BuildRequires:  ros-lyrical-resource-retriever
-BuildRequires:  ros-lyrical-rviz-ogre-vendor
+BuildRequires:  ros-lyrical-ament-index-python
 
-Requires:       assimp
-Requires:       eigen3-devel
-Requires:       qt6-qtbase
-Requires:       qt6-qtbase-devel
-Requires:       qt6-qtbase-gui
-Requires:       qt6-qtsvg
+Requires:       libcurl-devel
 Requires:       ros-lyrical-ament-index-cpp
-Requires:       ros-lyrical-rviz-ogre-vendor
+Requires:       ros-lyrical-ament-index-python
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -52,10 +41,15 @@ Requires:       ros-lyrical-rviz-ogre-vendor
 %endif
 
 %description
-Library which provides the 3D rendering functionality in rviz.
+This package retrieves data from url-format files such as http://, ftp://,
+package:// file://, etc., and loads the data into memory. The package://
+url for ros packages is translated into a local file:// url. The resourse
+retriever was initially designed to load mesh files into memory, but it can
+be used for any type of data. The resource retriever is based on the the
+libcurl library.
 
 %prep
-%autosetup -p1 -n rviz-release-release-lyrical-rviz_rendering-15.2.3-1
+%autosetup -p1 -n resource_retriever-release-release-lyrical-resource_retriever-3.9.3-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -98,10 +92,12 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
+%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
 %{install_prefix}/include/%{pkg_name}/
 %{install_prefix}/lib/lib%{pkg_name}.so*
 
 
 %changelog
-* Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 15.2.3-1
+* Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 3.9.3-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

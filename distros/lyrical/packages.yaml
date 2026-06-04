@@ -907,6 +907,12 @@ eigen3_cmake_module:
   source_dir: eigen3_cmake_module-release-release-lyrical-eigen3_cmake_module-{version}-3
   source_url: https://github.com/ros2-gbp/eigen3_cmake_module-release/archive/refs/tags/release/lyrical/eigen3_cmake_module/{version}-3.tar.gz
 
+# rviz_rendering build-depends on resource_retriever (find_package at CMakeLists:55).
+resource_retriever:
+  disable_tests: true
+  source_dir: resource_retriever-release-release-lyrical-resource_retriever-{version}-3
+  source_url: https://github.com/ros2-gbp/resource_retriever-release/archive/refs/tags/release/lyrical/resource_retriever/{version}-3.tar.gz
+
 # rosidl repo added rosidl_buffer in Lyrical; rosidl_runtime_c build-depends on it.
 rosidl_buffer:
   source_url: https://github.com/ros2/rosidl/archive/refs/tags/{version}.tar.gz
