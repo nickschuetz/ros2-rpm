@@ -86,9 +86,9 @@ PYEOF
 # (no LICENSE file in source tree; see package.xml <license>)
 %doc CHANGELOG.rst
 
-# TODO: review the file list, generator emits a permissive glob and you may
-# need to enumerate explicit paths to avoid conflicts with sibling packages.
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
+# rqt is a pure metapackage, setup.py has packages=[] (no Python modules).
+# Only the ament_index sentinel + share/<pkg>/ + dist-info land in the
+# buildroot; there is no site-packages/rqt/ directory (matches jazzy).
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}.dist-info/
 %{install_prefix}/share/ament_index/resource_index/packages/%{pkg_name}
 %{install_prefix}/share/%{pkg_name}/

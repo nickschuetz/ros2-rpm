@@ -27,6 +27,9 @@ BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  ros-lyrical-ament-cmake-ros
+# ament_cmake_ros's exported extras transitively find_package(ament_cmake_ros_core);
+# Lyrical split it into its own package, so name it explicitly as a build dep.
+BuildRequires:  ros-lyrical-ament-cmake-ros-core
 BuildRequires:  ros-lyrical-ament-index-cpp
 BuildRequires:  ros-lyrical-rviz-ogre-vendor
 
