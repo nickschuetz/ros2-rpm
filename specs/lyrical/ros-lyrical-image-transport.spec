@@ -98,7 +98,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
 %{install_prefix}/include/%{pkg_name}/
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# Ships the main lib plus a plugins lib and a republish_node component lib, and
+# the list_transports / republish executables under lib/image_transport/.
+%{install_prefix}/lib/lib*.so*
+%{install_prefix}/lib/%{pkg_name}/
 
 
 %changelog

@@ -1,5 +1,5 @@
 %global ros_distro       lyrical
-%global pkg_name         tf2_geometry_msgs
+%global pkg_name         gz_cmake_vendor
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -9,33 +9,27 @@
 %global install_prefix   /opt/ros/%{ros_distro}
 %endif
 
-Name:           ros-%{ros_distro}-tf2-geometry-msgs
-Version:        0.45.7
+Name:           ros-%{ros_distro}-gz-cmake-vendor
+Version:        0.4.4
 Release:        1%{?dist}
-Summary:        ROS 2 Lyrical tf2_geometry_msgs
+Summary:        ROS 2 Lyrical gz_cmake_vendor
 
-License:        BSD-3-Clause
-URL:            http://www.ros.org/wiki/tf2_ros
-Source0:        https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/lyrical/tf2_geometry_msgs/0.45.7-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+License:        Apache-2.0
+URL:            https://github.com/gazebosim/gz-cmake
+Source0:        https://github.com/ros2-gbp/gz_cmake_vendor-release/archive/refs/tags/release/lyrical/gz_cmake_vendor/0.4.4-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  orocos-kdl-devel
+BuildRequires:  pkgconfig
 BuildRequires:  python3-devel
-BuildRequires:  ros-lyrical-ament-cmake
-BuildRequires:  ros-lyrical-geometry-msgs
-BuildRequires:  ros-lyrical-tf2
-BuildRequires:  ros-lyrical-tf2-ros
+BuildRequires:  ros-lyrical-ament-cmake-core
+BuildRequires:  ros-lyrical-ament-cmake-test
+BuildRequires:  ros-lyrical-ament-cmake-vendor-package
 
-Requires:       orocos-kdl
-Requires:       orocos-kdl-devel
-Requires:       python3-numpy
-Requires:       ros-lyrical-geometry-msgs
-Requires:       ros-lyrical-tf2
-Requires:       ros-lyrical-tf2-ros
+
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -45,10 +39,12 @@ Requires:       ros-lyrical-tf2-ros
 %endif
 
 %description
-tf2_geometry_msgs
+Vendor package for: gz-cmake 5.1.0
+
+Gazebo CMake : CMake Modules for Gazebo Projects
 
 %prep
-%autosetup -p1 -n geometry2-release-release-lyrical-tf2_geometry_msgs-0.45.7-3
+%autosetup -p1 -n gz_cmake_vendor-release-release-lyrical-gz_cmake_vendor-0.4.4-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -81,7 +77,7 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %files
-# (no LICENSE file in source tree; see package.xml <license>)
+%license LICENSE
 %doc CHANGELOG.rst
 # TODO: review the file list against the build's "Installing:" log lines; the
 # generator emits the conventional ament_cmake set but specific packages may
@@ -91,13 +87,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
-%{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}-py%{python3_version}.egg-info/
-# Header-only C++ (headers) + a pure-Python module; no compiled library, so the
-# package is noarch and ships no lib/lib*.so.
-%{install_prefix}/include/%{pkg_name}/
 
 
 %changelog
-* Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 0.45.7-1
+* Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 0.4.4-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

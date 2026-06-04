@@ -1003,3 +1003,17 @@ gz_math_vendor:
   disable_tests: true
   source_url: https://github.com/ros2-gbp/gz_math_vendor-release/archive/refs/tags/release/lyrical/gz_math_vendor/{version}-3.tar.gz
   source_dir: gz_math_vendor-release-release-lyrical-gz_math_vendor-{version}-3
+
+# urdf needs urdfdom (Fedora has no urdfdom-devel; rosdistro provides it). gz_math_vendor subtree.
+urdfdom:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/urdfdom-release/archive/refs/tags/release/lyrical/urdfdom/{version}-3.tar.gz
+  source_dir: urdfdom-release-release-lyrical-urdfdom-{version}-3
+gz_cmake_vendor:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/gz_cmake_vendor-release/archive/refs/tags/release/lyrical/gz_cmake_vendor/{version}-3.tar.gz
+  source_dir: gz_cmake_vendor-release-release-lyrical-gz_cmake_vendor-{version}-3
+gz_utils_vendor:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/gz_utils_vendor-release/archive/refs/tags/release/lyrical/gz_utils_vendor/{version}-3.tar.gz
+  source_dir: gz_utils_vendor-release-release-lyrical-gz_utils_vendor-{version}-3
