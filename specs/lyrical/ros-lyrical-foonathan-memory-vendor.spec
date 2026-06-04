@@ -40,6 +40,14 @@ Foonathan/memory vendor package for Fast DDS.
 
 %prep
 %autosetup -p1 -n foonathan_memory_vendor-release-release-lyrical-foonathan_memory_vendor-1.4.1-1
+# Force the inner ExternalProject (the actual foonathan/memory upstream) to
+# install into lib/ rather than the GNUInstallDirs default of lib64/. The outer
+# install() copies the staged tree as-is, so the inner CMAKE_INSTALL_LIBDIR
+# controls where libfoonathan_memory-*.so lands in the final RPM. Without this
+# the library is installed to /opt/ros/lyrical/lib64/, which is NOT on the
+# runtime linker path, so Fast DDS fails to dlopen it and rmw_fastrtps_cpp
+# cannot load at runtime ("failed to load any RMW implementations").
+sed -i 's|^    -DCMAKE_INSTALL_PREFIX=|    -DCMAKE_INSTALL_LIBDIR=lib\n    -DCMAKE_INSTALL_PREFIX=|' CMakeLists.txt
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -75,13 +83,13 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %license LICENSE
 %doc CHANGELOG.rst
 # Vendor package: bundles upstream foonathan/memory under the install prefix.
-# The inner build installs the library and CMake config under lib64 regardless
-# of CMAKE_INSTALL_LIBDIR, and headers under include/foonathan/.
+# The %prep sed forces the inner build to install into lib/ (not lib64/) so the
+# library sits on the runtime linker path; headers land under include/foonathan/.
 %{install_prefix}/share/%{pkg_name}/
 %{install_prefix}/share/foonathan_memory/
 %{install_prefix}/include/foonathan/
-%{install_prefix}/lib64/foonathan_memory/
-%{install_prefix}/lib64/libfoonathan_memory-*.so*
+%{install_prefix}/lib/foonathan_memory/
+%{install_prefix}/lib/libfoonathan_memory-*.so*
 %{install_prefix}/bin/nodesize_dbg
 
 
