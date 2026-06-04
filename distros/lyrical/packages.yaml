@@ -276,6 +276,13 @@ std_msgs:
   noarch: false
   disable_tests: true
 
+# rviz_common build-depends on std_srvs (find_package at CMakeLists:57).
+std_srvs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/std_srvs/{version}-3.tar.gz
+  source_dir: common_interfaces-release-release-lyrical-std_srvs-{version}-3
+  noarch: false
+  disable_tests: true
+
 # Tier 2.
 action_msgs:
   source_url: https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/action_msgs/{version}-1.tar.gz
