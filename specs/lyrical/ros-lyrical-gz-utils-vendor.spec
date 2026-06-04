@@ -54,10 +54,13 @@ Gazebo Utils : Classes and functions for robot applications
 # Make our previously-installed ROS Python packages discoverable to CMake's
 # execute_process invocations of python3.
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
+# gz_cmake_vendor stages gz-cmake under opt/gz_cmake_vendor/ and only adds that
+# path to CMAKE_PREFIX_PATH via a sourced ament environment hook, which does not
+# fire in a plain rpmbuild. Add it explicitly so find_package(gz-cmake) resolves.
 %cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
-    -DCMAKE_PREFIX_PATH=%{install_prefix} \
+    -DCMAKE_PREFIX_PATH="%{install_prefix};%{install_prefix}/opt/gz_cmake_vendor" \
     -DCMAKE_INSTALL_INCLUDEDIR=include \
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_INSTALL_BINDIR=bin \
