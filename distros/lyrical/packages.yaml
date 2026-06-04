@@ -969,3 +969,37 @@ yaml_cpp_vendor:
   disable_tests: true
   source_url: https://github.com/ros2-gbp/yaml_cpp_vendor-release/archive/refs/tags/release/lyrical/yaml_cpp_vendor/{version}-3.tar.gz
   source_dir: yaml_cpp_vendor-release-release-lyrical-yaml_cpp_vendor-{version}-3
+
+# rviz_default_plugins subtree.
+visualization_msgs:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/visualization_msgs/{version}-3.tar.gz
+  source_dir: common_interfaces-release-release-lyrical-visualization_msgs-{version}-3
+map_msgs:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/navigation_msgs-release/archive/refs/tags/release/lyrical/map_msgs/{version}-1.tar.gz
+  source_dir: navigation_msgs-release-release-lyrical-map_msgs-{version}-1
+interactive_markers:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/interactive_markers-release/archive/refs/tags/release/lyrical/interactive_markers/{version}-1.tar.gz
+  source_dir: interactive_markers-release-release-lyrical-interactive_markers-{version}-1
+image_transport:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/image_common-release/archive/refs/tags/release/lyrical/image_transport/{version}-1.tar.gz
+  source_dir: image_common-release-release-lyrical-image_transport-{version}-1
+point_cloud_transport:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/point_cloud_transport-release/archive/refs/tags/release/lyrical/point_cloud_transport/{version}-1.tar.gz
+  source_dir: point_cloud_transport-release-release-lyrical-point_cloud_transport-{version}-1
+laser_geometry:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/laser_geometry-release/archive/refs/tags/release/lyrical/laser_geometry/{version}-6.tar.gz
+  source_dir: laser_geometry-release-release-lyrical-laser_geometry-{version}-6
+tf2_geometry_msgs:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/lyrical/tf2_geometry_msgs/{version}-3.tar.gz
+  source_dir: geometry2-release-release-lyrical-tf2_geometry_msgs-{version}-3
+gz_math_vendor:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/gz_math_vendor-release/archive/refs/tags/release/lyrical/gz_math_vendor/{version}-3.tar.gz
+  source_dir: gz_math_vendor-release-release-lyrical-gz_math_vendor-{version}-3
