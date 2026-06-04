@@ -79,12 +79,12 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 %files
 %license LICENSE
 %doc CHANGELOG.rst
-# Plain-CMake upstream (not ament): compiled parser libraries, urdf_parser
-# headers, CMake package config, pkg-config, and the check_urdf / urdf_to_graphviz
-# tools. The urdf_model headers come from the system urdfdom-headers-devel.
+# Plain-CMake upstream (not ament): compiled parser libraries, headers nested
+# under include/urdfdom/, CMake package config under lib/urdfdom/cmake, pkg-config,
+# and the check_urdf / urdf_to_graphviz tools.
 %{install_prefix}/lib/liburdfdom*.so*
-%{install_prefix}/include/urdf_parser/
-%{install_prefix}/lib/cmake/urdfdom/
+%{install_prefix}/include/%{pkg_name}/
+%{install_prefix}/lib/%{pkg_name}/
 %{install_prefix}/lib/pkgconfig/urdfdom.pc
 %{install_prefix}/bin/*
 %{install_prefix}/share/%{pkg_name}/
