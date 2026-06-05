@@ -26,26 +26,48 @@ BuildRequires:  python3-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  ros-lyrical-ament-cmake-ros
 BuildRequires:  ros-lyrical-geometry-msgs
+BuildRequires:  ros-lyrical-gz-math-vendor
+BuildRequires:  ros-lyrical-image-transport
+BuildRequires:  ros-lyrical-interactive-markers
+BuildRequires:  ros-lyrical-laser-geometry
+BuildRequires:  ros-lyrical-map-msgs
 BuildRequires:  ros-lyrical-nav-msgs
 BuildRequires:  ros-lyrical-pluginlib
+BuildRequires:  ros-lyrical-point-cloud-transport
 BuildRequires:  ros-lyrical-rclcpp
+BuildRequires:  ros-lyrical-resource-retriever
+BuildRequires:  ros-lyrical-resource-retriever-service-plugin
 BuildRequires:  ros-lyrical-rviz-common
 BuildRequires:  ros-lyrical-rviz-ogre-vendor
 BuildRequires:  ros-lyrical-rviz-rendering
 BuildRequires:  ros-lyrical-tf2
+BuildRequires:  ros-lyrical-tf2-geometry-msgs
 BuildRequires:  ros-lyrical-tf2-ros
+BuildRequires:  ros-lyrical-urdf
+BuildRequires:  ros-lyrical-visualization-msgs
 
 Requires:       qt6-qtbase
 Requires:       qt6-qtbase-gui
 Requires:       ros-lyrical-geometry-msgs
+Requires:       ros-lyrical-gz-math-vendor
+Requires:       ros-lyrical-image-transport
+Requires:       ros-lyrical-interactive-markers
+Requires:       ros-lyrical-laser-geometry
+Requires:       ros-lyrical-map-msgs
 Requires:       ros-lyrical-nav-msgs
 Requires:       ros-lyrical-pluginlib
+Requires:       ros-lyrical-point-cloud-transport
 Requires:       ros-lyrical-rclcpp
+Requires:       ros-lyrical-resource-retriever
+Requires:       ros-lyrical-resource-retriever-service-plugin
 Requires:       ros-lyrical-rviz-common
 Requires:       ros-lyrical-rviz-ogre-vendor
 Requires:       ros-lyrical-rviz-rendering
 Requires:       ros-lyrical-tf2
+Requires:       ros-lyrical-tf2-geometry-msgs
 Requires:       ros-lyrical-tf2-ros
+Requires:       ros-lyrical-urdf
+Requires:       ros-lyrical-visualization-msgs
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -64,10 +86,14 @@ Several default plugins for rviz to cover the basic functionality.
 # Make our previously-installed ROS Python packages discoverable to CMake's
 # execute_process invocations of python3.
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
+# The gz vendor packages stage their inner libs under opt/<vendor>/ and add those
+# paths to CMAKE_PREFIX_PATH only via sourced ament environment hooks, which do
+# not fire in a plain rpmbuild. find_package(gz_math_vendor) pulls gz-math ->
+# gz-utils -> gz-cmake, so add all three opt paths explicitly.
 %cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
-    -DCMAKE_PREFIX_PATH=%{install_prefix} \
+    -DCMAKE_PREFIX_PATH="%{install_prefix};%{install_prefix}/opt/gz_cmake_vendor;%{install_prefix}/opt/gz_utils_vendor;%{install_prefix}/opt/gz_math_vendor" \
     -DCMAKE_INSTALL_INCLUDEDIR=include \
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_INSTALL_BINDIR=bin \

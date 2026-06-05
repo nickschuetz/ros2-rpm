@@ -1023,3 +1023,19 @@ urdfdom_headers:
   disable_tests: true
   source_url: https://github.com/ros2-gbp/urdfdom_headers-release/archive/refs/tags/release/lyrical/urdfdom_headers/{version}-3.tar.gz
   source_dir: urdfdom_headers-release-release-lyrical-urdfdom_headers-{version}-3
+
+# resource_retriever_service repo: pulled in by rviz_default_plugins via
+# find_package(resource_retriever_service_plugin). Three packages at 0.0.2-1.
+resource_retriever_interfaces:
+  noarch: false
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/release/lyrical/resource_retriever_interfaces/{version}-1.tar.gz
+  source_dir: resource_retriever_service-release-release-lyrical-resource_retriever_interfaces-{version}-1
+resource_retriever_service:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/release/lyrical/resource_retriever_service/{version}-1.tar.gz
+  source_dir: resource_retriever_service-release-release-lyrical-resource_retriever_service-{version}-1
+resource_retriever_service_plugin:
+  disable_tests: true
+  source_url: https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/release/lyrical/resource_retriever_service_plugin/{version}-1.tar.gz
+  source_dir: resource_retriever_service-release-release-lyrical-resource_retriever_service_plugin-{version}-1
