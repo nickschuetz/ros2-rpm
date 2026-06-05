@@ -1032,10 +1032,12 @@ resource_retriever_interfaces:
   source_url: https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/release/lyrical/resource_retriever_interfaces/{version}-1.tar.gz
   source_dir: resource_retriever_service-release-release-lyrical-resource_retriever_interfaces-{version}-1
 resource_retriever_service:
+  noarch: false
   disable_tests: true
   source_url: https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/release/lyrical/resource_retriever_service/{version}-1.tar.gz
   source_dir: resource_retriever_service-release-release-lyrical-resource_retriever_service-{version}-1
 resource_retriever_service_plugin:
+  noarch: false
   disable_tests: true
   source_url: https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/release/lyrical/resource_retriever_service_plugin/{version}-1.tar.gz
   source_dir: resource_retriever_service-release-release-lyrical-resource_retriever_service_plugin-{version}-1

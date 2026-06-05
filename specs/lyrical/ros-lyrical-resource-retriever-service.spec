@@ -18,8 +18,6 @@ License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/resource_retriever_service-release
 Source0:        https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/release/lyrical/resource_retriever_service/0.0.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
-BuildArch:      noarch
-
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
