@@ -19,6 +19,7 @@ URL:            https://github.com/ros2/rviz/blob/ros2/README.md
 Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz2/15.2.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
+BuildRequires:  chrpath
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -105,6 +106,18 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
 %cmake_install
 
+# rviz2 installs only the rviz2 executable (no libraries land in
+# %{install_prefix}/lib), so its baked-in RPATH points at directories that are
+# absent from this package's own buildroot and check-rpaths rejects them
+# (error 0002). The libraries (rviz_common, rviz_rendering, Ogre) are resolved
+# at runtime from %{install_prefix}/lib and the ogre vendor opt dir via the
+# setup.bash LD_LIBRARY_PATH hooks, so the RPATH is redundant; strip it. This
+# also guarantees no build-tree path can leak through an RPATH.
+for f in %{buildroot}%{install_prefix}/bin/rviz2 \
+         %{buildroot}%{install_prefix}/lib/%{pkg_name}/rviz2; do
+    chrpath --delete "$f" || :
+done
+
 
 %check
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
@@ -121,7 +134,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
-%{install_prefix}/lib/lib%{pkg_name}.so*
+# rviz2 ships the rviz2 launcher executable (bin/ plus the ament-private copy
+# under lib/rviz2/ alongside rviz1_to_rviz2.py); it installs no libraries.
+%{install_prefix}/bin/%{pkg_name}
 %{install_prefix}/lib/%{pkg_name}/
 
 
