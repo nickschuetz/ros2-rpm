@@ -40,6 +40,8 @@ BuildRequires:  ros-lyrical-resource-retriever-service-plugin
 BuildRequires:  ros-lyrical-rviz-common
 BuildRequires:  ros-lyrical-rviz-ogre-vendor
 BuildRequires:  ros-lyrical-rviz-rendering
+# rviz_common's exported CMake config re-runs find_package(std_srvs).
+BuildRequires:  ros-lyrical-std-srvs
 BuildRequires:  ros-lyrical-tf2
 BuildRequires:  ros-lyrical-tf2-geometry-msgs
 BuildRequires:  ros-lyrical-tf2-ros
