@@ -25,12 +25,14 @@ BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  ros-lyrical-ament-cmake-ros
+BuildRequires:  ros-lyrical-eigen3-cmake-module
 BuildRequires:  ros-lyrical-geometry-msgs
 BuildRequires:  ros-lyrical-gz-math-vendor
 BuildRequires:  ros-lyrical-image-transport
 BuildRequires:  ros-lyrical-interactive-markers
 BuildRequires:  ros-lyrical-laser-geometry
 BuildRequires:  ros-lyrical-map-msgs
+BuildRequires:  ros-lyrical-message-filters
 BuildRequires:  ros-lyrical-nav-msgs
 BuildRequires:  ros-lyrical-pluginlib
 BuildRequires:  ros-lyrical-point-cloud-transport
@@ -40,13 +42,20 @@ BuildRequires:  ros-lyrical-resource-retriever-service-plugin
 BuildRequires:  ros-lyrical-rviz-common
 BuildRequires:  ros-lyrical-rviz-ogre-vendor
 BuildRequires:  ros-lyrical-rviz-rendering
-# rviz_common's exported CMake config re-runs find_package(std_srvs).
+BuildRequires:  ros-lyrical-sensor-msgs
+BuildRequires:  ros-lyrical-std-msgs
+# rviz_common's exported CMake config re-runs find_package for each of its own
+# build deps (std_srvs, yaml_cpp_vendor, urdf -> urdfdom_headers, eigen3, ...),
+# so the full transitive closure must be present in this buildroot.
 BuildRequires:  ros-lyrical-std-srvs
 BuildRequires:  ros-lyrical-tf2
 BuildRequires:  ros-lyrical-tf2-geometry-msgs
 BuildRequires:  ros-lyrical-tf2-ros
 BuildRequires:  ros-lyrical-urdf
+BuildRequires:  ros-lyrical-urdfdom
+BuildRequires:  ros-lyrical-urdfdom-headers
 BuildRequires:  ros-lyrical-visualization-msgs
+BuildRequires:  ros-lyrical-yaml-cpp-vendor
 
 Requires:       qt6-qtbase
 Requires:       qt6-qtbase-gui
