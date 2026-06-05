@@ -1,5 +1,9 @@
 %global ros_distro       lyrical
 %global pkg_name         gz_math_vendor
+# Bundles a compiled libgz-math.so under opt/<pkg>/; the ExternalProject build
+# produces no separable debugsource, so debuginfo generation is disabled (vendor
+# pattern, exempted in verify-specs).
+%global debug_package %{nil}
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -18,8 +22,6 @@ License:        Apache-2.0
 URL:            https://github.com/gazebosim/gz-math
 Source0:        https://github.com/ros2-gbp/gz_math_vendor-release/archive/refs/tags/release/lyrical/gz_math_vendor/0.4.3-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
-BuildArch:      noarch
-
 BuildRequires:  cmake
 BuildRequires:  eigen3-devel
 BuildRequires:  gcc
@@ -29,8 +31,12 @@ BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake-core
 BuildRequires:  ros-lyrical-ament-cmake-test
 BuildRequires:  ros-lyrical-ament-cmake-vendor-package
+BuildRequires:  ros-lyrical-gz-cmake-vendor
+BuildRequires:  ros-lyrical-gz-utils-vendor
 
 Requires:       eigen3-devel
+Requires:       ros-lyrical-gz-cmake-vendor
+Requires:       ros-lyrical-gz-utils-vendor
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.
@@ -51,10 +57,14 @@ Gazebo Math : Math classes and functions for robot applications
 # Make our previously-installed ROS Python packages discoverable to CMake's
 # execute_process invocations of python3.
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
+# gz_cmake_vendor and gz_utils_vendor stage their inner libs under opt/<vendor>/
+# and only add those paths to CMAKE_PREFIX_PATH via sourced ament environment
+# hooks, which do not fire in a plain rpmbuild. Add them explicitly so
+# find_package(gz-cmake) and find_package(gz-utils) resolve.
 %cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
-    -DCMAKE_PREFIX_PATH=%{install_prefix} \
+    -DCMAKE_PREFIX_PATH="%{install_prefix};%{install_prefix}/opt/gz_cmake_vendor;%{install_prefix}/opt/gz_utils_vendor" \
     -DCMAKE_INSTALL_INCLUDEDIR=include \
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_INSTALL_BINDIR=bin \
@@ -88,6 +98,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# Vendor subtree: gz-math is staged under opt/<pkg>/ (headers, the compiled
+# libgz-math.so, CMake config, pkg-config) and surfaced to consumers via the
+# ament environment hook / our explicit opt-path CMAKE_PREFIX_PATH.
+%{install_prefix}/opt/%{pkg_name}/
 
 
 %changelog

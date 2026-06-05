@@ -1,5 +1,9 @@
 %global ros_distro       lyrical
 %global pkg_name         gz_utils_vendor
+# Bundles a compiled libgz-utils.so under opt/<pkg>/; the ExternalProject build
+# produces no separable debugsource, so debuginfo generation is disabled (vendor
+# pattern, exempted in verify-specs).
+%global debug_package %{nil}
 %bcond fedora_fhs 0
 %if %{with fedora_fhs}
 # FHS layout for a possible Fedora main-repo build or reference impl (ADR 0012).
@@ -17,8 +21,6 @@ Summary:        ROS 2 Lyrical gz_utils_vendor
 License:        Apache-2.0
 URL:            https://github.com/gazebosim/gz-utils
 Source0:        https://github.com/ros2-gbp/gz_utils_vendor-release/archive/refs/tags/release/lyrical/gz_utils_vendor/0.4.1-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
-
-BuildArch:      noarch
 
 BuildRequires:  cli11-devel
 BuildRequires:  cmake
@@ -94,6 +96,10 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 # packages/, package_run_dependencies/, parent_prefix_path/, and any
 # member_of_group entries (rosidl_runtime_packages, etc.).
 %{install_prefix}/share/ament_index/resource_index/*/%{pkg_name}
+# Vendor subtree: gz-utils is staged under opt/<pkg>/ (headers, the compiled
+# libgz-utils.so, CMake config, pkg-config) and surfaced to consumers via the
+# ament environment hook / our explicit opt-path CMAKE_PREFIX_PATH.
+%{install_prefix}/opt/%{pkg_name}/
 
 
 %changelog

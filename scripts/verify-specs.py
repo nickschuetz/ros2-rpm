@@ -146,6 +146,8 @@ EXEMPTIONS: dict[str, set[str]] = {
     "ros-lyrical-python-qt-binding.spec":       {"debug_package-nil"},
     "ros-lyrical-rosidl-buffer-py.spec":         {"debug_package-nil"},
     "ros-lyrical-rviz-ogre-vendor.spec":         {"debug_package-nil"},
+    "ros-lyrical-gz-utils-vendor.spec":          {"debug_package-nil"},
+    "ros-lyrical-gz-math-vendor.spec":           {"debug_package-nil"},
 }
 
 # Map each FORBIDDEN_PATTERNS regex to a short rule-id for the exemption
