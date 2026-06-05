@@ -53,16 +53,30 @@ After ADR 0010 cancelled the originally-planned ~320-package full `ros-jazzy-des
 
 ### Phase 2 metapackage
 
-- **`ros-jazzy-ros-desktop`**, License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only` (Qt5 via the rqt suite). Pulls in `ros-jazzy-ros-base` plus the Phase 2 surface. Users explicitly opt in to the heterogeneous license aggregate by installing this metapackage. **Does not include rviz2**, see deferral note below.
+- **`ros-jazzy-ros-desktop`**, License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only` (Qt5 via the rqt suite). Pulls in `ros-jazzy-ros-base` plus the Phase 2 surface. Users explicitly opt in to the heterogeneous license aggregate by installing this metapackage. **Does not include rviz2**, see Jazzy deferral note below.
+
+### Phase 2 on Lyrical (flagship): the full sandbox plus rviz2
+
+Lyrical carries the same Phase 2 dev sandbox as Jazzy **and** the `rviz2` 3D visualizer, which Jazzy still defers. The Lyrical sandbox uses **Qt6** (not Jazzy's Qt5), so the `rqt` suite and `rviz2` build on **CentOS Stream 10 as well as Fedora 44** (both arches). The pieces:
+
+- The same `rqt` suite, `ros2cli` suite, launch infrastructure, lifecycle backfill, Cyclone DDS RMW, and demo nodes listed above, under the `ros-lyrical-*` prefix.
+- The **`rviz2` chain**: `rviz_ogre_vendor`, `rviz_rendering`, `rviz_common`, `rviz_default_plugins`, `rviz2`, plus the supporting `resource_retriever_service` packages (`resource_retriever_interfaces`, `resource_retriever_service`, `resource_retriever_service_plugin`) and the Gazebo math vendor chain (`gz_cmake_vendor`, `gz_utils_vendor`, `gz_math_vendor`) that `rviz_default_plugins` links.
+- **`ros-lyrical-ros-desktop`**, License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only AND EPL-2.0` (LGPL-3.0 via Qt6 for the rqt suite and rviz2; EPL-2.0 via Cyclone DDS). Pulls in `ros-lyrical-ros-base` plus the full Lyrical Phase 2 surface including rviz2.
+
+**Lyrical build matrix for the sandbox + rviz2**: Fedora 44 and CentOS Stream 10 (both arches), **not fedora-rawhide**. The Ogre and Gazebo vendor packages run `vcstool` (`vcs import`) in a CMake ExternalProject download step, and vcstool crashes on rawhide's Python 3.14 because setuptools removed `pkg_resources`. The headless set still builds on rawhide; only the rviz/gz/rqt visual chain is held back there. When vcstool is fixed for Python 3.14, the rawhide chroots can be added back with no spec changes.
+
+`ros-lyrical-ros-core` and `ros-lyrical-ros-base` stay permissive-only (`Apache-2.0 AND BSD-3-Clause`), exactly like their Jazzy counterparts; the heterogeneous license aggregate is confined to the opt-in `ros-lyrical-ros-desktop`.
 
 ### Phase 2 build matrix caveat
 
 The Qt5-dependent packages (qt_gui_core, python_qt_binding, rqt + plugins) build successfully on the **4 Fedora chroots** (`fedora-44` + `fedora-rawhide` × `x86_64` + `aarch64`) but fail on **CentOS Stream 10** because Stream 10 doesn't ship `python3-sip-devel` and other Qt5 build deps. Stream 10 users get `ros-jazzy-ros-base` + the headless launch / ros2cli / demo packages; for visualization on Stream 10, run `rqt` from a Fedora chroot.
 
 <a name="rviz2-deferral-side-effects"></a>
-### rviz2 deferral, side effects
+### rviz2 deferral on Jazzy, side effects
 
-`rviz2` (and its chain: `rviz_ogre_vendor`, `rviz_assimp_vendor`, `rviz_rendering`, `rviz_common`, `rviz_default_plugins`) is **not packaged**. Two upstream blockers identified during Phase 2 P-4:
+**This deferral applies to Jazzy only.** Lyrical ships `rviz2` (see "Phase 2 on Lyrical" above); the section below documents why the Jazzy COPR still does not, and what Jazzy users lose as a result.
+
+On Jazzy, `rviz2` (and its chain: `rviz_ogre_vendor`, `rviz_assimp_vendor`, `rviz_rendering`, `rviz_common`, `rviz_default_plugins`) is **not packaged**. Two upstream blockers were identified during Phase 2 P-4:
 
 | Package | Blocker |
 |---|---|

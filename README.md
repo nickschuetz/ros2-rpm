@@ -29,7 +29,11 @@ Verify the install (~20s, no root, no GUI):
 bash <(curl -fsSL https://raw.githubusercontent.com/nickschuetz/ros2-rpm/main/scripts/smoke-test.sh) lyrical
 ```
 
-Lyrical currently ships the **minimal headless set**: `rclcpp`, `rclpy`, the common message packages (`std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `control_msgs`, and more), Fast DDS as the RMW, `tf2_ros`, and the `ros-lyrical-ros-core` / `ros-lyrical-ros-base` metapackages. The developer sandbox (`rqt`, `ros2cli`, `launch`, demo nodes, Cyclone DDS) is available today on the Jazzy maintenance COPR and is being ported to Lyrical.
+Lyrical ships the **minimal headless set** (`rclcpp`, `rclpy`, the common message packages such as `std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `control_msgs`, Fast DDS as the RMW, `tf2_ros`, and the `ros-lyrical-ros-core` / `ros-lyrical-ros-base` metapackages) plus the full **developer sandbox**: `rqt`, `ros2cli`, `launch`, demo nodes, the alternate Cyclone DDS RMW, and **`rviz2`**, all rolled up in the `ros-lyrical-ros-desktop` metapackage. The sandbox and `rviz2` build on Fedora 44 and CentOS Stream 10 (both arches); fedora-rawhide carries the headless set only (see [Supported targets](#supported-targets)).
+
+```bash
+sudo dnf install ros-lyrical-ros-desktop   # rqt + ros2cli + launch + rviz2 + Cyclone DDS + demos
+```
 
 ## Quickstart (Jazzy, maintenance)
 
@@ -53,9 +57,10 @@ Substitute `<distro>` with `lyrical` (from `hellaenergy/ros2`) or `jazzy` (from 
 |---|---|
 | Minimal headless dev (rclcpp + Fast DDS + tf2 + common messages) | `ros-<distro>-ros-base` |
 | One specific package | `ros-<distro>-<pkg>` (e.g. `ros-lyrical-rclcpp`) |
-| Dev tooling (rqt, ros2cli, launch, demo_nodes, Cyclone DDS) **(Jazzy today)** | `ros-jazzy-ros-desktop` |
+| Dev tooling (rqt, ros2cli, launch, demo_nodes, Cyclone DDS, **rviz2 on Lyrical**) | `ros-<distro>-ros-desktop` |
+| 3D visualization (`rviz2`) **(Lyrical, Fedora 44 + Stream 10)** | `ros-lyrical-rviz2` |
 | O3DE Gem optional ContactSensor + Spawner support **(Jazzy)** | `ros-jazzy-gazebo-msgs` |
-| Cyclone DDS as your RMW **(Jazzy today)** | `ros-jazzy-rmw-cyclonedds-cpp`, then `export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` |
+| Cyclone DDS as your RMW | `ros-<distro>-rmw-cyclonedds-cpp`, then `export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` |
 
 Setup environment is sourced per-session via `source /opt/ros/<distro>/setup.bash`. To enable shell-wide loading, opt in by sourcing `/etc/profile.d/ros-<distro>.sh` from your login shell. Packages install to `/opt/ros/<distro>/`; see [ADR 0007](docs/adr/0007-install-location-opt-ros-jazzy.md) for why.
 
@@ -69,17 +74,22 @@ Both COPRs build the same matrix:
 | Fedora rawhide | ✓ | ✓ |
 | CentOS Stream 10 (with EPEL 10) | ✓ | ✓ |
 
-The CentOS Stream 10 chroots are convenient build targets, **not** a production-deployment pitch. Stream 10 also lacks Qt5 build deps, so the Jazzy `rqt` family is Fedora-chroot-only; install `ros-jazzy-ros-desktop` from a Fedora chroot if you want the GUI tooling.
+The CentOS Stream 10 chroots are convenient build targets, **not** a production-deployment pitch.
+
+Per-distro GUI / sandbox availability differs:
+
+- **Lyrical**: the `rqt` family and `rviz2` use Qt6 and build on Fedora 44 **and** CentOS Stream 10 (both arches). They are **not** built on fedora-rawhide: the Ogre and Gazebo vendor packages download sources with `vcstool`, which is broken on rawhide's Python 3.14 (setuptools dropped `pkg_resources`). On rawhide, install `ros-lyrical-ros-base` (headless).
+- **Jazzy**: the `rqt` family is built on the Fedora chroots only; Stream 10 lacks the Qt5 build deps (`python3-sip-devel`). Install `ros-jazzy-ros-desktop` from a Fedora chroot for the GUI tooling. Jazzy does not ship `rviz2` (see Known limitations).
 
 ## Known limitations
 
-- **`rviz2` (3D visualizer) is not packaged** on either COPR. Tracked upstream blockers include [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708) (Ogre / CMake 4.x) and [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730) (Assimp / Fedora's stricter GCC). On Jazzy, `rqt` works for non-3D debugging (graph, topic echo, console, plot). For 3D today, run a RHEL 9 container with [packages.ros.org's RPMs](https://docs.ros.org/en/jazzy/Installation/RHEL-Install-RPMs.html) or wait for Open Robotics's Lyrical packages. Full impact analysis: [`docs/SCOPE.md`](docs/SCOPE.md).
+- **`rviz2` (3D visualizer):** packaged on **Lyrical** (Fedora 44 + CentOS Stream 10, both arches) via `ros-lyrical-rviz2` / `ros-lyrical-ros-desktop`; not built on fedora-rawhide (the Ogre/Gazebo vendor downloads use `vcstool`, broken on rawhide's Python 3.14). **Not packaged on Jazzy**: its Ogre and Assimp vendor builds hit [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708) (Ogre / CMake 4.x) and [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730) (Assimp / Fedora's stricter GCC); on Jazzy, `rqt` covers non-3D debugging (graph, topic echo, console, plot), or run a RHEL 9 container with [packages.ros.org's RPMs](https://docs.ros.org/en/jazzy/Installation/RHEL-Install-RPMs.html). Full impact analysis: [`docs/SCOPE.md`](docs/SCOPE.md).
 - **`nav2_*`, `ros2control`, simulation bridges** are out of scope. Production-shaped surfaces; users belong on Open Robotics's Lyrical packages once they ship.
 - **Long-term posture is undecided.** Upstream EOLs Jazzy in May 2029. Whether the Jazzy COPR sunsets, freezes as a historical archive, or is retired once the official Lyrical packages ship is a future-ADR decision; see [`docs/UPGRADING.md`](docs/UPGRADING.md#approaching-upstream-eol).
 
 ## License
 
-Each package carries its own SPDX `License:` field. The default metapackages (`ros-<distro>-ros-core`, `ros-<distro>-ros-base`) ship only **Apache-2.0** and **BSD-3-Clause** content. The optional `ros-jazzy-ros-desktop` metapackage opts in to a heterogeneous aggregate (`Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only AND EPL-2.0`) honestly disclosed in its `License:` field. All non-permissive packages link dynamically against system libraries. Full policy: [`docs/SCOPE.md`](docs/SCOPE.md). The repo itself is Apache-2.0 ([`LICENSE`](LICENSE)).
+Each package carries its own SPDX `License:` field. The default metapackages (`ros-<distro>-ros-core`, `ros-<distro>-ros-base`) ship only **Apache-2.0** and **BSD-3-Clause** content. The optional `ros-<distro>-ros-desktop` metapackages opt in to a heterogeneous aggregate, honestly disclosed in their `License:` field: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only AND EPL-2.0` (LGPL-3.0 via Qt6 for the `rqt` suite and, on Lyrical, `rviz2`; EPL-2.0 via the Cyclone DDS RMW). All non-permissive packages link dynamically against system libraries. Full policy: [`docs/SCOPE.md`](docs/SCOPE.md). The repo itself is Apache-2.0 ([`LICENSE`](LICENSE)).
 
 ## Documentation
 
