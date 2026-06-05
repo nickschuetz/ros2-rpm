@@ -26,7 +26,37 @@ BuildRequires:  python3-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  ros-lyrical-ament-cmake
 BuildRequires:  ros-lyrical-rviz-common
+BuildRequires:  ros-lyrical-rviz-default-plugins
 BuildRequires:  ros-lyrical-rviz-ogre-vendor
+# find_package(rviz_common) and find_package(rviz_default_plugins) re-run
+# find_package for every one of their exported dependencies, so the full
+# transitive closure must be present in this buildroot.
+BuildRequires:  ros-lyrical-eigen3-cmake-module
+BuildRequires:  ros-lyrical-geometry-msgs
+BuildRequires:  ros-lyrical-gz-math-vendor
+BuildRequires:  ros-lyrical-image-transport
+BuildRequires:  ros-lyrical-interactive-markers
+BuildRequires:  ros-lyrical-laser-geometry
+BuildRequires:  ros-lyrical-map-msgs
+BuildRequires:  ros-lyrical-message-filters
+BuildRequires:  ros-lyrical-nav-msgs
+BuildRequires:  ros-lyrical-pluginlib
+BuildRequires:  ros-lyrical-point-cloud-transport
+BuildRequires:  ros-lyrical-rclcpp
+BuildRequires:  ros-lyrical-resource-retriever
+BuildRequires:  ros-lyrical-resource-retriever-service-plugin
+BuildRequires:  ros-lyrical-rviz-rendering
+BuildRequires:  ros-lyrical-sensor-msgs
+BuildRequires:  ros-lyrical-std-msgs
+BuildRequires:  ros-lyrical-std-srvs
+BuildRequires:  ros-lyrical-tf2
+BuildRequires:  ros-lyrical-tf2-geometry-msgs
+BuildRequires:  ros-lyrical-tf2-ros
+BuildRequires:  ros-lyrical-urdf
+BuildRequires:  ros-lyrical-urdfdom
+BuildRequires:  ros-lyrical-urdfdom-headers
+BuildRequires:  ros-lyrical-visualization-msgs
+BuildRequires:  ros-lyrical-yaml-cpp-vendor
 
 Requires:       python3-devel
 Requires:       ros-lyrical-rviz-common
@@ -50,10 +80,14 @@ Requires:       ros-lyrical-rviz-ogre-vendor
 # Make our previously-installed ROS Python packages discoverable to CMake's
 # execute_process invocations of python3.
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
+# The gz vendor packages (pulled transitively via rviz_default_plugins ->
+# gz_math_vendor) stage their inner libs under opt/<vendor>/ and rely on sourced
+# ament environment hooks that do not fire under rpmbuild; add the opt paths so
+# find_package(gz_math_vendor) and its gz-utils/gz-cmake chain resolve.
 %cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
-    -DCMAKE_PREFIX_PATH=%{install_prefix} \
+    -DCMAKE_PREFIX_PATH="%{install_prefix};%{install_prefix}/opt/gz_cmake_vendor;%{install_prefix}/opt/gz_utils_vendor;%{install_prefix}/opt/gz_math_vendor" \
     -DCMAKE_INSTALL_INCLUDEDIR=include \
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_INSTALL_BINDIR=bin \
