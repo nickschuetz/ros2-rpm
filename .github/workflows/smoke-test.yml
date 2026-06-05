@@ -61,11 +61,28 @@ jobs:
         # core packages already in fedora:44, but we re-confirm rather than
         # assume.
         run: |
-          dnf -y install dnf-plugins-core which procps-ng diffutils \
+          # The COPR download backend is intermittently slow; disable dnf's
+          # "operation too slow" abort (minrate=0), give metadata fetches a
+          # generous timeout, and retry the metadata-dependent commands so a
+          # transient slow mirror does not fail the run (curl error 28 ->
+          # "No match for argument").
+          DNF_OPTS="--setopt=timeout=120 --setopt=minrate=0 --setopt=retries=10"
+          retry() {
+            local n=1 max=5
+            until "$@"; do
+              if [ "$n" -ge "$max" ]; then
+                echo "::error::command failed after ${max} attempts: $*"
+                return 1
+              fi
+              echo "attempt ${n}/${max} failed; retrying in $((n*15))s: $*"
+              sleep $((n*15)); n=$((n+1))
+            done
+          }
+          dnf -y $DNF_OPTS install dnf-plugins-core which procps-ng diffutils \
                          rpm-build cmake gcc gcc-c++ python3-devel \
                          findutils
-          dnf copr enable -y ${{ matrix.copr }}
-          dnf -y install ${{ matrix.packages }}
+          retry dnf copr enable -y ${{ matrix.copr }}
+          retry dnf -y $DNF_OPTS --refresh install ${{ matrix.packages }}
 
       - name: Run smoke test
         run: bash scripts/smoke-test.sh ${{ matrix.distro }} -v
