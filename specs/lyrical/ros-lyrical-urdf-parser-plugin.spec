@@ -28,9 +28,13 @@ BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-lyrical-ament-cmake-ros
 BuildRequires:  ros-lyrical-ament-cmake-ros-core
-BuildRequires:  urdfdom-headers-devel
+# Use our urdfdom_headers 3.x (matches urdf / urdfdom in this distro); Fedora's
+# system urdfdom-headers-devel is only 1.1.2.
+BuildRequires:  ros-lyrical-urdfdom-headers
 
-
+# The installed CMake config re-runs find_package(urdfdom_headers), so consumers
+# need the headers package present at their own configure time.
+Requires:       ros-lyrical-urdfdom-headers
 
 # Hide ROS libraries from the system solver under /opt; under FHS
 # (--with fedora_fhs) normal auto-provides/requires apply.

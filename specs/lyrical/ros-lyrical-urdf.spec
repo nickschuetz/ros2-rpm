@@ -36,6 +36,10 @@ BuildRequires:  ros-lyrical-urdfdom-headers
 Requires:       ros-lyrical-pluginlib
 Requires:       ros-lyrical-rcutils
 Requires:       ros-lyrical-urdf-parser-plugin
+# liburdf links liburdfdom at runtime, and the installed CMake config re-runs
+# find_package(urdfdom_headers); pull both so consumers resolve at build and run.
+Requires:       ros-lyrical-urdfdom
+Requires:       ros-lyrical-urdfdom-headers
 Requires:       tinyxml2-devel
 
 # Hide ROS libraries from the system solver under /opt; under FHS

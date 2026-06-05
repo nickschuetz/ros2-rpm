@@ -33,6 +33,10 @@ BuildRequires:  ros-lyrical-eigen3-cmake-module
 BuildRequires:  ros-lyrical-resource-retriever
 BuildRequires:  ros-lyrical-std-srvs
 BuildRequires:  ros-lyrical-urdf
+# urdf's exported CMake config transitively re-runs find_package(urdfdom_headers)
+# (and urdfdom), so the headers/parser packages must be in the buildroot.
+BuildRequires:  ros-lyrical-urdfdom
+BuildRequires:  ros-lyrical-urdfdom-headers
 BuildRequires:  ros-lyrical-yaml-cpp-vendor
 BuildRequires:  ros-lyrical-geometry-msgs
 BuildRequires:  ros-lyrical-message-filters
