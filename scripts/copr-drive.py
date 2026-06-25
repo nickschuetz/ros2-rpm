@@ -23,7 +23,13 @@ from pathlib import Path
 
 import distros
 
-ACTIVE = {"running", "pending", "starting", "importing", "waiting", "forked"}
+ACTIVE = {"running", "pending", "starting", "importing", "waiting"}
+# States that mean "a usable RPM exists at this version". "forked" is terminal:
+# a maintenance COPR created by forking another project (as ros2-jazzy was forked
+# from ros2) carries every package's last build as "forked", which is a real,
+# installable build, not an in-flight one. Treated as success-equivalent for both
+# the dependency gate and version-drift detection.
+SUCCESS = {"succeeded", "forked"}
 
 # A freshly-submitted build does not appear in `copr-cli list-packages
 # --with-latest-build` (or `monitor`) until COPR finishes importing its SRPM and
@@ -85,14 +91,31 @@ def spec_meta(spec: Path, distro: str) -> dict:
             "patches": patches, "deps": deps}
 
 
-def copr_states(project: str) -> dict[str, str]:
+def copr_package_info(project: str) -> dict[str, dict]:
+    """Map each COPR package to its latest build's state and upstream version.
+
+    The version is taken from latest_build.source_package.version (e.g.
+    "28.1.18-1") with the trailing "-<release>" stripped, so it can be compared
+    directly against a spec's Version: field. Lets the driver tell a genuinely
+    finished package from one whose COPR build succeeded at a now-stale version
+    (i.e. the spec was bumped since), which must be rebuilt.
+    """
     r = subprocess.run(["copr-cli", "list-packages", project, "--with-latest-build"],
                        capture_output=True, text=True, check=True)
     out = {}
     for p in json.loads(r.stdout):
         lb = p.get("latest_build") or {}
-        out[p["name"]] = lb.get("state") or "none"
+        sp = lb.get("source_package") or {}
+        ver = sp.get("version") or ""
+        out[p["name"]] = {
+            "state": lb.get("state") or "none",
+            "version": ver.split("-")[0] if ver else "",
+        }
     return out
+
+
+def copr_states(project: str) -> dict[str, str]:
+    return {n: i["state"] for n, i in copr_package_info(project).items()}
 
 
 def _topdir_matches(target: Path, expected: str | None) -> bool:
@@ -187,9 +210,22 @@ def main() -> int:
     build = distros.REPO_ROOT / "build"
     specs = [spec_meta(s, args.distro) for s in sorted(distros.spec_dir(args.distro).glob("*.spec"))]
     by_name = {m["rpm_name"]: m for m in specs if m["rpm_name"]}
-    states = copr_states(project)
+    info = copr_package_info(project)
+    states = {n: i["state"] for n, i in info.items()}
+    built_ver = {n: i["version"] for n, i in info.items()}
+    spec_ver = {m["rpm_name"]: m["version"] for m in specs if m["rpm_name"]}
 
-    succeeded = {n for n, s in states.items() if s == "succeeded"}
+    succeeded_state = {n for n, s in states.items() if s in SUCCESS}
+    # Drifted: COPR's succeeded build is at a version older than the current
+    # spec (the spec was bumped to track upstream). Both versions must be known
+    # and differ; on missing data we trust the succeeded state and do not force
+    # a rebuild. Drifted packages are excluded from `succeeded` so they (and,
+    # via the dependency gate, anything that builds on them) get rebuilt in
+    # topological order.
+    drifted = {n for n in succeeded_state
+               if built_ver.get(n) and spec_ver.get(n)
+               and built_ver[n] != spec_ver[n]}
+    succeeded = succeeded_state - drifted
     active = {n for n, s in states.items() if s in ACTIVE}
     failed = {n for n, s in states.items() if s == "failed"}
 
@@ -231,10 +267,14 @@ def main() -> int:
     # those still cooling down (submitted recently, not yet registered by COPR).
     inflight = (active & set(by_name)) | cooling | set(submitted)
     print(f"[{args.distro}] succeeded {done}/{total} | building {len(inflight)} | "
-          f"failed {len(failed & set(by_name))} | {'would-submit' if args.dry_run else 'submitted'} {len(submitted)} | "
+          f"failed {len(failed & set(by_name))} | drifted {len(drifted & set(by_name))} | "
+          f"{'would-submit' if args.dry_run else 'submitted'} {len(submitted)} | "
           f"remaining {total - done}")
     if failed & set(by_name):
         print("FAILED:", ", ".join(sorted(failed & set(by_name))))
+    if drifted & set(by_name):
+        print("DRIFTED (spec bumped, COPR stale):",
+              ", ".join(sorted(drifted & set(by_name))))
     if submitted:
         print(("WOULD SUBMIT: " if args.dry_run else "SUBMITTED: ") + ", ".join(submitted))
     # Exit 0 normally; exit 3 signals "all done"; exit 4 signals "stuck" (failures block, nothing in flight)

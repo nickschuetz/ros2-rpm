@@ -97,15 +97,20 @@ def update_spec(text: str, distro: str, new_upstream: str, full_version: str,
         flags=re.MULTILINE,
     )
 
-    # Source0 embeds the bloom-tag form `<upstream>-<release_counter>`. Substitute
-    # any matching token in the Source0 URL. Don't touch tarball filename
-    # macros (those use %{version} which already expanded to new_upstream).
+    # Two Source0 conventions appear in this repo:
+    #   1. ros2-gbp `<repo>-release` tags: .../release/<distro>/<pkg>/<ver>-<counter>
+    #      carry the bloom release counter, so they take the full version-counter.
+    #   2. bare upstream tags: .../ros2/<repo>/archive/refs/tags/<ver>.tar.gz
+    #      carry no counter, so they take the bare upstream version only.
+    # The two patterns are mutually exclusive (pattern 1's `<ver>-<counter>` is
+    # not followed by `.tar.gz`, so pattern 2 cannot also match it). Don't touch
+    # tarball filename macros (those use %{version}, already = new_upstream).
     def source0_sub(m: re.Match) -> str:
         url = m.group(1)
         url = re.sub(rf"(release/{distro}/[^/]+/)([0-9][0-9.A-Za-z]*-\d+)",
                      lambda x: f"{x.group(1)}{full_version}", url)
         url = re.sub(r"(/v?)\d[0-9.A-Za-z]*(\.tar\.gz)",
-                     lambda x: f"{x.group(1)}{full_version}{x.group(2)}", url)
+                     lambda x: f"{x.group(1)}{new_upstream}{x.group(2)}", url)
         return f"Source0:        {url}"
 
     new_text = re.sub(
