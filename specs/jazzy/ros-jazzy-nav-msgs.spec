@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-nav-msgs
-Version:        5.3.7
+Version:        5.3.8
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy nav_msgs
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/common_interfaces-release
-Source0:        https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/jazzy/nav_msgs/5.3.7-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/jazzy/nav_msgs/5.3.8-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -97,5 +97,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 5.3.8-1
+- Sync with upstream jazzy: 5.3.8.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 5.3.7-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

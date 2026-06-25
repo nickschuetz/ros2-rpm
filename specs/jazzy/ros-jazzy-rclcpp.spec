@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rclcpp
-Version:        28.1.18
+Version:        28.1.21
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rclcpp
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rclcpp-release
-Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp/28.1.18-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp/28.1.21-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -122,5 +122,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 28.1.21-1
+- Sync with upstream jazzy: 28.1.21.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 28.1.18-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

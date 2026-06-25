@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-tracetools
-Version:        8.2.5
+Version:        8.2.6
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy tracetools
 
 License:        Apache-2.0
 URL:            https://docs.ros.org/en/rolling/p/tracetools/
-Source0:        https://github.com/ros2-gbp/ros2_tracing-release/archive/refs/tags/release/jazzy/tracetools/8.2.5-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/ros2_tracing-release/archive/refs/tags/release/jazzy/tracetools/8.2.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -92,5 +92,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 8.2.6-1
+- Sync with upstream jazzy: 8.2.6.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 8.2.5-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-gui-cpp
-Version:        1.10.5
+Version:        1.10.6
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rqt_gui_cpp
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/rqt_gui_cpp
-Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui_cpp/1.10.5-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui_cpp/1.10.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -92,5 +92,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.6-1
+- Sync with upstream lyrical: 1.10.6.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.5-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

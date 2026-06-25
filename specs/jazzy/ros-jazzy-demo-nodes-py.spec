@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-demo-nodes-py
-Version:        0.33.10
+Version:        0.33.11
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy demo_nodes_py
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/demos-release
-Source0:        https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/jazzy/demo_nodes_py/0.33.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/jazzy/demo_nodes_py/0.33.11-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -98,5 +98,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.33.11-1
+- Sync with upstream jazzy: 0.33.11.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.33.10-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

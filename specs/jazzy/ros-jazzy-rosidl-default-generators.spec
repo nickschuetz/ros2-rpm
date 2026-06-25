@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rosidl-default-generators
-Version:        1.6.0
+Version:        1.6.1
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rosidl_default_generators
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rosidl_defaults-release
-Source0:        https://github.com/ros2-gbp/rosidl_defaults-release/archive/refs/tags/release/jazzy/rosidl_default_generators/1.6.0-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rosidl_defaults-release/archive/refs/tags/release/jazzy/rosidl_default_generators/1.6.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -88,5 +88,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.1-1
+- Sync with upstream jazzy: 1.6.1.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.0-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

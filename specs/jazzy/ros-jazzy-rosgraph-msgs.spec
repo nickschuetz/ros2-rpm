@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rosgraph-msgs
-Version:        2.0.3
+Version:        2.0.4
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rosgraph_msgs
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rcl_interfaces-release
-Source0:        https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/rosgraph_msgs/2.0.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/jazzy/rosgraph_msgs/2.0.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -93,5 +93,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.0.4-1
+- Sync with upstream jazzy: 2.0.4.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 2.0.3-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

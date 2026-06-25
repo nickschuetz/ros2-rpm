@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rosidl-runtime-py
-Version:        0.13.1
+Version:        0.13.2
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rosidl_runtime_py
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rosidl_runtime_py-release
-Source0:        https://github.com/ros2-gbp/rosidl_runtime_py-release/archive/refs/tags/release/jazzy/rosidl_runtime_py/0.13.1-2.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rosidl_runtime_py-release/archive/refs/tags/release/jazzy/rosidl_runtime_py/0.13.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -94,5 +94,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.2-1
+- Sync with upstream jazzy: 0.13.2.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.1-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

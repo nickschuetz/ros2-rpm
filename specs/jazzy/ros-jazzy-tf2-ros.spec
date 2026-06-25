@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-tf2-ros
-Version:        0.36.20
+Version:        0.36.21
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy tf2_ros
 
 License:        BSD-3-Clause
 URL:            http://www.ros.org/wiki/tf2_ros
-Source0:        https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/jazzy/tf2_ros/0.36.20-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/jazzy/tf2_ros/0.36.21-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -106,5 +106,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.36.21-1
+- Sync with upstream jazzy: 0.36.21.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.36.20-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

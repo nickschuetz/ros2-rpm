@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-example-interfaces
-Version:        0.12.0
+Version:        0.12.1
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy example_interfaces
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/example_interfaces-release
-Source0:        https://github.com/ros2-gbp/example_interfaces-release/archive/refs/tags/release/jazzy/example_interfaces/0.12.0-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/example_interfaces-release/archive/refs/tags/release/jazzy/example_interfaces/0.12.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -90,5 +90,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.12.1-1
+- Sync with upstream jazzy: 0.12.1.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.12.0-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

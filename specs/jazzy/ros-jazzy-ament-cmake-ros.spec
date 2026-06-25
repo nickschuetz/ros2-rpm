@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-cmake-ros
-Version:        0.12.0
+Version:        0.12.1
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy ament_cmake_ros
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/ament_cmake_ros-release
-Source0:        https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/release/jazzy/ament_cmake_ros/0.12.0-3.tar.gz#/ament_cmake_ros-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/release/jazzy/ament_cmake_ros/0.12.1-1.tar.gz#/ament_cmake_ros-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -81,5 +81,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.12.1-1
+- Sync with upstream jazzy: 0.12.1.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 0.12.0-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

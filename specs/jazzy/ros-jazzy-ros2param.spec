@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ros2param
-Version:        0.32.9
+Version:        0.32.10
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy ros2param
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/ros2cli-release
-Source0:        https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2param/0.32.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2param/0.32.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -96,5 +96,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.32.10-1
+- Sync with upstream jazzy: 0.32.10.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.32.9-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

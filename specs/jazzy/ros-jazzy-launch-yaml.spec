@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-launch-yaml
-Version:        3.4.10
+Version:        3.4.11
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy launch_yaml
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/launch-release
-Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch_yaml/3.4.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/jazzy/launch_yaml/3.4.11-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -93,5 +93,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 3.4.11-1
+- Sync with upstream jazzy: 3.4.11.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 3.4.10-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

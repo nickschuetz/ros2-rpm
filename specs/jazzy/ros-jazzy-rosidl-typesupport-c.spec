@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rosidl-typesupport-c
-Version:        3.2.2
+Version:        3.2.3
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rosidl_typesupport_c
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rosidl_typesupport-release
-Source0:        https://github.com/ros2-gbp/rosidl_typesupport-release/archive/refs/tags/release/jazzy/rosidl_typesupport_c/3.2.2-1.tar.gz#/rosidl_typesupport-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rosidl_typesupport-release/archive/refs/tags/release/jazzy/rosidl_typesupport_c/3.2.3-1.tar.gz#/rosidl_typesupport-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -94,5 +94,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 3.2.3-1
+- Sync with upstream jazzy: 3.2.3.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 3.2.2-1
 - Initial Fedora COPR build for ROS 2 Jazzy.
