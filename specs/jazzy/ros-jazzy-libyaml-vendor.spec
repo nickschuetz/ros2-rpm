@@ -11,13 +11,13 @@
 %global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-libyaml-vendor
-Version:        1.6.3
+Version:        1.6.4
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy libyaml_vendor
 
 License:        Apache-2.0
 URL:            https://github.com/yaml/libyaml
-Source0:        https://github.com/ros2-gbp/libyaml_vendor-release/archive/refs/tags/release/jazzy/libyaml_vendor/1.6.3-2.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/libyaml_vendor-release/archive/refs/tags/release/jazzy/libyaml_vendor/1.6.4-2.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -90,5 +90,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.4-1
+- Sync with upstream jazzy: 1.6.4.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.3-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

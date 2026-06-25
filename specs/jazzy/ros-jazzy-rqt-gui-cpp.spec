@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-gui-cpp
-Version:        1.6.3
+Version:        1.6.4
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rqt_gui_cpp
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/rqt_gui_cpp
-Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/jazzy/rqt_gui_cpp/1.6.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/jazzy/rqt_gui_cpp/1.6.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -92,5 +92,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.4-1
+- Sync with upstream jazzy: 1.6.4.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.3-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

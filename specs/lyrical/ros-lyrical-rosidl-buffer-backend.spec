@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rosidl-buffer-backend
-Version:        5.2.0
+Version:        5.2.1
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rosidl_buffer_backend
 
 License:        Apache-2.0
 URL:            https://github.com/ros2/rosidl
-Source0:        https://github.com/ros2/rosidl/archive/refs/tags/5.2.0.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2/rosidl/archive/refs/tags/5.2.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 # Headers + CMake config only (no compiled artifacts).
 BuildArch:      noarch
@@ -93,5 +93,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 5.2.1-1
+- Sync with upstream lyrical: 5.2.1.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 5.2.0-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

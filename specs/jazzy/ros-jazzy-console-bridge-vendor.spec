@@ -11,13 +11,13 @@
 %global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-console-bridge-vendor
-Version:        1.7.1
+Version:        1.7.2
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy console_bridge_vendor
 
 License:        Apache-2.0
 URL:            https://github.com/ros/console_bridge
-Source0:        https://github.com/ros2-gbp/console_bridge_vendor-release/archive/refs/tags/release/jazzy/console_bridge_vendor/1.7.1-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/console_bridge_vendor-release/archive/refs/tags/release/jazzy/console_bridge_vendor/1.7.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -89,5 +89,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.7.2-1
+- Sync with upstream jazzy: 1.7.2.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 1.7.1-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-graph
-Version:        1.8.3
+Version:        1.8.4
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rqt_graph
 
 License:        BSD-3-Clause
 URL:            http://wiki.ros.org/rqt_graph
-Source0:        https://github.com/ros2-gbp/rqt_graph-release/archive/refs/tags/release/lyrical/rqt_graph/1.8.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt_graph-release/archive/refs/tags/release/lyrical/rqt_graph/1.8.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -99,5 +99,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.8.4-1
+- Sync with upstream lyrical: 1.8.4.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 1.8.3-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

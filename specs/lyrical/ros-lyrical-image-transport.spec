@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-image-transport
-Version:        6.4.9
+Version:        6.4.10
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical image_transport
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/image_transport
-Source0:        https://github.com/ros2-gbp/image_common-release/archive/refs/tags/release/lyrical/image_transport/6.4.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/image_common-release/archive/refs/tags/release/lyrical/image_transport/6.4.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -105,5 +105,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 6.4.10-1
+- Sync with upstream lyrical: 6.4.10.
+
 * Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 6.4.9-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-service-caller
-Version:        1.5.2
+Version:        1.5.3
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rqt_service_caller
 
 License:        BSD-3-Clause
 URL:            http://wiki.ros.org/rqt_service_caller
-Source0:        https://github.com/ros2-gbp/rqt_service_caller-release/archive/refs/tags/release/lyrical/rqt_service_caller/1.5.2-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt_service_caller-release/archive/refs/tags/release/lyrical/rqt_service_caller/1.5.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -96,5 +96,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.5.3-1
+- Sync with upstream lyrical: 1.5.3.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 1.5.2-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

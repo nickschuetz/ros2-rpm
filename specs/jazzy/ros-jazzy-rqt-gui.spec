@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-gui
-Version:        1.6.3
+Version:        1.6.4
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rqt_gui
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/rqt_gui
-Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/jazzy/rqt_gui/1.6.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/jazzy/rqt_gui/1.6.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -101,5 +101,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.4-1
+- Sync with upstream jazzy: 1.6.4.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 1.6.3-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

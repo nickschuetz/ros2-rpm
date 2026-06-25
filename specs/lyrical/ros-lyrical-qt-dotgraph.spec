@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-qt-dotgraph
-Version:        2.11.0
+Version:        2.11.1
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical qt_dotgraph
 
 License:        BSD-3-Clause
 URL:            https://github.com/ros-visualization/qt_gui_core
-Source0:        https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/lyrical/qt_dotgraph/2.11.0-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/release/lyrical/qt_dotgraph/2.11.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -94,5 +94,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.11.1-1
+- Sync with upstream lyrical: 2.11.1.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 2.11.0-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

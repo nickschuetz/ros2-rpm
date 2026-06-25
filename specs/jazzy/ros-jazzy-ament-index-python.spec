@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-index-python
-Version:        1.8.3
+Version:        1.8.4
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy ament_index_python
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/ament_index-release
-Source0:        https://github.com/ros2-gbp/ament_index-release/archive/refs/tags/release/jazzy/ament_index_python/1.8.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/ament_index-release/archive/refs/tags/release/jazzy/ament_index_python/1.8.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -77,5 +77,8 @@ Python API to access the ament resource index.
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.8.4-1
+- Sync with upstream jazzy: 1.8.4.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 1.8.3-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

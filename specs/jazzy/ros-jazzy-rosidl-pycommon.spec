@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rosidl-pycommon
-Version:        4.6.7
+Version:        4.6.9
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rosidl_pycommon
 
 License:        Apache-2.0
 URL:            https://github.com/ros2/rosidl
-Source0:        https://github.com/ros2/rosidl/archive/refs/tags/4.6.7.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2/rosidl/archive/refs/tags/4.6.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -84,5 +84,8 @@ popd > /dev/null
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 4.6.9-1
+- Sync with upstream jazzy: 4.6.9.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 4.6.7-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

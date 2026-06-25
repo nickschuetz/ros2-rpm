@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rcpputils
-Version:        2.11.3
+Version:        2.11.4
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rcpputils
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rcpputils-release
-Source0:        https://github.com/ros2-gbp/rcpputils-release/archive/refs/tags/release/jazzy/rcpputils/2.11.3-1.tar.gz#/rcpputils-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rcpputils-release/archive/refs/tags/release/jazzy/rcpputils/2.11.4-1.tar.gz#/rcpputils-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -81,5 +81,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.11.4-1
+- Sync with upstream jazzy: 2.11.4.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 2.11.3-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rcutils
-Version:        6.7.5
+Version:        6.7.6
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rcutils
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rcutils-release
-Source0:        https://github.com/ros2-gbp/rcutils-release/archive/refs/tags/release/jazzy/rcutils/6.7.5-1.tar.gz#/rcutils-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rcutils-release/archive/refs/tags/release/jazzy/rcutils/6.7.6-1.tar.gz#/rcutils-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -80,5 +80,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 6.7.6-1
+- Sync with upstream jazzy: 6.7.6.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 6.7.5-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

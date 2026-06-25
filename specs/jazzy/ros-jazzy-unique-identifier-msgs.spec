@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-unique-identifier-msgs
-Version:        2.5.0
+Version:        2.5.1
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy unique_identifier_msgs
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/unique_identifier_msgs
-Source0:        https://github.com/ros2-gbp/unique_identifier_msgs-release/archive/refs/tags/release/jazzy/unique_identifier_msgs/2.5.0-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/unique_identifier_msgs-release/archive/refs/tags/release/jazzy/unique_identifier_msgs/2.5.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -90,5 +90,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.1-1
+- Sync with upstream jazzy: 2.5.1.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.0-1
 - Initial Fedora COPR build for ROS 2 Jazzy.
