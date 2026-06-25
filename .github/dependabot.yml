@@ -7,9 +7,11 @@ updates:
     open-pull-requests-limit: 5
     labels: ["dependencies", "ci"]
 
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3
-    labels: ["dependencies", "tooling"]
+  # No pip ecosystem entry: this repo commits no Python dependency manifest.
+  # The scripts under scripts/ use only the standard library, and the Python
+  # packages built into the ROS RPMs get their setup.py / pyproject.toml from
+  # upstream source tarballs fetched at build time (extracted under the
+  # gitignored build/ tree, never committed). Upstream versions are pinned
+  # deliberately via distros/<distro>/packages.yaml and the rosdistro pins, so
+  # Dependabot must not float them. A pip entry here finds no manifest and
+  # fails every run with "No files found in /".
