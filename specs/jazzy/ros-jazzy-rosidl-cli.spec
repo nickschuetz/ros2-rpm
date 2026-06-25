@@ -16,7 +16,7 @@ Summary:        ROS 2 Jazzy rosidl_cli
 
 License:        Apache-2.0
 URL:            https://github.com/ros2/rosidl
-Source0:        https://github.com/ros2/rosidl/archive/refs/tags/4.6.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2/rosidl/archive/refs/tags/4.6.9.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 

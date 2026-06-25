@@ -17,7 +17,7 @@ Summary:        ROS 2 Lyrical rosidl_buffer_py
 
 License:        Apache-2.0
 URL:            https://github.com/ros2/rosidl
-Source0:        https://github.com/ros2/rosidl/archive/refs/tags/5.2.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2/rosidl/archive/refs/tags/5.2.1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake

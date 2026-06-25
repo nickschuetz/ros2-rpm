@@ -16,7 +16,7 @@ Summary:        ROS 2 Jazzy rosidl_typesupport_interface
 
 License:        Apache-2.0
 URL:            https://github.com/ros2/rosidl
-Source0:        https://github.com/ros2/rosidl/archive/refs/tags/4.6.9-1.tar.gz#/rosidl-%{version}.tar.gz
+Source0:        https://github.com/ros2/rosidl/archive/refs/tags/4.6.9.tar.gz#/rosidl-%{version}.tar.gz
 
 BuildArch:      noarch
 
