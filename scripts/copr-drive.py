@@ -218,8 +218,14 @@ def main() -> int:
                          "--chroots fedora-44-x86_64,fedora-44-aarch64,"
                          "centos-stream-10-x86_64,centos-stream-10-aarch64 to skip "
                          "fedora-rawhide.")
+    ap.add_argument("--exclude",
+                    help="comma-separated rpm package names to skip this run, e.g. "
+                         "packages that build on a different chroot set (jazzy rqt "
+                         "is Fedora-only). Run them separately with their own "
+                         "--chroots.")
     args = ap.parse_args()
     chroots = [c.strip() for c in args.chroots.split(",")] if args.chroots else None
+    exclude = {c.strip() for c in args.exclude.split(",")} if args.exclude else set()
 
     project = distros.copr_project(args.distro)
     build = distros.REPO_ROOT / "build"
@@ -258,7 +264,7 @@ def main() -> int:
     ready = []
     for m in specs:
         n = m["rpm_name"]
-        if not n or n in succeeded or n in active or n in cooling:
+        if not n or n in succeeded or n in active or n in cooling or n in exclude:
             continue
         # only build deps that are in our tree; all must be succeeded
         intree = {d for d in m["deps"] if d in by_name}
