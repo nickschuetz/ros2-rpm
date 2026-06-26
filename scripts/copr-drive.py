@@ -76,6 +76,19 @@ def spec_meta(spec: Path, distro: str) -> dict:
     src_url = src0.split("#")[0] if src0 else None
     if src_url and version:
         src_url = src_url.replace("%{version}", version)
+    # The Source0 "#/<localname>" fragment is the filename rpmbuild looks for in
+    # _sourcedir; it is not always <pkg_name>-<version> (jazzy rosidl specs use
+    # the repo name, e.g. "#/rosidl-%{version}.tar.gz"). Honor it so the fetched
+    # tarball lands under the exact name the spec references; fall back to
+    # <pkg_name>-<version> when no fragment is present.
+    frag = src0.split("#", 1)[1].lstrip("/") if (src0 and "#" in src0) else None
+    if frag:
+        src_name = frag.replace("%{version}", version or "").replace(
+            "%{pkg_name}", pkg_name or "")
+    elif pkg_name and version:
+        src_name = f"{pkg_name}-{version}.tar.gz"
+    else:
+        src_name = None
     # The %autosetup -n dir is the tarball top-dir the build cd's into; cache
     # validation compares against it so a stale same-named tarball (e.g. a Jazzy
     # tarball cached under the same <pkg>-<version> name) is detected + refetched.
@@ -87,8 +100,8 @@ def spec_meta(spec: Path, distro: str) -> dict:
     # _sourcedir so rpmbuild -bs can include them in the SRPM.
     patches = re.findall(r"^Patch\d+:\s+(\S+)", text, re.M)
     return {"spec": spec, "rpm_name": name, "pkg_name": pkg_name,
-            "version": version, "src_url": src_url, "topdir": topdir,
-            "patches": patches, "deps": deps}
+            "version": version, "src_url": src_url, "src_name": src_name,
+            "topdir": topdir, "patches": patches, "deps": deps}
 
 
 def copr_package_info(project: str) -> dict[str, dict]:
@@ -148,9 +161,11 @@ def ensure_source(meta: dict, sources: Path) -> bool:
             with tarfile.open(stub, "w:gz"):
                 pass
         return True
-    if not (meta["src_url"] and meta["pkg_name"] and meta["version"]):
+    if not (meta["src_url"] and meta["src_name"]):
         return False
-    target = sources / f"{meta['pkg_name']}-{meta['version']}.tar.gz"
+    # Save under the exact name the spec's Source0 references (the "#/<name>"
+    # fragment), which rpmbuild looks for; not all specs use <pkg_name>-<version>.
+    target = sources / meta["src_name"]
     if target.is_file() and _topdir_matches(target, meta.get("topdir")):
         return True
     try:
