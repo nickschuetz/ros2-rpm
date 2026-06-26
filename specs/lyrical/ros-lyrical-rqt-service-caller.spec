@@ -43,7 +43,7 @@ Requires:       ros-lyrical-rqt-gui-py
 rqt_service_caller provides a GUI plugin for calling arbitrary services.
 
 %prep
-%autosetup -p1 -n rqt_service_caller-release-release-lyrical-rqt_service_caller-1.5.2-3
+%autosetup -p1 -n rqt_service_caller-release-release-lyrical-rqt_service_caller-1.5.3-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

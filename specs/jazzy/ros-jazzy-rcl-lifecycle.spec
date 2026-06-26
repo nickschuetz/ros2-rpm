@@ -50,7 +50,7 @@ Requires:       ros-jazzy-tracetools
 Package containing a C-based lifecycle implementation
 
 %prep
-%autosetup -p1 -n rcl-release-release-jazzy-rcl_lifecycle-9.2.9-2
+%autosetup -p1 -n rcl-release-release-jazzy-rcl_lifecycle-9.2.11-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

@@ -54,7 +54,7 @@ Requires:       ros-jazzy-rclpy
 ROS specific extensions to the launch tool.
 
 %prep
-%autosetup -p1 -n launch_ros-release-release-jazzy-launch_ros-0.26.11-1
+%autosetup -p1 -n launch_ros-release-release-jazzy-launch_ros-0.26.12-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

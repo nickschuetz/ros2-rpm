@@ -48,7 +48,7 @@ A set of ROS 2 message filters which take in messages and may output those
 messages at a later time, based on the conditions that filter needs met.
 
 %prep
-%autosetup -p1 -n ros2_message_filters-release-release-jazzy-message_filters-4.11.13-1
+%autosetup -p1 -n ros2_message_filters-release-release-jazzy-message_filters-4.11.17-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

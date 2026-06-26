@@ -61,7 +61,7 @@ Requires:       ros-jazzy-tracetools
 Code shared on static and dynamic type support of rmw_fastrtps_cpp.
 
 %prep
-%autosetup -p1 -n rmw_fastrtps-release-release-jazzy-rmw_fastrtps_shared_cpp-8.4.3-1
+%autosetup -p1 -n rmw_fastrtps-release-release-jazzy-rmw_fastrtps_shared_cpp-8.4.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

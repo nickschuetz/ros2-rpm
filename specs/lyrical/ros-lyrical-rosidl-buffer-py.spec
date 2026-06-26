@@ -43,7 +43,7 @@ Python bindings for rosidl::Buffer, providing a Buffer class that supports
 vendor-specific memory backends (CPU, GPU, custom) for rclpy users.
 
 %prep
-%autosetup -p1 -n rosidl-5.2.0
+%autosetup -p1 -n rosidl-5.2.1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

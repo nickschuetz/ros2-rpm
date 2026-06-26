@@ -46,7 +46,7 @@ rqt_gui provides the main to start an instance of the ROS integrated
 graphical user interface provided by qt_gui.
 
 %prep
-%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui-1.10.5-1
+%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui-1.10.6-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

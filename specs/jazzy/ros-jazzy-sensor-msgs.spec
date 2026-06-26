@@ -46,7 +46,7 @@ A package containing some sensor data related message and service
 definitions.
 
 %prep
-%autosetup -p1 -n common_interfaces-release-release-jazzy-sensor_msgs-5.3.7-1
+%autosetup -p1 -n common_interfaces-release-release-jazzy-sensor_msgs-5.3.8-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

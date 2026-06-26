@@ -46,7 +46,7 @@ rqt_console provides a GUI plugin for displaying and filtering ROS
 messages.
 
 %prep
-%autosetup -p1 -n rqt_console-release-release-lyrical-rqt_console-2.4.3-3
+%autosetup -p1 -n rqt_console-release-release-lyrical-rqt_console-2.4.4-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

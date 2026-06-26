@@ -44,7 +44,7 @@ Requires:       ros-jazzy-osrf-pycommon
 The ROS launch tool.
 
 %prep
-%autosetup -p1 -n launch-release-release-jazzy-launch-3.4.10-1
+%autosetup -p1 -n launch-release-release-jazzy-launch-3.4.11-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

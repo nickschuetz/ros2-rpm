@@ -42,7 +42,7 @@ Requires:       ros-lyrical-rosidl-cli
 API and scripts to parse .msg/.srv/.action files and convert them to .idl.
 
 %prep
-%autosetup -p1 -n rosidl-5.2.0
+%autosetup -p1 -n rosidl-5.2.1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

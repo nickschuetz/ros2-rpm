@@ -40,7 +40,7 @@ Requires:       ros-jazzy-rosidl-parser
 Common Python functions used by rosidl packages.
 
 %prep
-%autosetup -p1 -n rosidl-4.6.7
+%autosetup -p1 -n rosidl-4.6.9
 
 %generate_buildrequires
 pushd rosidl_pycommon > /dev/null

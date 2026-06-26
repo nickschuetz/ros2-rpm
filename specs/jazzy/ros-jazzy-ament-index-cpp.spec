@@ -39,7 +39,7 @@ BuildRequires:  ros-jazzy-ament-cmake-gen-version-h
 C++ API to access the ament resource index.
 
 %prep
-%autosetup -p1 -n ament_index-release-release-jazzy-ament_index_cpp-1.8.3-1
+%autosetup -p1 -n ament_index-release-release-jazzy-ament_index_cpp-1.8.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

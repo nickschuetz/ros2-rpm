@@ -42,7 +42,7 @@ Requires:       ros-jazzy-rosidl-cli
 API and scripts to parse .msg/.srv/.action files and convert them to .idl.
 
 %prep
-%autosetup -p1 -n rosidl-4.6.7
+%autosetup -p1 -n rosidl-4.6.9
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

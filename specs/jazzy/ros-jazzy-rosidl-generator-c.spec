@@ -48,7 +48,7 @@ Requires:       ros-jazzy-rosidl-typesupport-interface
 Generate the ROS interfaces in C.
 
 %prep
-%autosetup -p1 -n rosidl-4.6.7
+%autosetup -p1 -n rosidl-4.6.9
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

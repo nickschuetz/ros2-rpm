@@ -42,7 +42,7 @@ Requires:       ros-jazzy-service-msgs
 A configuration package defining the default ROS interface generators.
 
 %prep
-%autosetup -p1 -n rosidl_defaults-release-release-jazzy-rosidl_default_generators-1.6.0-3
+%autosetup -p1 -n rosidl_defaults-release-release-jazzy-rosidl_default_generators-1.6.1-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

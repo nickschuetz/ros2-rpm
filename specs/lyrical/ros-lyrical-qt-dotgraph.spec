@@ -42,7 +42,7 @@ Requires:       ros-lyrical-python-qt-binding
 qt_dotgraph provides helpers to work with dot graphs.
 
 %prep
-%autosetup -p1 -n qt_gui_core-release-release-lyrical-qt_dotgraph-2.11.0-1
+%autosetup -p1 -n qt_gui_core-release-release-lyrical-qt_dotgraph-2.11.1-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

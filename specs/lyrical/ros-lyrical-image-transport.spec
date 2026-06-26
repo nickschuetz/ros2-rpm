@@ -54,7 +54,7 @@ compressed formats. Examples (provided by separate plugin packages) include
 JPEG/PNG compression and Theora streaming video.
 
 %prep
-%autosetup -p1 -n image_common-release-release-lyrical-image_transport-6.4.9-1
+%autosetup -p1 -n image_common-release-release-lyrical-image_transport-6.4.10-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

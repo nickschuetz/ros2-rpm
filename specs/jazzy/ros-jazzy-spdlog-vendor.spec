@@ -42,7 +42,7 @@ Wrapper around spdlog, providing nothing but a dependency on spdlog, on
 some systems. On others, it provides an ExternalProject build of spdlog.
 
 %prep
-%autosetup -p1 -n spdlog_vendor-release-release-jazzy-spdlog_vendor-1.6.1-1
+%autosetup -p1 -n spdlog_vendor-release-release-jazzy-spdlog_vendor-1.6.2-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

@@ -43,7 +43,7 @@ Requires:       ros-jazzy-rosidl-default-runtime
 tf2_msgs
 
 %prep
-%autosetup -p1 -n geometry2-release-release-jazzy-tf2_msgs-0.36.20-1
+%autosetup -p1 -n geometry2-release-release-jazzy-tf2_msgs-0.36.21-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

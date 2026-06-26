@@ -40,7 +40,7 @@ Requires:       libatomic
 Package containing various utility types and functions for C
 
 %prep
-%autosetup -p1 -n rcutils-release-release-jazzy-rcutils-6.7.5-1
+%autosetup -p1 -n rcutils-release-release-jazzy-rcutils-6.7.6-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

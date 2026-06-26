@@ -69,7 +69,7 @@ Implement the ROS middleware interface using eProsima FastRTPS static code
 generation in C++.
 
 %prep
-%autosetup -p1 -n rmw_fastrtps-release-release-jazzy-rmw_fastrtps_cpp-8.4.3-1
+%autosetup -p1 -n rmw_fastrtps-release-release-jazzy-rmw_fastrtps_cpp-8.4.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

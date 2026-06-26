@@ -41,7 +41,7 @@ Requires:       ros-jazzy-rcutils
 Package containing utility code for C++.
 
 %prep
-%autosetup -p1 -n rcpputils-release-release-jazzy-rcpputils-2.11.3-1
+%autosetup -p1 -n rcpputils-release-release-jazzy-rcpputils-2.11.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

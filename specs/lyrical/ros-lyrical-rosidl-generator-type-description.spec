@@ -44,7 +44,7 @@ Requires:       ros-lyrical-rosidl-parser
 Generate hashes and descriptions of ROS 2 interface types, per REP-2011.
 
 %prep
-%autosetup -p1 -n rosidl-5.2.0
+%autosetup -p1 -n rosidl-5.2.1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

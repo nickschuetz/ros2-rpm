@@ -55,7 +55,7 @@ Requires:       ros-jazzy-rosidl-typesupport-interface
 Generate the C++ interfaces for eProsima FastRTPS.
 
 %prep
-%autosetup -p1 -n rosidl_typesupport_fastrtps-release-release-jazzy-rosidl_typesupport_fastrtps_cpp-3.6.3-1
+%autosetup -p1 -n rosidl_typesupport_fastrtps-release-release-jazzy-rosidl_typesupport_fastrtps_cpp-3.6.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

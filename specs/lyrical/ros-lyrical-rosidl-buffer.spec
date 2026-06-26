@@ -40,7 +40,7 @@ Provides Buffer container type with support for multiple memory backends
 (CPU, GPU, custom).
 
 %prep
-%autosetup -p1 -n rosidl-5.2.0
+%autosetup -p1 -n rosidl-5.2.1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

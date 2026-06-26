@@ -44,7 +44,7 @@ Requires:       ros-jazzy-rclcpp
 rqt_gui_cpp enables GUI plugins to use the C++ client library for ROS.
 
 %prep
-%autosetup -p1 -n rqt-release-release-jazzy-rqt_gui_cpp-1.6.3-1
+%autosetup -p1 -n rqt-release-release-jazzy-rqt_gui_cpp-1.6.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

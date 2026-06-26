@@ -43,7 +43,7 @@ console_bridge, on some systems. On others, it provides an ExternalProject
 build of console_bridge.
 
 %prep
-%autosetup -p1 -n console_bridge_vendor-release-release-jazzy-console_bridge_vendor-1.7.1-3
+%autosetup -p1 -n console_bridge_vendor-release-release-jazzy-console_bridge_vendor-1.7.2-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

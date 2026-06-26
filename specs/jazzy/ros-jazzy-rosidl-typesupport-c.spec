@@ -51,7 +51,7 @@ Requires:       ros-jazzy-rosidl-typesupport-interface
 Generate the type support for C messages.
 
 %prep
-%autosetup -p1 -n rosidl_typesupport-release-release-jazzy-rosidl_typesupport_c-3.2.2-1
+%autosetup -p1 -n rosidl_typesupport-release-release-jazzy-rosidl_typesupport_c-3.2.3-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
