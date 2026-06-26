@@ -48,7 +48,7 @@ rqt_publisher provides a GUI plugin for publishing arbitrary messages with
 fixed or computed field values.
 
 %prep
-%autosetup -p1 -n rqt_publisher-release-release-lyrical-rqt_publisher-1.10.3-1
+%autosetup -p1 -n rqt_publisher-release-release-lyrical-rqt_publisher-1.10.4-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

@@ -44,7 +44,7 @@ Requires:       ros-lyrical-rclcpp
 rqt_gui_cpp enables GUI plugins to use the C++ client library for ROS.
 
 %prep
-%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui_cpp-1.10.5-1
+%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui_cpp-1.10.6-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

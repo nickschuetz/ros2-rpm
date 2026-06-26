@@ -74,7 +74,7 @@ Requires:       ros-jazzy-tracetools
 The ROS client library in C++.
 
 %prep
-%autosetup -p1 -n rclcpp-release-release-jazzy-rclcpp-28.1.18-1
+%autosetup -p1 -n rclcpp-release-release-jazzy-rclcpp-28.1.21-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

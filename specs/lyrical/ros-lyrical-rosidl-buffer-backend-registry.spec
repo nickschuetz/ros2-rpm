@@ -45,7 +45,7 @@ Requires:       ros-lyrical-rosidl-runtime-cpp
 Backend discovery and plugin loading for ROS2 buffer types
 
 %prep
-%autosetup -p1 -n rosidl-5.2.0
+%autosetup -p1 -n rosidl-5.2.1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

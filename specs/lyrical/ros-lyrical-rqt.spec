@@ -42,7 +42,7 @@ Requires:       ros-lyrical-rqt-gui-py
 rqt is a Qt-based framework for GUI development for ROS.
 
 %prep
-%autosetup -p1 -n rqt-release-release-lyrical-rqt-1.10.5-1
+%autosetup -p1 -n rqt-release-release-lyrical-rqt-1.10.6-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

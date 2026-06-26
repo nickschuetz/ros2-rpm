@@ -39,7 +39,7 @@ BuildRequires:  ros-lyrical-ament-cmake
 The interface for rosidl typesupport packages.
 
 %prep
-%autosetup -p1 -n rosidl-5.2.0
+%autosetup -p1 -n rosidl-5.2.1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

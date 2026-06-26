@@ -43,7 +43,7 @@ Requires:       ros-lyrical-rqt-gui
 rqt_gui_py enables GUI plugins to use the Python client library for ROS.
 
 %prep
-%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui_py-1.10.5-1
+%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui_py-1.10.6-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

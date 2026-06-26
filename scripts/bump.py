@@ -121,6 +121,22 @@ def update_spec(text: str, distro: str, new_upstream: str, full_version: str,
         flags=re.MULTILINE,
     )
 
+    # The %autosetup -n directory is the tarball's top-level dir and embeds the
+    # version too, so it must move in lockstep with Source0 or %prep fails with
+    # "cd: <repo>-<oldver>: No such file or directory". Same two conventions:
+    # the ros2-gbp release form ends with <ver>-<counter> (-> full_version), the
+    # bare upstream form ends with the bare <ver> (-> new_upstream).
+    old_upstream = parse_spec_version(text)
+    if old_upstream:
+        def autosetup_sub(m: re.Match) -> str:
+            head, name = m.group(1), m.group(2)
+            name2 = re.sub(rf"{re.escape(old_upstream)}-\d+", full_version, name)
+            if name2 == name:
+                name2 = re.sub(rf"{re.escape(old_upstream)}$", new_upstream, name)
+            return head + name2
+        new_text = re.sub(r"^(%autosetup\b.*?-n\s+)(\S+)",
+                          autosetup_sub, new_text, count=1, flags=re.MULTILINE)
+
     # Reset Release: to 1 on every upstream bump.
     new_text = re.sub(
         r"^(Release:\s+)\d+(%.*)$",

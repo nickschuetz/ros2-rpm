@@ -39,7 +39,7 @@ Requires:       python3
 Python API to access the ament resource index.
 
 %prep
-%autosetup -p1 -n ament_index-release-release-jazzy-ament_index_python-1.8.3-1
+%autosetup -p1 -n ament_index-release-release-jazzy-ament_index_python-1.8.4-1
 
 %generate_buildrequires
 %pyproject_buildrequires

@@ -41,7 +41,7 @@ Requires:       ros-jazzy-ros2cli
 The node command for ROS 2 command line tools.
 
 %prep
-%autosetup -p1 -n ros2cli-release-release-jazzy-ros2node-0.32.9-1
+%autosetup -p1 -n ros2cli-release-release-jazzy-ros2node-0.32.10-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

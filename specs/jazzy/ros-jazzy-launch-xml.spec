@@ -41,7 +41,7 @@ Requires:       ros-jazzy-launch
 XML frontend for the launch package.
 
 %prep
-%autosetup -p1 -n launch-release-release-jazzy-launch_xml-3.4.10-1
+%autosetup -p1 -n launch-release-release-jazzy-launch_xml-3.4.11-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

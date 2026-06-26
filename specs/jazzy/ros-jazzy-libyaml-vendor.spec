@@ -44,7 +44,7 @@ Requires:       pkgconfig
 Vendored version of libyaml.
 
 %prep
-%autosetup -p1 -n libyaml_vendor-release-release-jazzy-libyaml_vendor-1.6.3-2
+%autosetup -p1 -n libyaml_vendor-release-release-jazzy-libyaml_vendor-1.6.4-2
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

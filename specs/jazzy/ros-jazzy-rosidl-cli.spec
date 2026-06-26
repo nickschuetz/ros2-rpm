@@ -40,7 +40,7 @@ Requires:       python3-argcomplete
 Command line tools for ROS interface generation.
 
 %prep
-%autosetup -p1 -n rosidl-4.6.7
+%autosetup -p1 -n rosidl-4.6.9
 
 %generate_buildrequires
 pushd rosidl_cli > /dev/null

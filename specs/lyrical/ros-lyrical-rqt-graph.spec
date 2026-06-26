@@ -46,7 +46,7 @@ Requires:       ros-lyrical-rqt-gui-py
 rqt_graph provides a GUI plugin for visualizing the ROS computation graph.
 
 %prep
-%autosetup -p1 -n rqt_graph-release-release-lyrical-rqt_graph-1.8.3-1
+%autosetup -p1 -n rqt_graph-release-release-lyrical-rqt_graph-1.8.4-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

@@ -39,7 +39,7 @@ Requires:       ros-jazzy-rosidl-default-runtime
 Contains message and service definitions used by the examples.
 
 %prep
-%autosetup -p1 -n example_interfaces-release-release-jazzy-example_interfaces-0.12.0-3
+%autosetup -p1 -n example_interfaces-release-release-jazzy-example_interfaces-0.12.1-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

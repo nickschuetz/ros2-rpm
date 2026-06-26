@@ -55,7 +55,7 @@ Requires:       ros-jazzy-tf2-msgs
 This package contains the C++ ROS bindings for the tf2 library
 
 %prep
-%autosetup -p1 -n geometry2-release-release-jazzy-tf2_ros-0.36.20-1
+%autosetup -p1 -n geometry2-release-release-jazzy-tf2_ros-0.36.21-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

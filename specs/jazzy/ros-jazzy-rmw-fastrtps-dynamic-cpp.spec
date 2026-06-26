@@ -60,7 +60,7 @@ Requires:       ros-jazzy-rosidl-typesupport-introspection-cpp
 Implement the ROS middleware interface using introspection type support.
 
 %prep
-%autosetup -p1 -n rmw_fastrtps-release-release-jazzy-rmw_fastrtps_dynamic_cpp-8.4.3-1
+%autosetup -p1 -n rmw_fastrtps-release-release-jazzy-rmw_fastrtps_dynamic_cpp-8.4.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

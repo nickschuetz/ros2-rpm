@@ -50,7 +50,7 @@ time, and lets the user transform points, vectors, etc between any two
 coordinate frames at any desired point in time.
 
 %prep
-%autosetup -p1 -n geometry2-release-release-jazzy-tf2-0.36.20-1
+%autosetup -p1 -n geometry2-release-release-jazzy-tf2-0.36.21-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

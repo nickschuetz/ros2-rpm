@@ -50,7 +50,7 @@ exported classes without the explicit declaration (i.e. header file) for
 those classes.
 
 %prep
-%autosetup -p1 -n class_loader-release-release-jazzy-class_loader-2.7.0-3
+%autosetup -p1 -n class_loader-release-release-jazzy-class_loader-2.7.1-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

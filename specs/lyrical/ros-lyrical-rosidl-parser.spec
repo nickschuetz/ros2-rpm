@@ -40,7 +40,7 @@ Requires:       ros-lyrical-rosidl-adapter
 The parser for `.idl` ROS interface files.
 
 %prep
-%autosetup -p1 -n rosidl-5.2.0
+%autosetup -p1 -n rosidl-5.2.1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

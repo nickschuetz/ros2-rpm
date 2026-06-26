@@ -42,7 +42,7 @@ Message definitions for reporting statistics for topics and system
 resources.
 
 %prep
-%autosetup -p1 -n rcl_interfaces-release-release-jazzy-statistics_msgs-2.0.3-1
+%autosetup -p1 -n rcl_interfaces-release-release-jazzy-statistics_msgs-2.0.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

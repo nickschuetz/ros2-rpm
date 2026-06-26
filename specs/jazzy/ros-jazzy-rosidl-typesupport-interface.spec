@@ -39,7 +39,7 @@ BuildRequires:  ros-jazzy-ament-cmake
 The interface for rosidl typesupport packages.
 
 %prep
-%autosetup -p1 -n rosidl-4.6.7
+%autosetup -p1 -n rosidl-4.6.9
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

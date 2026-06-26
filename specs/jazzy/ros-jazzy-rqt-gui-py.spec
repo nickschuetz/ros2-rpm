@@ -43,7 +43,7 @@ Requires:       ros-jazzy-rqt-gui
 rqt_gui_py enables GUI plugins to use the Python client library for ROS.
 
 %prep
-%autosetup -p1 -n rqt-release-release-jazzy-rqt_gui_py-1.6.3-1
+%autosetup -p1 -n rqt-release-release-jazzy-rqt_gui_py-1.6.4-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

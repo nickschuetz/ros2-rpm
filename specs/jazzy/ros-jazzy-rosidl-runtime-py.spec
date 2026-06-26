@@ -42,7 +42,7 @@ Requires:       ros-jazzy-rosidl-parser
 Runtime utilities for working with generated ROS interfaces in Python.
 
 %prep
-%autosetup -p1 -n rosidl_runtime_py-release-release-jazzy-rosidl_runtime_py-0.13.1-2
+%autosetup -p1 -n rosidl_runtime_py-release-release-jazzy-rosidl_runtime_py-0.13.2-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

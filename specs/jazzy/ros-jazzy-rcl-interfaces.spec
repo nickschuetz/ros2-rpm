@@ -43,7 +43,7 @@ messages and services which ROS client libraries will use under the hood to
 communicate higher level concepts such as parameters.
 
 %prep
-%autosetup -p1 -n rcl_interfaces-release-release-jazzy-rcl_interfaces-2.0.3-1
+%autosetup -p1 -n rcl_interfaces-release-release-jazzy-rcl_interfaces-2.0.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

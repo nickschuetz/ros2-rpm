@@ -42,7 +42,7 @@ Requires:       lttng-ust-devel
 Tracing wrapper for ROS 2.
 
 %prep
-%autosetup -p1 -n ros2_tracing-release-release-jazzy-tracetools-8.2.5-1
+%autosetup -p1 -n ros2_tracing-release-release-jazzy-tracetools-8.2.6-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

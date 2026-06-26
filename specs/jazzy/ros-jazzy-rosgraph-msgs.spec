@@ -42,7 +42,7 @@ Messages relating to the ROS Computation Graph. These are generally
 considered to be low-level messages that end users do not interact with.
 
 %prep
-%autosetup -p1 -n rcl_interfaces-release-release-jazzy-rosgraph_msgs-2.0.3-1
+%autosetup -p1 -n rcl_interfaces-release-release-jazzy-rosgraph_msgs-2.0.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

@@ -43,7 +43,7 @@ Requires:       ros-jazzy-rosidl-parser
 Generate hashes and descriptions of ROS 2 interface types, per REP-2011.
 
 %prep
-%autosetup -p1 -n rosidl-4.6.7
+%autosetup -p1 -n rosidl-4.6.9
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

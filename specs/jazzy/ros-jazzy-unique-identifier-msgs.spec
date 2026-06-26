@@ -39,7 +39,7 @@ Requires:       ros-jazzy-rosidl-core-runtime
 ROS messages for universally unique identifiers.
 
 %prep
-%autosetup -p1 -n unique_identifier_msgs-release-release-jazzy-unique_identifier_msgs-2.5.0-3
+%autosetup -p1 -n unique_identifier_msgs-release-release-jazzy-unique_identifier_msgs-2.5.1-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

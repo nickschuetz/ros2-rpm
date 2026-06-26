@@ -45,7 +45,7 @@ Requires:       ros-jazzy-ros2cli
 The pkg command for ROS 2 command line tools.
 
 %prep
-%autosetup -p1 -n ros2cli-release-release-jazzy-ros2pkg-0.32.9-1
+%autosetup -p1 -n ros2cli-release-release-jazzy-ros2pkg-0.32.10-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

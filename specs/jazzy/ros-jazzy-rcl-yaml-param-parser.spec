@@ -46,7 +46,7 @@ Requires:       ros-jazzy-rmw
 Parse a YAML parameter file and populate the C data structure.
 
 %prep
-%autosetup -p1 -n rcl-release-release-jazzy-rcl_yaml_param_parser-9.2.9-2
+%autosetup -p1 -n rcl-release-release-jazzy-rcl_yaml_param_parser-9.2.11-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

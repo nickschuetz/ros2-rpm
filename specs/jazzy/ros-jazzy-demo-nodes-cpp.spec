@@ -58,7 +58,7 @@ C++ nodes which were previously in the ros2/examples repository but are now
 just used for demo purposes.
 
 %prep
-%autosetup -p1 -n demos-release-release-jazzy-demo_nodes_cpp-0.33.10-1
+%autosetup -p1 -n demos-release-release-jazzy-demo_nodes_cpp-0.33.11-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

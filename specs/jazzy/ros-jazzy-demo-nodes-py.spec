@@ -45,7 +45,7 @@ Python nodes which were previously in the ros2/examples repository but are
 now just used for demo purposes.
 
 %prep
-%autosetup -p1 -n demos-release-release-jazzy-demo_nodes_py-0.33.10-1
+%autosetup -p1 -n demos-release-release-jazzy-demo_nodes_py-0.33.11-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

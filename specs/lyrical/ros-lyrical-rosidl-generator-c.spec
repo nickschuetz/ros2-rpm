@@ -50,7 +50,7 @@ Requires:       ros-lyrical-rosidl-typesupport-interface
 Generate the ROS interfaces in C.
 
 %prep
-%autosetup -p1 -n rosidl-5.2.0
+%autosetup -p1 -n rosidl-5.2.1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

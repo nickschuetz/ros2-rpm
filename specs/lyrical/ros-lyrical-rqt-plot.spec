@@ -53,7 +53,7 @@ rqt_plot provides a GUI plugin visualizing numeric values in a 2D plot
 using different plotting backends.
 
 %prep
-%autosetup -p1 -n rqt_plot-release-release-lyrical-rqt_plot-1.7.5-3
+%autosetup -p1 -n rqt_plot-release-release-lyrical-rqt_plot-1.7.6-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references

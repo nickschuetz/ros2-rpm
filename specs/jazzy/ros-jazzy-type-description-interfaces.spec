@@ -42,7 +42,7 @@ A package containing message and service definitions for describing and
 communicating descriptions of other types.
 
 %prep
-%autosetup -p1 -n rcl_interfaces-release-release-jazzy-type_description_interfaces-2.0.3-1
+%autosetup -p1 -n rcl_interfaces-release-release-jazzy-type_description_interfaces-2.0.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

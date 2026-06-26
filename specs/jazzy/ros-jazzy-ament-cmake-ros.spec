@@ -45,7 +45,7 @@ Requires:       ros-jazzy-ament-cmake-pytest
 The ROS specific CMake bits in the ament build system.
 
 %prep
-%autosetup -p1 -n ament_cmake_ros-release-release-jazzy-ament_cmake_ros-0.12.0-3
+%autosetup -p1 -n ament_cmake_ros-release-release-jazzy-ament_cmake_ros-0.12.1-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

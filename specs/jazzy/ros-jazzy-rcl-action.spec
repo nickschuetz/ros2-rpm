@@ -48,7 +48,7 @@ Requires:       ros-jazzy-rosidl-runtime-c
 Package containing a C-based ROS action implementation
 
 %prep
-%autosetup -p1 -n rcl-release-release-jazzy-rcl_action-9.2.9-2
+%autosetup -p1 -n rcl-release-release-jazzy-rcl_action-9.2.11-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

@@ -45,7 +45,7 @@ Requires:       ros-jazzy-unique-identifier-msgs
 Messages and service definitions common among all ROS actions.
 
 %prep
-%autosetup -p1 -n rcl_interfaces-release-release-jazzy-action_msgs-2.0.3-1
+%autosetup -p1 -n rcl_interfaces-release-release-jazzy-action_msgs-2.0.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

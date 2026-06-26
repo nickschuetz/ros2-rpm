@@ -45,7 +45,7 @@ interface based on Qt. It is extensible with Python- and C++-based plugins
 It requires either PyQt or PySide bindings.
 
 %prep
-%autosetup -p1 -n qt_gui_core-release-release-lyrical-qt_gui-2.11.0-1
+%autosetup -p1 -n qt_gui_core-release-release-lyrical-qt_gui-2.11.1-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's

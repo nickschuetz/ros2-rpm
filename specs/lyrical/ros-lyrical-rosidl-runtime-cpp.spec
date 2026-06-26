@@ -42,7 +42,7 @@ Provides definitions and templated functions for getting and working with
 rosidl typesupport types in C++.
 
 %prep
-%autosetup -p1 -n rosidl-5.2.0
+%autosetup -p1 -n rosidl-5.2.1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
