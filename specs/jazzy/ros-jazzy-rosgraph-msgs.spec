@@ -25,9 +25,13 @@ BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
 BuildRequires:  ros-jazzy-ament-cmake
 BuildRequires:  ros-jazzy-builtin-interfaces
+# rosgraph_msgs ships in the rcl_interfaces gbp repo and its CMakeLists does
+# find_package(rcl_interfaces); the sibling package must be in the buildroot.
+BuildRequires:  ros-jazzy-rcl-interfaces
 BuildRequires:  ros-jazzy-rosidl-default-generators
 
 Requires:       ros-jazzy-builtin-interfaces
+Requires:       ros-jazzy-rcl-interfaces
 Requires:       ros-jazzy-rosidl-default-runtime
 
 # Under /opt these libraries must not be exposed to the system dependency
