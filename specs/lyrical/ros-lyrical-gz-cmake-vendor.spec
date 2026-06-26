@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-gz-cmake-vendor
-Version:        0.4.4
+Version:        0.4.5
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical gz_cmake_vendor
 
 License:        Apache-2.0
 URL:            https://github.com/gazebosim/gz-cmake
-Source0:        https://github.com/ros2-gbp/gz_cmake_vendor-release/archive/refs/tags/release/lyrical/gz_cmake_vendor/0.4.4-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/gz_cmake_vendor-release/archive/refs/tags/release/lyrical/gz_cmake_vendor/0.4.5-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -44,7 +44,7 @@ Vendor package for: gz-cmake 5.1.0
 Gazebo CMake : CMake Modules for Gazebo Projects
 
 %prep
-%autosetup -p1 -n gz_cmake_vendor-release-release-lyrical-gz_cmake_vendor-0.4.4-3
+%autosetup -p1 -n gz_cmake_vendor-release-release-lyrical-gz_cmake_vendor-0.4.5-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -94,5 +94,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Fri Jun 26 2026 Nick Schuetz <nschuetz@redhat.com> - 0.4.5-1
+- Sync with upstream lyrical: 0.4.5.
+
 * Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 0.4.4-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

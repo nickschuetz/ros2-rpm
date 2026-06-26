@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rviz2
-Version:        15.2.3
+Version:        15.2.4
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rviz2
 
 License:        BSD-3-Clause
 URL:            https://github.com/ros2/rviz/blob/ros2/README.md
-Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz2/15.2.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz2/15.2.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  chrpath
@@ -75,7 +75,7 @@ Requires:       ros-lyrical-rviz-ogre-vendor
 3D visualization tool for ROS.
 
 %prep
-%autosetup -p1 -n rviz-release-release-lyrical-rviz2-15.2.3-1
+%autosetup -p1 -n rviz-release-release-lyrical-rviz2-15.2.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -141,5 +141,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Fri Jun 26 2026 Nick Schuetz <nschuetz@redhat.com> - 15.2.4-1
+- Sync with upstream lyrical: 15.2.4.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 15.2.3-1
 - Initial Fedora COPR build for ROS 2 Lyrical.
