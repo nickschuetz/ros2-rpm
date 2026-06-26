@@ -11,13 +11,13 @@
 %global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-rviz-ogre-vendor
-Version:        14.1.20
+Version:        14.1.22
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rviz_ogre_vendor
 
 License:        Apache-2.0
 URL:            https://www.ogre3d.org/
-Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_ogre_vendor/14.1.20-2.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_ogre_vendor/14.1.22-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -52,7 +52,7 @@ Wrapper around ogre3d, it provides a fixed CMake module and an
 ExternalProject build of ogre.
 
 %prep
-%autosetup -p1 -n rviz-release-release-jazzy-rviz_ogre_vendor-14.1.20-2
+%autosetup -p1 -n rviz-release-release-jazzy-rviz_ogre_vendor-14.1.22-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -99,5 +99,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Fri Jun 26 2026 Nick Schuetz <nschuetz@redhat.com> - 14.1.22-1
+- Sync with upstream jazzy: 14.1.22.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 14.1.20-1
 - Initial Fedora COPR build for ROS 2 Jazzy.
