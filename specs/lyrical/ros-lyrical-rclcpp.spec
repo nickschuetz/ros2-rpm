@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rclcpp
-Version:        32.0.0
+Version:        32.0.1
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rclcpp
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rclcpp-release
-Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp/32.0.0-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp/32.0.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -76,7 +76,7 @@ Requires:       ros-lyrical-tracetools
 The ROS client library in C++.
 
 %prep
-%autosetup -p1 -n rclcpp-release-release-lyrical-rclcpp-32.0.0-1
+%autosetup -p1 -n rclcpp-release-release-lyrical-rclcpp-32.0.1-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -124,5 +124,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 32.0.1-1
+- Sync with upstream lyrical: 32.0.1.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 32.0.0-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

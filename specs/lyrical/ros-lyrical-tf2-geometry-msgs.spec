@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-tf2-geometry-msgs
-Version:        0.45.7
+Version:        0.45.8
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical tf2_geometry_msgs
 
 License:        BSD-3-Clause
 URL:            http://www.ros.org/wiki/tf2_ros
-Source0:        https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/lyrical/tf2_geometry_msgs/0.45.7-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/lyrical/tf2_geometry_msgs/0.45.8-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -48,7 +48,7 @@ Requires:       ros-lyrical-tf2-ros
 tf2_geometry_msgs
 
 %prep
-%autosetup -p1 -n geometry2-release-release-lyrical-tf2_geometry_msgs-0.45.7-3
+%autosetup -p1 -n geometry2-release-release-lyrical-tf2_geometry_msgs-0.45.8-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -99,5 +99,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 0.45.8-1
+- Sync with upstream lyrical: 0.45.8.
+
 * Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 0.45.7-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

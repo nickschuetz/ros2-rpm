@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-fastdds
-Version:        3.6.1
+Version:        3.6.2
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical fastdds
 
 License:        Apache-2.0
 URL:            https://www.eprosima.com/
-Source0:        https://github.com/ros2-gbp/fastdds-release/archive/refs/tags/release/lyrical/fastdds/3.6.1-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/fastdds-release/archive/refs/tags/release/lyrical/fastdds/3.6.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 Patch0:         fastdds/0001-disable-werror.patch
 
 
@@ -55,7 +55,7 @@ access directly the RTPS protocol, giving the user full access to the
 protocol internals.
 
 %prep
-%autosetup -p1 -n fastdds-release-release-lyrical-fastdds-3.6.1-3
+%autosetup -p1 -n fastdds-release-release-lyrical-fastdds-3.6.2-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -103,5 +103,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 3.6.2-1
+- Sync with upstream lyrical: 3.6.2.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 3.6.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

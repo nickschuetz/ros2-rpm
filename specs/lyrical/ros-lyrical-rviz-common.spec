@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rviz-common
-Version:        15.2.4
+Version:        15.2.5
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rviz_common
 
 License:        BSD-3-Clause
 URL:            https://github.com/ros2/rviz/blob/ros2/README.md
-Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz_common/15.2.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/lyrical/rviz_common/15.2.5-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -77,7 +77,7 @@ Requires:       tinyxml2-devel
 Common rviz API, used by rviz plugins and applications.
 
 %prep
-%autosetup -p1 -n rviz-release-release-lyrical-rviz_common-15.2.4-1
+%autosetup -p1 -n rviz-release-release-lyrical-rviz_common-15.2.5-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -125,6 +125,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 15.2.5-1
+- Sync with upstream lyrical: 15.2.5.
+
 * Fri Jun 26 2026 Nick Schuetz <nschuetz@redhat.com> - 15.2.4-1
 - Sync with upstream lyrical: 15.2.4.
 

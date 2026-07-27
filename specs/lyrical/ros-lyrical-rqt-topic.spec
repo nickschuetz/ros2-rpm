@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-topic
-Version:        2.1.1
+Version:        2.1.2
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rqt_topic
 
 License:        BSD-3-Clause
 URL:            http://wiki.ros.org/rqt_topic
-Source0:        https://github.com/ros2-gbp/rqt_topic-release/archive/refs/tags/release/lyrical/rqt_topic/2.1.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt_topic-release/archive/refs/tags/release/lyrical/rqt_topic/2.1.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -53,7 +53,7 @@ topics including publishers, subscribers, publishing rate, and ROS
 Messages.
 
 %prep
-%autosetup -p1 -n rqt_topic-release-release-lyrical-rqt_topic-2.1.1-1
+%autosetup -p1 -n rqt_topic-release-release-lyrical-rqt_topic-2.1.2-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -106,5 +106,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 2.1.2-1
+- Sync with upstream lyrical: 2.1.2.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 2.1.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

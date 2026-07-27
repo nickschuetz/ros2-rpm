@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-point-cloud-transport
-Version:        5.4.2
+Version:        5.4.3
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical point_cloud_transport
 
 License:        BSD-3-Clause
 URL:            https://github.com/ros-perception/point_cloud_transport
-Source0:        https://github.com/ros2-gbp/point_cloud_transport-release/archive/refs/tags/release/lyrical/point_cloud_transport/5.4.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/point_cloud_transport-release/archive/refs/tags/release/lyrical/point_cloud_transport/5.4.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -56,7 +56,7 @@ Support for transporting PointCloud2 messages in compressed format and
 plugin interface for implementing additional PointCloud2 transports.
 
 %prep
-%autosetup -p1 -n point_cloud_transport-release-release-lyrical-point_cloud_transport-5.4.2-1
+%autosetup -p1 -n point_cloud_transport-release-release-lyrical-point_cloud_transport-5.4.3-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -107,5 +107,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 5.4.3-1
+- Sync with upstream lyrical: 5.4.3.
+
 * Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 5.4.2-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

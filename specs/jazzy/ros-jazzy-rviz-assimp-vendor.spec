@@ -11,13 +11,13 @@
 %global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-rviz-assimp-vendor
-Version:        14.1.22
+Version:        14.1.23
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rviz_assimp_vendor
 
 License:        Apache-2.0
 URL:            http://assimp.sourceforge.net/index.html
-Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_assimp_vendor/14.1.22-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_assimp_vendor/14.1.23-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  assimp
@@ -43,7 +43,7 @@ some systems. On others, it provides a fixed CMake module or even an
 ExternalProject build of assimp.
 
 %prep
-%autosetup -p1 -n rviz-release-release-jazzy-rviz_assimp_vendor-14.1.22-1
+%autosetup -p1 -n rviz-release-release-jazzy-rviz_assimp_vendor-14.1.23-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -94,6 +94,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 14.1.23-1
+- Sync with upstream jazzy: 14.1.23.
+
 * Fri Jun 26 2026 Nick Schuetz <nschuetz@redhat.com> - 14.1.22-1
 - Sync with upstream jazzy: 14.1.22.
 

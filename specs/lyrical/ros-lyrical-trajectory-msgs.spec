@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-trajectory-msgs
-Version:        5.9.2
+Version:        5.9.3
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical trajectory_msgs
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/common_interfaces-release
-Source0:        https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/trajectory_msgs/5.9.2-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/trajectory_msgs/5.9.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -45,7 +45,7 @@ Requires:       ros-lyrical-std-msgs
 A package containing some robot trajectory message definitions.
 
 %prep
-%autosetup -p1 -n common_interfaces-release-release-lyrical-trajectory_msgs-5.9.2-3
+%autosetup -p1 -n common_interfaces-release-release-lyrical-trajectory_msgs-5.9.3-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -96,5 +96,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 5.9.3-1
+- Sync with upstream lyrical: 5.9.3.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 5.9.2-1
 - Initial Fedora COPR build for ROS 2 Lyrical.
