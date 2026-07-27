@@ -349,12 +349,15 @@ def main() -> int:
     # A package we submitted recently but that COPR has not registered yet (so it
     # is absent from `states`) is treated as in-flight, not re-submitted. Once it
     # surfaces as failed, drop it from the ledger so a fix can be resubmitted.
-    # Forced packages are held for the full cooldown regardless of their reported
-    # state: a --force target reads as succeeded, so without this it would be
-    # eligible again the very next tick and thrash.
+    # Hold a recently-submitted package out of this wave, EXCEPT once it has
+    # failed (a failure should retry promptly, not wait a cooldown). A forced
+    # package additionally stays held while it reads succeeded, since a --force
+    # target reads as done and would otherwise be re-forced every tick and
+    # thrash; a forced package that FAILED still retries (n not in failed).
     cooling = {n for n, t in ledger.items()
                if now - t < SUBMIT_COOLDOWN
-               and (n in force or (n not in succeeded and n not in failed))}
+               and n not in failed
+               and (n in force or n not in succeeded)}
     for n in list(ledger):
         if n not in force and (n in succeeded or n in failed):
             ledger.pop(n, None)
