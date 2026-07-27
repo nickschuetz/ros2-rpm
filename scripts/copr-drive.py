@@ -16,11 +16,13 @@ dependency order, with its deps required green on rawhide first.
 Usage:
     scripts/copr-drive.py --distro lyrical            # submit the ready wave
     scripts/copr-drive.py --distro lyrical --dry-run  # show the plan only
-    # catch a chroot up (e.g. rawhide) once its foundation is healthy again:
+    # catch a chroot up (e.g. rawhide): first force-rebuild the noarch python
+    # foundation there (version-invisible py-path staleness), then plain-drive:
     scripts/copr-drive.py --distro lyrical \\
-        --chroots fedora-44-x86_64,fedora-44-aarch64,\\
-centos-stream-10-x86_64,centos-stream-10-aarch64,\\
-fedora-rawhide-x86_64,fedora-rawhide-aarch64 --exclude <deferred visual chain>
+        --chroots fedora-rawhide-x86_64,fedora-rawhide-aarch64 \\
+        --force ros-lyrical-ament-package,ros-lyrical-ament-index-python,...
+    scripts/copr-drive.py --distro lyrical \\
+        --chroots fedora-rawhide-x86_64,fedora-rawhide-aarch64 --exclude <visual chain>
 """
 from __future__ import annotations
 
@@ -304,9 +306,21 @@ def main() -> int:
                          "packages that build on a different chroot set (jazzy rqt "
                          "is Fedora-only). Run them separately with their own "
                          "--chroots.")
+    ap.add_argument("--force",
+                    help="comma-separated rpm package names to rebuild even though "
+                         "COPR reports them succeeded at the current version. Use "
+                         "when the staleness is invisible to version comparison, "
+                         "e.g. the noarch python foundation after a Python minor "
+                         "bump: ament_package etc. read as done but their modules "
+                         "sit in the old pythonX.Y/site-packages, so every compiled "
+                         "consumer fails 'ModuleNotFoundError'. Forced packages "
+                         "rebuild in dependency order on the target chroots and are "
+                         "held for one cooldown after submit so they do not thrash; "
+                         "drop --force once they are green and resume a plain drive.")
     args = ap.parse_args()
     chroots = [c.strip() for c in args.chroots.split(",")] if args.chroots else None
     exclude = {c.strip() for c in args.exclude.split(",")} if args.exclude else set()
+    force = {c.strip() for c in args.force.split(",")} if args.force else set()
 
     project = distros.copr_project(args.distro)
     build = distros.REPO_ROOT / "build"
@@ -335,16 +349,27 @@ def main() -> int:
     # A package we submitted recently but that COPR has not registered yet (so it
     # is absent from `states`) is treated as in-flight, not re-submitted. Once it
     # surfaces as failed, drop it from the ledger so a fix can be resubmitted.
+    # Forced packages are held for the full cooldown regardless of their reported
+    # state: a --force target reads as succeeded, so without this it would be
+    # eligible again the very next tick and thrash.
     cooling = {n for n, t in ledger.items()
-               if now - t < SUBMIT_COOLDOWN and n not in succeeded and n not in failed}
+               if now - t < SUBMIT_COOLDOWN
+               and (n in force or (n not in succeeded and n not in failed))}
     for n in list(ledger):
-        if n in succeeded or n in failed:
+        if n not in force and (n in succeeded or n in failed):
             ledger.pop(n, None)
 
     ready = []
     for m in specs:
         n = m["rpm_name"]
-        if not n or n in succeeded or n in active or n in cooling or n in exclude:
+        if not n or n in active or n in cooling or n in exclude:
+            continue
+        # Skip packages already done, UNLESS forced (a forced target reads as done
+        # by version but must rebuild anyway). Forced packages still count as
+        # succeeded for OTHER packages' dep gate below (via `succeeded`), so a
+        # forced chain does not deadlock: an outer forced package sees its inner
+        # forced dep as satisfied once that dep has actually rebuilt green.
+        if n in succeeded and n not in force:
             continue
         # only build deps that are in our tree; all must be succeeded
         intree = {d for d in m["deps"] if d in by_name}
@@ -370,7 +395,8 @@ def main() -> int:
     print(f"[{args.distro}] succeeded {done}/{total} | building {len(inflight)} | "
           f"failed {len(failed & set(by_name))} | drifted {len(drifted & set(by_name))} | "
           f"{'would-submit' if args.dry_run else 'submitted'} {len(submitted)} | "
-          f"remaining {total - done}")
+          f"remaining {total - done}"
+          + (f" | forcing {len(force & set(by_name))}" if force else ""))
     if failed & set(by_name):
         print("FAILED:", ", ".join(sorted(failed & set(by_name))))
     if drifted & set(by_name):
