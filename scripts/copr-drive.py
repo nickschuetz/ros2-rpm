@@ -6,9 +6,21 @@ ros-<distro>- dependencies have succeeded, so a full tree builds in topological
 order without hand-sequencing waves. Idempotent: packages already succeeded or
 currently building are skipped.
 
+Success is judged PER CHROOT against the target chroot set (the --chroots
+subset, or every project chroot when --chroots is omitted): a package is "done"
+only when it succeeded at the current spec version on every target chroot. So a
+package built on a subset (e.g. the 4 stable chroots with fedora-rawhide skipped)
+reads as not-done for a later run that includes rawhide and is rebuilt there, in
+dependency order, with its deps required green on rawhide first.
+
 Usage:
     scripts/copr-drive.py --distro lyrical            # submit the ready wave
     scripts/copr-drive.py --distro lyrical --dry-run  # show the plan only
+    # catch a chroot up (e.g. rawhide) once its foundation is healthy again:
+    scripts/copr-drive.py --distro lyrical \\
+        --chroots fedora-44-x86_64,fedora-44-aarch64,\\
+centos-stream-10-x86_64,centos-stream-10-aarch64,\\
+fedora-rawhide-x86_64,fedora-rawhide-aarch64 --exclude <deferred visual chain>
 """
 from __future__ import annotations
 
@@ -131,6 +143,59 @@ def copr_states(project: str) -> dict[str, str]:
     return {n: i["state"] for n, i in copr_package_info(project).items()}
 
 
+def copr_chroot_info(project: str) -> dict[str, dict[str, dict]]:
+    """Map each COPR package to its latest per-chroot build state and version.
+
+    `copr-cli list-packages --with-latest-build` only exposes one global
+    latest_build, which hides the case where a package's newest build targeted a
+    chroot SUBSET (e.g. the drift catch-ups drove `--chroots <4 stable>`, leaving
+    fedora-rawhide on an older build). `copr-cli monitor` reports one row per
+    package per chroot, each carrying that chroot's own latest build state and
+    version, so the driver can tell "green on all target chroots at the current
+    version" from "green on the 4 stable but stale/failed on rawhide".
+
+    Returns {name: {chroot: {"state": str, "version": str}}}. Absent (name,
+    chroot) pairs mean the package has never built on that chroot.
+    """
+    r = subprocess.run(["copr-cli", "monitor", project, "--output-format", "json"],
+                       capture_output=True, text=True, check=True)
+    out: dict[str, dict[str, dict]] = {}
+    for row in json.loads(r.stdout):
+        ver = row.get("pkg_version") or ""
+        out.setdefault(row["name"], {})[row["chroot"]] = {
+            "state": row.get("state") or "none",
+            "version": ver.split("-")[0] if ver else "",
+        }
+    return out
+
+
+def classify(chroots_for_pkg: dict[str, dict], target: list[str],
+             spec_version: str | None) -> str:
+    """Per-chroot status of one package over the `target` chroot set.
+
+    - "done":    succeeded at the current spec version on EVERY target chroot.
+    - "active":  in-flight on some target chroot (build it out, don't resubmit).
+    - "failed":  failed on some target chroot (and not active anywhere).
+    - "drifted": succeeded on every target chroot but at least one is a stale
+                 version (spec bumped, or the chroot never got the rebuild).
+    - "todo":    never built on some target chroot (new pkg / missing chroot).
+    """
+    entries = [chroots_for_pkg.get(ch) for ch in target]
+    if any(e and e["state"] in ACTIVE for e in entries):
+        return "active"
+    if any(e is None for e in entries):
+        return "todo"
+    if all(e["state"] in SUCCESS
+           and (not spec_version or not e["version"] or e["version"] == spec_version)
+           for e in entries):
+        return "done"
+    if any(e["state"] == "failed" for e in entries):
+        return "failed"
+    if all(e["state"] in SUCCESS for e in entries):
+        return "drifted"
+    return "todo"
+
+
 def _topdir_matches(target: Path, expected: str | None) -> bool:
     """True if the tarball's top-level dir matches the expected %autosetup -n dir."""
     if not expected:
@@ -228,11 +293,12 @@ def main() -> int:
     ap.add_argument("--distro", choices=distros.DISTROS, required=True)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--chroots",
-                    help="comma-separated chroot subset to build (default: all "
-                         "project chroots). Use to exclude a broken chroot, e.g. "
-                         "--chroots fedora-44-x86_64,fedora-44-aarch64,"
-                         "centos-stream-10-x86_64,centos-stream-10-aarch64 to skip "
-                         "fedora-rawhide.")
+                    help="comma-separated chroot subset to build AND to judge "
+                         "'done' against (default: all project chroots). Skip a "
+                         "broken chroot, e.g. --chroots fedora-44-x86_64,"
+                         "fedora-44-aarch64,centos-stream-10-x86_64,"
+                         "centos-stream-10-aarch64 to leave fedora-rawhide alone; "
+                         "or add the rawhide pair to catch it up once healthy.")
     ap.add_argument("--exclude",
                     help="comma-separated rpm package names to skip this run, e.g. "
                          "packages that build on a different chroot set (jazzy rqt "
@@ -246,24 +312,23 @@ def main() -> int:
     build = distros.REPO_ROOT / "build"
     specs = [spec_meta(s, args.distro) for s in sorted(distros.spec_dir(args.distro).glob("*.spec"))]
     by_name = {m["rpm_name"]: m for m in specs if m["rpm_name"]}
-    info = copr_package_info(project)
-    states = {n: i["state"] for n, i in info.items()}
-    built_ver = {n: i["version"] for n, i in info.items()}
     spec_ver = {m["rpm_name"]: m["version"] for m in specs if m["rpm_name"]}
 
-    succeeded_state = {n for n, s in states.items() if s in SUCCESS}
-    # Drifted: COPR's succeeded build is at a version older than the current
-    # spec (the spec was bumped to track upstream). Both versions must be known
-    # and differ; on missing data we trust the succeeded state and do not force
-    # a rebuild. Drifted packages are excluded from `succeeded` so they (and,
-    # via the dependency gate, anything that builds on them) get rebuilt in
-    # topological order.
-    drifted = {n for n in succeeded_state
-               if built_ver.get(n) and spec_ver.get(n)
-               and built_ver[n] != spec_ver[n]}
-    succeeded = succeeded_state - drifted
-    active = {n for n, s in states.items() if s in ACTIVE}
-    failed = {n for n, s in states.items() if s == "failed"}
+    # Per-chroot build state. "Done" is judged against the target chroot set, so
+    # a package built on a subset (e.g. the 4 stable chroots, rawhide skipped)
+    # correctly reads as not-done for a run that includes rawhide, and gets
+    # rebuilt there in dependency order. When --chroots is omitted, the target is
+    # every chroot the project has, matching "green everywhere at this version".
+    chroot_info = copr_chroot_info(project)
+    all_chroots = sorted({ch for chs in chroot_info.values() for ch in chs})
+    target = chroots if chroots else all_chroots
+
+    status = {n: classify(chroot_info.get(n, {}), target, spec_ver.get(n))
+              for n in by_name}
+    succeeded = {n for n, s in status.items() if s == "done"}
+    drifted = {n for n, s in status.items() if s == "drifted"}
+    active = {n for n, s in status.items() if s == "active"}
+    failed = {n for n, s in status.items() if s == "failed"}
 
     ledger = load_ledger(build, args.distro)
     now = time.time()
