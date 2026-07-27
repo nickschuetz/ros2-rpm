@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ros2node
-Version:        0.32.10
+Version:        0.32.11
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy ros2node
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/ros2cli-release
-Source0:        https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2node/0.32.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/jazzy/ros2node/0.32.11-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -41,7 +41,7 @@ Requires:       ros-jazzy-ros2cli
 The node command for ROS 2 command line tools.
 
 %prep
-%autosetup -p1 -n ros2cli-release-release-jazzy-ros2node-0.32.10-1
+%autosetup -p1 -n ros2cli-release-release-jazzy-ros2node-0.32.11-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -93,6 +93,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 0.32.11-1
+- Sync with upstream jazzy: 0.32.11.
+
 * Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.32.10-1
 - Sync with upstream jazzy: 0.32.10.
 

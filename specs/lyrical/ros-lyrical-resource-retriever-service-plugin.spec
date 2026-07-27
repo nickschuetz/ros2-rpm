@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-resource-retriever-service-plugin
-Version:        0.0.2
+Version:        0.0.3
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical resource_retriever_service_plugin
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/resource_retriever_service-release
-Source0:        https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/release/lyrical/resource_retriever_service_plugin/0.0.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/release/lyrical/resource_retriever_service_plugin/0.0.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -43,7 +43,7 @@ A resource retriever plugin that relies on talking to a service (specified
 by resource_retriever_interfaces) for retrieving resources like meshes.
 
 %prep
-%autosetup -p1 -n resource_retriever_service-release-release-lyrical-resource_retriever_service_plugin-0.0.2-1
+%autosetup -p1 -n resource_retriever_service-release-release-lyrical-resource_retriever_service_plugin-0.0.3-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -91,5 +91,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 0.0.3-1
+- Sync with upstream lyrical: 0.0.3.
+
 * Fri Jun 05 2026 Nick Schuetz <nschuetz@redhat.com> - 0.0.2-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

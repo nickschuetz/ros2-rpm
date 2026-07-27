@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-demo-nodes-cpp
-Version:        0.37.8
+Version:        0.37.9
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical demo_nodes_cpp
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/demos-release
-Source0:        https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/lyrical/demo_nodes_cpp/0.37.8-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/lyrical/demo_nodes_cpp/0.37.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -56,7 +56,7 @@ C++ nodes which were previously in the ros2/examples repository but are now
 just used for demo purposes.
 
 %prep
-%autosetup -p1 -n demos-release-release-lyrical-demo_nodes_cpp-0.37.8-3
+%autosetup -p1 -n demos-release-release-lyrical-demo_nodes_cpp-0.37.9-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -107,5 +107,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 0.37.9-1
+- Sync with upstream lyrical: 0.37.9.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 0.37.8-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

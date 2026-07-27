@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-launch-xml
-Version:        3.9.7
+Version:        3.9.8
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical launch_xml
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/launch-release
-Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/lyrical/launch_xml/3.9.7-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/lyrical/launch_xml/3.9.8-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -40,7 +40,7 @@ Requires:       ros-lyrical-launch
 XML frontend for the launch package.
 
 %prep
-%autosetup -p1 -n launch-release-release-lyrical-launch_xml-3.9.7-3
+%autosetup -p1 -n launch-release-release-lyrical-launch_xml-3.9.8-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -92,5 +92,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 3.9.8-1
+- Sync with upstream lyrical: 3.9.8.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 3.9.7-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

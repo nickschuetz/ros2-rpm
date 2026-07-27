@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-service-caller
-Version:        1.5.3
+Version:        1.5.4
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rqt_service_caller
 
 License:        BSD-3-Clause
 URL:            http://wiki.ros.org/rqt_service_caller
-Source0:        https://github.com/ros2-gbp/rqt_service_caller-release/archive/refs/tags/release/lyrical/rqt_service_caller/1.5.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt_service_caller-release/archive/refs/tags/release/lyrical/rqt_service_caller/1.5.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -43,7 +43,7 @@ Requires:       ros-lyrical-rqt-gui-py
 rqt_service_caller provides a GUI plugin for calling arbitrary services.
 
 %prep
-%autosetup -p1 -n rqt_service_caller-release-release-lyrical-rqt_service_caller-1.5.3-1
+%autosetup -p1 -n rqt_service_caller-release-release-lyrical-rqt_service_caller-1.5.4-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -96,6 +96,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 1.5.4-1
+- Sync with upstream lyrical: 1.5.4.
+
 * Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.5.3-1
 - Sync with upstream lyrical: 1.5.3.
 

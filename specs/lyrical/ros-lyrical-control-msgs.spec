@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-control-msgs
-Version:        6.9.0
+Version:        6.10.0
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical control_msgs
 
 License:        BSD-3-Clause
 URL:            https://control.ros.org
-Source0:        https://github.com/ros2-gbp/control_msgs-release/archive/refs/tags/release/lyrical/control_msgs/6.9.0-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/control_msgs-release/archive/refs/tags/release/lyrical/control_msgs/6.10.0-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -55,7 +55,7 @@ robots. It provides representations for controller setpoints and joint and
 cartesian trajectories.
 
 %prep
-%autosetup -p1 -n control_msgs-release-release-lyrical-control_msgs-6.9.0-3
+%autosetup -p1 -n control_msgs-release-release-lyrical-control_msgs-6.10.0-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -106,5 +106,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 6.10.0-1
+- Sync with upstream lyrical: 6.10.0.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 6.9.0-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

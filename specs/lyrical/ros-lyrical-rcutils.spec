@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rcutils
-Version:        7.1.1
+Version:        7.1.2
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rcutils
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rcutils-release
-Source0:        https://github.com/ros2-gbp/rcutils-release/archive/refs/tags/release/lyrical/rcutils/7.1.1-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rcutils-release/archive/refs/tags/release/lyrical/rcutils/7.1.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -41,7 +41,7 @@ Requires:       ros-lyrical-ament-cmake-ros-core
 Package containing various utility types and functions for C
 
 %prep
-%autosetup -p1 -n rcutils-release-release-lyrical-rcutils-7.1.1-3
+%autosetup -p1 -n rcutils-release-release-lyrical-rcutils-7.1.2-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -89,5 +89,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 7.1.2-1
+- Sync with upstream lyrical: 7.1.2.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 7.1.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

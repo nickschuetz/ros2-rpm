@@ -11,13 +11,13 @@
 %global debug_package %{nil}
 
 Name:           ros-%{ros_distro}-python-qt-binding
-Version:        2.5.4
+Version:        2.5.5
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical python_qt_binding
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/python_qt_binding
-Source0:        https://github.com/ros2-gbp/python_qt_binding-release/archive/refs/tags/release/lyrical/python_qt_binding/2.5.4-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/python_qt_binding-release/archive/refs/tags/release/lyrical/python_qt_binding/2.5.5-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -51,7 +51,7 @@ which binding provider was actually used which makes it very easy to switch
 between these.
 
 %prep
-%autosetup -p1 -n python_qt_binding-release-release-lyrical-python_qt_binding-2.5.4-3
+%autosetup -p1 -n python_qt_binding-release-release-lyrical-python_qt_binding-2.5.5-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -99,5 +99,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.5-1
+- Sync with upstream lyrical: 2.5.5.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.4-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

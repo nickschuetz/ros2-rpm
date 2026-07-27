@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-std-msgs
-Version:        5.9.2
+Version:        5.9.3
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical std_msgs
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/common_interfaces-release
-Source0:        https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/std_msgs/5.9.2-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/std_msgs/5.9.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -41,7 +41,7 @@ Requires:       ros-lyrical-rosidl-default-runtime
 A package containing some standard message definitions.
 
 %prep
-%autosetup -p1 -n common_interfaces-release-release-lyrical-std_msgs-5.9.2-3
+%autosetup -p1 -n common_interfaces-release-release-lyrical-std_msgs-5.9.3-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -92,5 +92,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 5.9.3-1
+- Sync with upstream lyrical: 5.9.3.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 5.9.2-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

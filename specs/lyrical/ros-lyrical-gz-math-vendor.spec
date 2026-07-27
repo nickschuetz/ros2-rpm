@@ -14,13 +14,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-gz-math-vendor
-Version:        0.4.3
+Version:        0.4.4
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical gz_math_vendor
 
 License:        Apache-2.0
 URL:            https://github.com/gazebosim/gz-math
-Source0:        https://github.com/ros2-gbp/gz_math_vendor-release/archive/refs/tags/release/lyrical/gz_math_vendor/0.4.3-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/gz_math_vendor-release/archive/refs/tags/release/lyrical/gz_math_vendor/0.4.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  eigen3-devel
@@ -51,7 +51,7 @@ Vendor package for: gz-math 9.1.0
 Gazebo Math : Math classes and functions for robot applications
 
 %prep
-%autosetup -p1 -n gz_math_vendor-release-release-lyrical-gz_math_vendor-0.4.3-3
+%autosetup -p1 -n gz_math_vendor-release-release-lyrical-gz_math_vendor-0.4.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -105,5 +105,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 0.4.4-1
+- Sync with upstream lyrical: 0.4.4.
+
 * Thu Jun 04 2026 Nick Schuetz <nschuetz@redhat.com> - 0.4.3-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

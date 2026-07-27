@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rviz-rendering
-Version:        14.1.22
+Version:        14.1.23
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rviz_rendering
 
 License:        BSD-3-Clause
 URL:            https://github.com/ros2/rviz/blob/ros2/README.md
-Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_rendering/14.1.22-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rviz-release/archive/refs/tags/release/jazzy/rviz_rendering/14.1.23-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -49,7 +49,7 @@ Requires:       ros-jazzy-rviz-ogre-vendor
 Library which provides the 3D rendering functionality in rviz.
 
 %prep
-%autosetup -p1 -n rviz-release-release-jazzy-rviz_rendering-14.1.22-1
+%autosetup -p1 -n rviz-release-release-jazzy-rviz_rendering-14.1.23-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -97,6 +97,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 14.1.23-1
+- Sync with upstream jazzy: 14.1.23.
+
 * Fri Jun 26 2026 Nick Schuetz <nschuetz@redhat.com> - 14.1.22-1
 - Sync with upstream jazzy: 14.1.22.
 
