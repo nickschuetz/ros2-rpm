@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rmw-cyclonedds-cpp
-Version:        4.1.4
+Version:        4.1.5
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rmw_cyclonedds_cpp
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rmw_cyclonedds-release
-Source0:        https://github.com/ros2-gbp/rmw_cyclonedds-release/archive/refs/tags/release/lyrical/rmw_cyclonedds_cpp/4.1.4-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rmw_cyclonedds-release/archive/refs/tags/release/lyrical/rmw_cyclonedds_cpp/4.1.5-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -57,7 +57,7 @@ Requires:       ros-lyrical-tracetools
 Implement the ROS middleware interface using Eclipse CycloneDDS in C++.
 
 %prep
-%autosetup -p1 -n rmw_cyclonedds-release-release-lyrical-rmw_cyclonedds_cpp-4.1.4-3
+%autosetup -p1 -n rmw_cyclonedds-release-release-lyrical-rmw_cyclonedds_cpp-4.1.5-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -104,5 +104,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Aug 25 2026 Nick Schuetz <nschuetz@redhat.com> - 4.1.5-1
+- Sync with upstream lyrical: 4.1.5.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 4.1.4-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

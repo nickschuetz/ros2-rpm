@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rmw-implementation
-Version:        3.1.5
+Version:        3.1.6
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rmw_implementation
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rmw_implementation-release
-Source0:        https://github.com/ros2-gbp/rmw_implementation-release/archive/refs/tags/release/lyrical/rmw_implementation/3.1.5-6.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rmw_implementation-release/archive/refs/tags/release/lyrical/rmw_implementation/3.1.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -53,7 +53,7 @@ Requires:       ros-lyrical-rmw-fastrtps-cpp
 Proxy implementation of the ROS 2 Middleware Interface.
 
 %prep
-%autosetup -p1 -n rmw_implementation-release-release-lyrical-rmw_implementation-3.1.5-6
+%autosetup -p1 -n rmw_implementation-release-release-lyrical-rmw_implementation-3.1.6-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -100,5 +100,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Aug 25 2026 Nick Schuetz <nschuetz@redhat.com> - 3.1.6-1
+- Sync with upstream lyrical: 3.1.6.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 3.1.5-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-cmake-gmock
-Version:        2.8.7
+Version:        2.8.8
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical ament_cmake_gmock
 
 License:        Apache-2.0
 URL:            https://github.com/ament/ament_cmake
-Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.8.7.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.8.8.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -42,7 +42,7 @@ The ability to add Google mock-based tests in the ament build system in
 CMake.
 
 %prep
-%autosetup -p1 -n ament_cmake-2.8.7
+%autosetup -p1 -n ament_cmake-2.8.8
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -92,5 +92,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Aug 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.8.8-1
+- Sync with upstream lyrical: 2.8.8.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 2.8.7-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

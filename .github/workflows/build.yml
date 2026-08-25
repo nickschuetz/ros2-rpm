@@ -60,9 +60,15 @@ jobs:
           dnf install -y dnf-plugins-core epel-release
           dnf config-manager --set-enabled crb
 
+      # The Cisco openh264 repo is a video codec repo ROS builds never use, but
+      # its GPG key intermittently fails verification on rawhide and aborts the
+      # whole dnf transaction. Disable it by repo id (deleting the .repo file
+      # does not stop dnf5 from using the cached repo config). Harmless where the
+      # repo is absent (e.g. CentOS): a non-matching --disablerepo id is ignored.
       - name: Install build tooling
         run: |
           dnf install -y --setopt=install_weak_deps=False \
+            --disablerepo=fedora-cisco-openh264 \
             rpm-build rpmlint \
             python3-pip git make cmake \
             redhat-rpm-config
