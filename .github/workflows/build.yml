@@ -60,6 +60,13 @@ jobs:
           dnf install -y dnf-plugins-core epel-release
           dnf config-manager --set-enabled crb
 
+      # The Cisco openh264 repo is a video codec repo ROS builds never use, but
+      # its GPG key intermittently fails verification on rawhide and aborts the
+      # whole dnf transaction. Drop the repo definition so dnf ignores it.
+      - name: Drop the unused Cisco openh264 repo (GPG-key-flaky on rawhide)
+        if: startsWith(matrix.distro, 'fedora')
+        run: rm -f /etc/yum.repos.d/fedora-cisco-openh264*.repo
+
       - name: Install build tooling
         run: |
           dnf install -y --setopt=install_weak_deps=False \
