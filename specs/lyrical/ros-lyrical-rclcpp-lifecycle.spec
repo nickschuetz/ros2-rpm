@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rclcpp-lifecycle
-Version:        32.0.1
+Version:        32.0.2
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rclcpp_lifecycle
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rclcpp-release
-Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp_lifecycle/32.0.1-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp_lifecycle/32.0.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -53,7 +53,7 @@ Requires:       ros-lyrical-rosidl-typesupport-cpp
 Package containing a prototype for lifecycle implementation
 
 %prep
-%autosetup -p1 -n rclcpp-release-release-lyrical-rclcpp_lifecycle-32.0.1-1
+%autosetup -p1 -n rclcpp-release-release-lyrical-rclcpp_lifecycle-32.0.2-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -101,6 +101,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Aug 25 2026 Nick Schuetz <nschuetz@redhat.com> - 32.0.2-1
+- Sync with upstream lyrical: 32.0.2.
+
 * Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 32.0.1-1
 - Sync with upstream lyrical: 32.0.1.
 
