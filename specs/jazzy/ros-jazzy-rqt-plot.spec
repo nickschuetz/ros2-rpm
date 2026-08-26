@@ -11,7 +11,7 @@
 
 Name:           ros-%{ros_distro}-rqt-plot
 Version:        1.4.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Jazzy rqt_plot
 
 License:        BSD-3-Clause
@@ -99,10 +99,15 @@ PYEOF
 # need to enumerate explicit paths to avoid conflicts with sibling packages.
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}/
 %{install_prefix}/lib/python%{python3_version}/site-packages/%{pkg_name}-%{version}.dist-info/
-%{install_prefix}/lib/%{pkg_name}/
 %{install_prefix}/share/ament_index/resource_index/packages/%{pkg_name}
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Wed Aug 26 2026 Nick Schuetz <nschuetz@redhat.com> - 1.4.5-2
+- Drop the stray %{install_prefix}/lib/%{pkg_name}/ entry from %files. The
+  pyproject wheel install places the module under site-packages and the
+  launcher under bin, so that directory is never created and the build failed
+  at %files with "Directory not found".
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 1.4.5-1
 - Initial Fedora COPR build for ROS 2 Jazzy.
