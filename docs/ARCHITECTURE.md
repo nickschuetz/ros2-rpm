@@ -11,7 +11,7 @@ There are exactly two public surfaces, and they are kept in lockstep:
   ─────────────────────────             ───────────────────────────
   github.com/nickschuetz/ros2-rpm   →   copr.fedorainfracloud.org/coprs/hellaenergy/ros2
 
-  - spec files (specs/<distro>/*.spec)     - chroot matrix (3 distros × 2 arches = 6)
+  - spec files (specs/<distro>/*.spec)     - chroot matrix (4 targets × 2 arches = 8)
   - generator (scripts/*)                  - signed RPMs
   - per-package config                     - per-build SBOM
     (distros/<distro>/packages.yaml)
@@ -63,7 +63,7 @@ Any package goes through the same five stages. The generator handles 1-3 mechani
    │    - LOCAL: mock --rebuild on fedora-44-x86_64           │
    │      (validates against pulled deps from COPR)           │
    │    - REMOTE: copr-cli build → COPR builds across all     │
-   │      6 chroot/arch pairs in parallel.                    │
+   │      8 chroot/arch pairs in parallel.                    │
    └──────────────────────────────────────────────────────────┘
                          ↓
    ┌──────────────────────────────────────────────────────────┐
@@ -235,7 +235,7 @@ The dep graph is realized as the tier list in [`build-order.md`](build-order.md)
        │ copr-cli build      │                                    │
        ├───────────────────────────────────────────────────────► │
        │                     │                                    │
-       │                     │                                    │ build all 6
+       │                     │                                    │ build all 8
        │                     │                                    │ chroot/arch
        │                     │                                    │ in parallel
        │                     │                                    │
