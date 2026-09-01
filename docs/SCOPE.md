@@ -57,13 +57,13 @@ After ADR 0010 cancelled the originally-planned ~320-package full `ros-jazzy-des
 
 ### Phase 2 on Lyrical (flagship): the full sandbox plus rviz2
 
-Lyrical carries the same Phase 2 dev sandbox as Jazzy **and** the `rviz2` 3D visualizer, which Jazzy still defers. The Lyrical sandbox uses **Qt6** (not Jazzy's Qt5), so the `rqt` suite builds on all four chroots and `rviz2` builds on **CentOS Stream 10 as well as Fedora 44** (both arches). The pieces:
+Lyrical carries the same Phase 2 dev sandbox as Jazzy **and** the `rviz2` 3D visualizer, which Jazzy still defers. The Lyrical sandbox uses **Qt6** (not Jazzy's Qt5), so the `rqt` suite builds on all four targets (both arches) and `rviz2` builds on **CentOS Stream 10 as well as Fedora 44** (both arches). The pieces:
 
 - The same `rqt` suite, `ros2cli` suite, launch infrastructure, lifecycle backfill, Cyclone DDS RMW, and demo nodes listed above, under the `ros-lyrical-*` prefix.
 - The **`rviz2` chain**: `rviz_ogre_vendor`, `rviz_rendering`, `rviz_common`, `rviz_default_plugins`, `rviz2`, plus the supporting `resource_retriever_service` packages (`resource_retriever_interfaces`, `resource_retriever_service`, `resource_retriever_service_plugin`) and the Gazebo math vendor chain (`gz_cmake_vendor`, `gz_utils_vendor`, `gz_math_vendor`) that `rviz_default_plugins` links.
 - **`ros-lyrical-ros-desktop`**, License: `Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-only AND EPL-2.0` (LGPL-3.0 via Qt6 for the rqt suite and rviz2; EPL-2.0 via Cyclone DDS). Pulls in `ros-lyrical-ros-base` plus the full Lyrical Phase 2 surface including rviz2.
 
-**Lyrical build matrix for `rviz2` and its Ogre/Gazebo vendor chain**: Fedora 44 and CentOS Stream 10 (both arches), **not the Python 3.15 chroots** (Fedora 45 and fedora-rawhide). The Ogre and Gazebo vendor packages run `vcstool` (`vcs import`) in a CMake ExternalProject download step, and vcstool has no Python 3.15 build because setuptools removed `pkg_resources`. The headless set **and** the `rqt` sandbox still build on Fedora 45 and rawhide; only the rviz/gz visual chain is held back there. When `python3-vcstool` ships for Python 3.15, those chroots pick up the visual chain with no spec changes.
+**Lyrical build matrix for `rviz2` and its Ogre/Gazebo vendor chain**: Fedora 44 and CentOS Stream 10 (both arches), **not the Python 3.15 targets** (Fedora 45 and fedora-rawhide). The Ogre and Gazebo vendor packages run `vcstool` (`vcs import`) in a CMake ExternalProject download step, and vcstool has no Python 3.15 build because setuptools removed `pkg_resources`. The headless set **and** the `rqt` sandbox still build on Fedora 45 and rawhide; only the rviz/gz visual chain is held back there. When `python3-vcstool` ships for Python 3.15, those chroots pick up the visual chain with no spec changes.
 
 `ros-lyrical-ros-core` and `ros-lyrical-ros-base` stay permissive-only (`Apache-2.0 AND BSD-3-Clause`), exactly like their Jazzy counterparts; the heterogeneous license aggregate is confined to the opt-in `ros-lyrical-ros-desktop`.
 
