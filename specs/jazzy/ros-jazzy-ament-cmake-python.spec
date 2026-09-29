@@ -11,7 +11,7 @@
 
 Name:           ros-%{ros_distro}-ament-cmake-python
 Version:        2.5.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Jazzy ament_cmake_python
 
 License:        Apache-2.0
@@ -23,6 +23,12 @@ BuildArch:      noarch
 BuildRequires:  cmake
 BuildRequires:  python3-devel
 BuildRequires:  ros-jazzy-ament-cmake-core
+
+# ament_cmake_python_install_package() runs "python3 setup.py egg_info" in
+# every consumer's build, so setuptools is a runtime need of this package.
+# It used to arrive transitively via python3-catkin_pkg, which dropped its
+# own setuptools dependency in 1.1.1.
+Requires:       python3-setuptools
 
 
 
@@ -79,5 +85,9 @@ popd
 %{install_prefix}/share/ament_index/resource_index/parent_prefix_path/%{pkg_name}
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.6-2
+- Require python3-setuptools. Consumers run setup.py egg_info at build time
+  and python3-catkin_pkg 1.1.1 no longer pulls setuptools in transitively.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.6-1
 - Initial Fedora COPR build for ROS 2 Jazzy.
