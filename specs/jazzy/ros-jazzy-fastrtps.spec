@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-fastrtps
-Version:        2.14.6
+Version:        2.14.7
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy fastrtps
 
 License:        Apache-2.0
 URL:            https://www.eprosima.com/
-Source0:        https://github.com/ros2-gbp/fastrtps-release/archive/refs/tags/release/jazzy/fastrtps/2.14.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/fastrtps-release/archive/refs/tags/release/jazzy/fastrtps/2.14.7-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  asio-devel
@@ -54,7 +54,7 @@ protocol defined for the Data Distribution Service (DDS) standard.
 giving the user full access to the protocol internals.
 
 %prep
-%autosetup -p1 -n fastdds-release-release-jazzy-fastrtps-2.14.6-1
+%autosetup -p1 -n fastdds-release-release-jazzy-fastrtps-2.14.7-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -103,5 +103,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 2.14.7-1
+- Sync with upstream jazzy: 2.14.7.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 2.14.6-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

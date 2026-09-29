@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-launch-ros
-Version:        0.26.12
+Version:        0.26.13
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy launch_ros
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/launch_ros-release
-Source0:        https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/jazzy/launch_ros/0.26.12-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/jazzy/launch_ros/0.26.13-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -54,7 +54,7 @@ Requires:       ros-jazzy-rclpy
 ROS specific extensions to the launch tool.
 
 %prep
-%autosetup -p1 -n launch_ros-release-release-jazzy-launch_ros-0.26.12-1
+%autosetup -p1 -n launch_ros-release-release-jazzy-launch_ros-0.26.13-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -106,6 +106,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 0.26.13-1
+- Sync with upstream jazzy: 0.26.13.
+
 * Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.26.12-1
 - Sync with upstream jazzy: 0.26.12.
 

@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rmw-fastrtps-cpp
-Version:        9.4.9
+Version:        9.4.10
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rmw_fastrtps_cpp
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rmw_fastrtps-release
-Source0:        https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/lyrical/rmw_fastrtps_cpp/9.4.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/release/lyrical/rmw_fastrtps_cpp/9.4.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -68,7 +68,7 @@ Implement the ROS middleware interface using eProsima FastRTPS static code
 generation in C++.
 
 %prep
-%autosetup -p1 -n rmw_fastrtps-release-release-lyrical-rmw_fastrtps_cpp-9.4.9-1
+%autosetup -p1 -n rmw_fastrtps-release-release-lyrical-rmw_fastrtps_cpp-9.4.10-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -116,6 +116,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 9.4.10-1
+- Sync with upstream lyrical: 9.4.10.
+
 * Tue Aug 25 2026 Nick Schuetz <nschuetz@redhat.com> - 9.4.9-1
 - Sync with upstream lyrical: 9.4.9.
 

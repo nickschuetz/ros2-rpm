@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rclcpp-action
-Version:        32.0.2
+Version:        32.0.3
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rclcpp_action
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rclcpp-release
-Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp_action/32.0.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/lyrical/rclcpp_action/32.0.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -49,7 +49,7 @@ Requires:       ros-lyrical-rosidl-runtime-c
 Adds action APIs for C++.
 
 %prep
-%autosetup -p1 -n rclcpp-release-release-lyrical-rclcpp_action-32.0.2-1
+%autosetup -p1 -n rclcpp-release-release-lyrical-rclcpp_action-32.0.3-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -97,6 +97,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 32.0.3-1
+- Sync with upstream lyrical: 32.0.3.
+
 * Tue Aug 25 2026 Nick Schuetz <nschuetz@redhat.com> - 32.0.2-1
 - Sync with upstream lyrical: 32.0.2.
 
