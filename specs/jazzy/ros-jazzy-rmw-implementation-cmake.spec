@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rmw-implementation-cmake
-Version:        7.3.3
+Version:        7.3.4
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rmw_implementation_cmake
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rmw-release
-Source0:        https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/jazzy/rmw_implementation_cmake/7.3.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/jazzy/rmw_implementation_cmake/7.3.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -39,7 +39,7 @@ Requires:       ros-jazzy-ament-cmake
 CMake functions which can discover and enumerate available implementations.
 
 %prep
-%autosetup -p1 -n rmw-release-release-jazzy-rmw_implementation_cmake-7.3.3-1
+%autosetup -p1 -n rmw-release-release-jazzy-rmw_implementation_cmake-7.3.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -85,5 +85,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 7.3.4-1
+- Sync with upstream jazzy: 7.3.4.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 7.3.3-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

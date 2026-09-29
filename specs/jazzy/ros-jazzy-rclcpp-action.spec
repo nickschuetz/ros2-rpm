@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rclcpp-action
-Version:        28.1.21
+Version:        28.1.22
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy rclcpp_action
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rclcpp-release
-Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp_action/28.1.21-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/release/jazzy/rclcpp_action/28.1.22-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -51,7 +51,7 @@ Requires:       ros-jazzy-rosidl-runtime-c
 Adds action APIs for C++.
 
 %prep
-%autosetup -p1 -n rclcpp-release-release-jazzy-rclcpp_action-28.1.21-1
+%autosetup -p1 -n rclcpp-release-release-jazzy-rclcpp_action-28.1.22-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -99,6 +99,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 28.1.22-1
+- Sync with upstream jazzy: 28.1.22.
+
 * Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 28.1.21-1
 - Sync with upstream jazzy: 28.1.21.
 

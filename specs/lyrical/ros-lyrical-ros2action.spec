@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ros2action
-Version:        0.40.8
+Version:        0.40.9
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical ros2action
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/ros2cli-release
-Source0:        https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2action/0.40.8-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2action/0.40.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -44,7 +44,7 @@ Requires:       ros-lyrical-rosidl-runtime-py
 The action command for ROS 2 command line tools.
 
 %prep
-%autosetup -p1 -n ros2cli-release-release-lyrical-ros2action-0.40.8-1
+%autosetup -p1 -n ros2cli-release-release-lyrical-ros2action-0.40.9-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -96,6 +96,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 0.40.9-1
+- Sync with upstream lyrical: 0.40.9.
+
 * Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 0.40.8-1
 - Sync with upstream lyrical: 0.40.8.
 

@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rcl
-Version:        10.4.4
+Version:        10.4.5
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rcl
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rcl-release
-Source0:        https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/lyrical/rcl/10.4.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/lyrical/rcl/10.4.5-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -65,7 +65,7 @@ which builds on the ROS middleware API and is optionally built upon by the
 other ROS client libraries.
 
 %prep
-%autosetup -p1 -n rcl-release-release-lyrical-rcl-10.4.4-1
+%autosetup -p1 -n rcl-release-release-lyrical-rcl-10.4.5-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -114,5 +114,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 10.4.5-1
+- Sync with upstream lyrical: 10.4.5.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 10.4.4-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

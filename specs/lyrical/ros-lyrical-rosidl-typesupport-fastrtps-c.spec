@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rosidl-typesupport-fastrtps-c
-Version:        3.9.5
+Version:        3.9.7
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rosidl_typesupport_fastrtps_c
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release
-Source0:        https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/release/lyrical/rosidl_typesupport_fastrtps_c/3.9.5-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/release/lyrical/rosidl_typesupport_fastrtps_c/3.9.7-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -55,7 +55,7 @@ Requires:       ros-lyrical-rosidl-typesupport-interface
 Generate the C interfaces for eProsima FastRTPS.
 
 %prep
-%autosetup -p1 -n rosidl_typesupport_fastrtps-release-release-lyrical-rosidl_typesupport_fastrtps_c-3.9.5-3
+%autosetup -p1 -n rosidl_typesupport_fastrtps-release-release-lyrical-rosidl_typesupport_fastrtps_c-3.9.7-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -106,5 +106,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 3.9.7-1
+- Sync with upstream lyrical: 3.9.7.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 3.9.5-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

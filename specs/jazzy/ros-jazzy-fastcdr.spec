@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-fastcdr
-Version:        2.2.7
+Version:        2.2.8
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy fastcdr
 
 License:        Apache-2.0
 URL:            https://www.eprosima.com/
-Source0:        https://github.com/ros2-gbp/fastcdr-release/archive/refs/tags/release/jazzy/fastcdr/2.2.7-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/fastcdr-release/archive/refs/tags/release/jazzy/fastcdr/2.2.8-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -40,7 +40,7 @@ Data Representation (CDR) mechanism defined by the Object Management Group
 DDS Interoperability Wire Protocol (DDSI-RTPS).
 
 %prep
-%autosetup -p1 -n fastcdr-release-release-jazzy-fastcdr-2.2.7-1
+%autosetup -p1 -n fastcdr-release-release-jazzy-fastcdr-2.2.8-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -83,5 +83,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 2.2.8-1
+- Sync with upstream jazzy: 2.2.8.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 2.2.7-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

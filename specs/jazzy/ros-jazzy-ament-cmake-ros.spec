@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-cmake-ros
-Version:        0.12.1
+Version:        0.12.2
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy ament_cmake_ros
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/ament_cmake_ros-release
-Source0:        https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/release/jazzy/ament_cmake_ros/0.12.1-1.tar.gz#/ament_cmake_ros-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/release/jazzy/ament_cmake_ros/0.12.2-1.tar.gz#/ament_cmake_ros-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -45,7 +45,7 @@ Requires:       ros-jazzy-ament-cmake-pytest
 The ROS specific CMake bits in the ament build system.
 
 %prep
-%autosetup -p1 -n ament_cmake_ros-release-release-jazzy-ament_cmake_ros-0.12.1-1
+%autosetup -p1 -n ament_cmake_ros-release-release-jazzy-ament_cmake_ros-0.12.2-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -81,6 +81,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 0.12.2-1
+- Sync with upstream jazzy: 0.12.2.
+
 * Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.12.1-1
 - Sync with upstream jazzy: 0.12.1.
 

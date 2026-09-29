@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rmw-security-common
-Version:        7.10.1
+Version:        7.10.2
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rmw_security_common
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/rmw-release
-Source0:        https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/lyrical/rmw_security_common/7.10.1-5.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rmw-release/archive/refs/tags/release/lyrical/rmw_security_common/7.10.2-3.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -41,7 +41,7 @@ Requires:       ros-lyrical-rmw
 Define a common rmw secutiry utils
 
 %prep
-%autosetup -p1 -n rmw-release-release-lyrical-rmw_security_common-7.10.1-5
+%autosetup -p1 -n rmw-release-release-lyrical-rmw_security_common-7.10.2-3
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -89,5 +89,8 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 7.10.2-1
+- Sync with upstream lyrical: 7.10.2.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 7.10.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.
