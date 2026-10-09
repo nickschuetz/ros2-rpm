@@ -58,7 +58,7 @@ Substitute `<distro>` with `lyrical` (from `hellaenergy/ros2`) or `jazzy` (from 
 | Minimal headless dev (rclcpp + Fast DDS + tf2 + common messages) | `ros-<distro>-ros-base` |
 | One specific package | `ros-<distro>-<pkg>` (e.g. `ros-lyrical-rclcpp`) |
 | Dev tooling (rqt, ros2cli, launch, demo_nodes, Cyclone DDS, **rviz2 on Lyrical**) | `ros-<distro>-ros-desktop` |
-| 3D visualization (`rviz2`) **(Lyrical, Fedora 44 + Stream 10)** | `ros-lyrical-rviz2` |
+| 3D visualization (`rviz2`) **(Lyrical)** | `ros-lyrical-rviz2` |
 | O3DE Gem optional ContactSensor + Spawner support **(Jazzy)** | `ros-jazzy-gazebo-msgs` |
 | Cyclone DDS as your RMW | `ros-<distro>-rmw-cyclonedds-cpp`, then `export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` |
 
@@ -79,12 +79,12 @@ The CentOS Stream 10 chroots are convenient build targets, **not** a production-
 
 Per-distro GUI / sandbox availability differs:
 
-- **Lyrical**: the `rqt` family uses Qt6 and builds on all four targets (both arches). `rviz2` and its Ogre and Gazebo vendor chain (rolled up in `ros-lyrical-ros-desktop`) build on Fedora 44 **and** CentOS Stream 10 (both arches) only. They are **not** built on the Python 3.15 targets (Fedora 45 and fedora-rawhide): the Ogre and Gazebo vendor packages download sources with `vcstool`, which has no Python 3.15 build yet (setuptools dropped `pkg_resources`). On Fedora 45 and rawhide, install `ros-lyrical-ros-base` plus the individual `rqt` packages you need.
+- **Lyrical**: the `rqt` family uses Qt6 and `rviz2` with its Ogre and Gazebo vendor chain (rolled up in `ros-lyrical-ros-desktop`) build on all four targets (both arches). On Fedora 45 and fedora-rawhide the vendor packages pull in `python3-pkg-resources`, which `vcstool` needs there and does not declare.
 - **Jazzy**: the `rqt` family is built on the three Fedora chroots (44, 45, rawhide) only; Stream 10 lacks the Qt5 build deps (`python3-sip-devel`). Install `ros-jazzy-ros-desktop` from a Fedora chroot for the GUI tooling. Jazzy does not ship `rviz2` (see Known limitations).
 
 ## Known limitations
 
-- **`rviz2` (3D visualizer):** packaged on **Lyrical** (Fedora 44 + CentOS Stream 10, both arches) via `ros-lyrical-rviz2` / `ros-lyrical-ros-desktop`; not built on the Python 3.15 targets (Fedora 45 and fedora-rawhide), where the Ogre/Gazebo vendor downloads use `vcstool`, which has no Python 3.15 build yet. **Not packaged on Jazzy**: its Ogre and Assimp vendor builds hit [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708) (Ogre / CMake 4.x) and [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730) (Assimp / Fedora's stricter GCC); on Jazzy, `rqt` covers non-3D debugging (graph, topic echo, console, plot), or run a RHEL 9 container with [packages.ros.org's RPMs](https://docs.ros.org/en/jazzy/Installation/RHEL-Install-RPMs.html). Full impact analysis: [`docs/SCOPE.md`](docs/SCOPE.md).
+- **`rviz2` (3D visualizer):** packaged on **Lyrical** on all four targets (both arches) via `ros-lyrical-rviz2` / `ros-lyrical-ros-desktop`. **Not packaged on Jazzy**: its Ogre and Assimp vendor builds hit [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708) (Ogre / CMake 4.x) and [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730) (Assimp / Fedora's stricter GCC); on Jazzy, `rqt` covers non-3D debugging (graph, topic echo, console, plot), or run a RHEL 9 container with [packages.ros.org's RPMs](https://docs.ros.org/en/jazzy/Installation/RHEL-Install-RPMs.html). Full impact analysis: [`docs/SCOPE.md`](docs/SCOPE.md).
 - **`nav2_*`, `ros2control`, simulation bridges** are out of scope. Production-shaped surfaces; users belong on Open Robotics's Lyrical packages once they ship.
 - **Long-term posture is undecided.** Upstream EOLs Jazzy in May 2029. Whether the Jazzy COPR sunsets, freezes as a historical archive, or is retired once the official Lyrical packages ship is a future-ADR decision; see [`docs/UPGRADING.md`](docs/UPGRADING.md#approaching-upstream-eol).
 
