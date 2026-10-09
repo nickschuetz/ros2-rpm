@@ -65,9 +65,8 @@ Requires:       ros-lyrical-rqt-service-caller
 Requires:       ros-lyrical-rqt-action
 Requires:       ros-lyrical-rqt-plot
 
-# rviz2 3D visualization (LGPL-3.0 via Qt6). Builds on Fedora 44 and CentOS
-# Stream 10 only; fedora-rawhide is deferred (vcstool/pkg_resources breakage in
-# the Ogre and gz vendor ExternalProject downloads under Python 3.14).
+# rviz2 3D visualization (LGPL-3.0 via Qt6). Builds on all four targets; the
+# vendor-package dependency supplies pkg_resources for vcstool on Fedora 45+.
 Requires:       ros-lyrical-rviz2
 Requires:       ros-lyrical-rviz-common
 Requires:       ros-lyrical-rviz-default-plugins
@@ -101,11 +100,6 @@ default.
 
 Phase 2 dev-sandbox per ADR 0011, not the official ROS 2 packages for
 Fedora; Open Robotics's official Lyrical packages are the production path.
-
-Note: this metapackage and its rviz2 dependency build on Fedora 44 and CentOS
-Stream 10 only. fedora-rawhide is deferred because the Ogre and Gazebo vendor
-ExternalProject downloads use vcstool, which is broken on rawhide's Python 3.14
-(setuptools dropped pkg_resources). On rawhide, install ros-lyrical-ros-base.
 
 %prep
 # No source, pure metapackage.
