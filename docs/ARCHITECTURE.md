@@ -216,7 +216,7 @@ The dep graph is realized as the tier list in [`build-order.md`](build-order.md)
        │                     │   up to 3 changed specs.           │
        │                     │                                    │
        │                     │ workflow: build (per push/PR)      │
-       │                     │   matrix-build dry-run on all 6    │
+       │                     │   matrix-build dry-run on all 8    │
        │                     │   chroot/arch pairs.               │
        │                     │                                    │
        │                     │ workflow: smoke-test (per push/PR  │

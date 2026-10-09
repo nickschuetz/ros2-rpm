@@ -35,6 +35,14 @@ jobs:
             arch: aarch64
             container: registry.fedoraproject.org/fedora:44
             runner: ubuntu-24.04-arm
+          - distro: fedora-45
+            arch: x86_64
+            container: registry.fedoraproject.org/fedora:45
+            runner: ubuntu-24.04
+          - distro: fedora-45
+            arch: aarch64
+            container: registry.fedoraproject.org/fedora:45
+            runner: ubuntu-24.04-arm
           - distro: fedora-rawhide
             arch: x86_64
             container: registry.fedoraproject.org/fedora:rawhide
