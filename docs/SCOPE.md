@@ -15,6 +15,7 @@ For the realized dependency-ordered build pipeline (ament_cmake stack → utilit
 - `rclcpp` ✓ (live)
 - `builtin_interfaces` ✓ (live)
 - `std_msgs` ✓ (live)
+- `std_srvs` ✓ (live; added to Jazzy 2026-10-15, Lyrical already carried it for rviz_common)
 - `sensor_msgs` ✓ (live)
 - `nav_msgs` ✓ (live)
 - `geometry_msgs` ✓ (live)
@@ -45,7 +46,7 @@ After ADR 0010 cancelled the originally-planned ~320-package full `ros-jazzy-des
 
 - **rqt suite**: `rqt`, `rqt_gui`, `rqt_gui_cpp`, `rqt_gui_py`, `rqt_graph`, `rqt_topic`, `rqt_console`, `rqt_publisher`, `rqt_service_caller`, `rqt_action`, `rqt_plot`. Underlying Qt foundation: `qt_gui`, `qt_gui_cpp`, `qt_gui_py_common`, `qt_dotgraph`, `python_qt_binding`, `pluginlib`, `tinyxml2_vendor`, `tango_icons_vendor`.
 - **Alternate RMW**: `rmw_cyclonedds_cpp` and `cyclonedds`. Adds `EPL-2.0` to the COPR's license aggregate.
-- **`ros2cli` suite**: `ros2cli`, `ros2pkg`, `ros2run`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`. Plus `rosidl_runtime_py`, `ament_copyright` (transitive runtime deps).
+- **`ros2cli` suite**: `ros2cli`, `ros2pkg`, `ros2run`, `ros2launch`, `ros2node`, `ros2topic`, `ros2service`, `ros2interface`, `ros2action`, `ros2lifecycle`, `ros2param`, `ros2component`. Plus `rosidl_runtime_py`, `ament_copyright` and, on Jazzy, `ament_lint` (transitive runtime deps).
 - **Launch infrastructure**: `launch`, `launch_ros`, `launch_xml`, `launch_yaml`, `launch_testing`, `osrf_pycommon`.
 - **Lifecycle backfill** (originally deferred from Phase 1): `lifecycle_msgs`, `rcl_lifecycle`, `rclcpp_lifecycle`, `rclpy`, `pybind11_vendor`.
 - **Demo nodes**: `demo_nodes_cpp`, `demo_nodes_py`, `example_interfaces` for environment verification.

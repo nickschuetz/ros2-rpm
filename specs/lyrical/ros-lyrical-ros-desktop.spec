@@ -10,7 +10,7 @@
 
 Name:           ros-%{ros_distro}-ros-desktop
 Version:        0.13.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Lyrical dev-sandbox install, ros-base plus rqt, ros2cli, launch, rviz2, demos
 
 # Heterogeneous license aggregate, honestly disclosed per ADR 0011.
@@ -43,6 +43,7 @@ Requires:       ros-lyrical-osrf-pycommon
 Requires:       ros-lyrical-ros2cli
 Requires:       ros-lyrical-ros2pkg
 Requires:       ros-lyrical-ros2run
+Requires:       ros-lyrical-ros2launch
 Requires:       ros-lyrical-ros2node
 Requires:       ros-lyrical-ros2topic
 Requires:       ros-lyrical-ros2service
@@ -115,6 +116,9 @@ echo "ros-lyrical-ros-desktop %{version} (metapackage)" > %{buildroot}%{install_
 %{install_prefix}/.ros-desktop-version
 
 %changelog
+* Thu Oct 15 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.1-2
+- Add ros-lyrical-ros2launch, the missing `ros2 launch` verb.
+
 * Fri Jun 05 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.1-1
 - Initial Lyrical Phase 2 dev-sandbox metapackage. Adds rviz2 and the Cyclone
   DDS alternate RMW on top of the Jazzy dev-sandbox set. Heterogeneous license
