@@ -9,7 +9,7 @@
 %endif
 
 Name:           ros-%{ros_distro}-ros-desktop
-Version:        0.13.0
+Version:        0.13.1
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy dev-sandbox install, ros-base plus rqt, ros2cli, launch, demos
 
@@ -23,8 +23,10 @@ Source0:        ros-jazzy-ros-desktop-%{version}.tar.gz
 BuildArch:      noarch
 
 # Pulls in the full ros-base (Phase 1 scope: rclcpp, tf2, common message
-# packages, Fast DDS RMW).
-Requires:       ros-jazzy-ros-base = %{version}-%{release}
+# packages, Fast DDS RMW). Unversioned on purpose: ros-base and ros-desktop
+# are bumped independently, and an exact pin here made this metapackage
+# uninstallable once ros-base moved ahead (issue #29).
+Requires:       ros-jazzy-ros-base
 
 # launch infrastructure (Phase 2 P-2).
 Requires:       ros-jazzy-launch
@@ -38,6 +40,7 @@ Requires:       ros-jazzy-osrf-pycommon
 Requires:       ros-jazzy-ros2cli
 Requires:       ros-jazzy-ros2pkg
 Requires:       ros-jazzy-ros2run
+Requires:       ros-jazzy-ros2launch
 Requires:       ros-jazzy-ros2node
 Requires:       ros-jazzy-ros2topic
 Requires:       ros-jazzy-ros2service
@@ -106,6 +109,12 @@ echo "ros-jazzy-ros-desktop %{version} (metapackage)" > %{buildroot}%{install_pr
 %{install_prefix}/.ros-desktop-version
 
 %changelog
+* Thu Oct 15 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.1-1
+- Require ros-jazzy-ros-base by name instead of an exact version-release
+  pin; the pin left the metapackage uninstallable after ros-base moved to
+  0.13.1 (issue #29).
+- Add ros-jazzy-ros2launch, the missing `ros2 launch` verb.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.0-1
 - Initial Phase 2 dev-sandbox metapackage. Heterogeneous license aggregate
   (Apache-2.0 AND BSD-3-Clause AND LGPL-3.0 via Qt5) honestly disclosed

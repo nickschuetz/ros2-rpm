@@ -902,3 +902,21 @@ gazebo_msgs:
   source_dir: gazebo_ros_pkgs-release-release-jazzy-gazebo_msgs-{version}-1
   noarch: false
   disable_tests: true
+
+# ros2launch lives in the launch_ros monorepo and shares its version.
+ros2launch:
+  source_url: https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/jazzy/ros2launch/{version}-1.tar.gz
+  source_dir: launch_ros-release-release-jazzy-ros2launch-{version}-1
+  noarch: true
+
+std_srvs:
+  source_url: https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/jazzy/std_srvs/{version}-1.tar.gz
+  source_dir: common_interfaces-release-release-jazzy-std_srvs-{version}-1
+  noarch: false
+
+# Common API for the ament linters; ament_copyright declares it as a runtime
+# dependency on Jazzy.
+ament_lint:
+  source_url: https://github.com/ros2-gbp/ament_lint-release/archive/refs/tags/release/jazzy/ament_lint/{version}-1.tar.gz
+  source_dir: ament_lint-release-release-jazzy-ament_lint-{version}-1
+  noarch: true

@@ -40,12 +40,18 @@ jobs:
           # hard gate again.
           - distro: lyrical
             copr: hellaenergy/ros2
-            packages: ros-lyrical-ros-base
+            packages: >-
+              ros-lyrical-ros-base
+              ros-lyrical-ros-desktop
           # Maintenance: Jazzy carries the full dev sandbox and is the hard gate.
+          # ros-desktop is listed explicitly: it is a local metapackage that the
+          # drift tracker does not cover, and installing it is the only check
+          # that its Requires: set still resolves against the published repo.
           - distro: jazzy
             copr: hellaenergy/ros2-jazzy
             packages: >-
               ros-jazzy-ros-base
+              ros-jazzy-ros-desktop
               ros-jazzy-ros2cli
               ros-jazzy-ros2node
               ros-jazzy-ros2topic
@@ -56,7 +62,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Install COPR + ros-base + optional sub-packages
+      - name: Install COPR + ros-base + ros-desktop + optional sub-packages
         # bash + sudo + dnf-plugins-core (for `dnf copr enable`) come from
         # core packages already in fedora:44, but we re-confirm rather than
         # assume.

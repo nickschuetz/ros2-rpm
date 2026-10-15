@@ -239,6 +239,19 @@ if rpm -q "ros-${DISTRO}-ros2cli" >/dev/null 2>&1; then
     else
         skip "ros2 topic list" "ros-${DISTRO}-ros2topic not installed"
     fi
+    if rpm -q "ros-${DISTRO}-ros2run" "ros-${DISTRO}-demo-nodes-cpp" >/dev/null 2>&1; then
+        check "ros2 run demo_nodes_cpp talker publishes" \
+            bash -c 'source "${ROS_PREFIX}/setup.bash" && \
+                     timeout 5 ros2 run demo_nodes_cpp talker 2>&1 | grep -q "Hello World"'
+    else
+        skip "ros2 run" "ros-${DISTRO}-ros2run or ros-${DISTRO}-demo-nodes-cpp not installed"
+    fi
+    if rpm -q "ros-${DISTRO}-ros2launch" >/dev/null 2>&1; then
+        check "ros2 launch --help runs without error" \
+            bash -c 'source "${ROS_PREFIX}/setup.bash" && ros2 launch --help > /dev/null'
+    else
+        skip "ros2 launch" "ros-${DISTRO}-ros2launch not installed"
+    fi
 else
     skip "ros2 CLI checks" "ros-${DISTRO}-ros2cli not installed"
 fi
