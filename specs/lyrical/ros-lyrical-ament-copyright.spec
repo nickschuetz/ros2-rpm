@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-copyright
-Version:        0.20.6
+Version:        0.20.7
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical ament_copyright
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/ament_lint-release
-Source0:        https://github.com/ros2-gbp/ament_lint-release/archive/refs/tags/release/lyrical/ament_copyright/0.20.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/ament_lint-release/archive/refs/tags/release/lyrical/ament_copyright/0.20.7-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -39,7 +39,7 @@ Requires:       python3
 The ability to check source files for copyright and license information.
 
 %prep
-%autosetup -p1 -n ament_lint-release-release-lyrical-ament_copyright-0.20.6-1
+%autosetup -p1 -n ament_lint-release-release-lyrical-ament_copyright-0.20.7-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -92,5 +92,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Thu Oct 15 2026 Nick Schuetz <nschuetz@redhat.com> - 0.20.7-1
+- Sync with upstream lyrical: 0.20.7.
+
 * Wed Jun 03 2026 Nick Schuetz <nschuetz@redhat.com> - 0.20.6-1
 - Initial Fedora COPR build for ROS 2 Lyrical.
