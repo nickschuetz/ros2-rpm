@@ -24,7 +24,7 @@ addFilter(r"^.*: W: files-duplicate /opt/ros/.*/share/.*/environment/.*\.sh /opt
 
 # ROS-specific spelling: msg, srv, idl, rmw, fastrtps etc. are technical terms
 # in the ROS ecosystem that rpmlint flags as misspellings.
-addFilter(r"^.*: E: spelling-error \('(msg|srv|idl|rmw|colcon|rclcpp|rclpy|rosidl|fastrtps|fastdds|rosbag|builtin|cmake|ament|geometry|sensor|nav|tf2|noetic|kilted|jazzy|lyrical)',")
+addFilter(r"^.*: E: spelling-error \('(msg|msgs|ackermann|srv|idl|rmw|colcon|rclcpp|rclpy|rosidl|fastrtps|fastdds|rosbag|builtin|cmake|ament|geometry|sensor|nav|tf2|noetic|kilted|jazzy|lyrical)',")
 
 # rosdistro's rosdep maps system "build helper" keys (python3, gtest, gmock,
 # eigen, etc.) to their *-devel Fedora packages on the assumption that ROS

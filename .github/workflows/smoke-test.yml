@@ -43,6 +43,7 @@ jobs:
             packages: >-
               ros-lyrical-ros-base
               ros-lyrical-ros-desktop
+              ros-lyrical-o3de-gem-deps
           # Maintenance: Jazzy carries the full dev sandbox and is the hard gate.
           # ros-desktop is listed explicitly: it is a local metapackage that the
           # drift tracker does not cover, and installing it is the only check

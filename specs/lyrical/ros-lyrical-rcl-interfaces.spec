@@ -11,7 +11,7 @@
 
 Name:           ros-%{ros_distro}-rcl-interfaces
 Version:        2.4.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Lyrical rcl_interfaces
 
 License:        Apache-2.0
@@ -94,5 +94,11 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Fri Oct 16 2026 Nick Schuetz <nschuetz@redhat.com> - 2.4.5-2
+- Rebuild against rosidl_typesupport_fastrtps 3.9.7. Since 3.9.6 the
+  generated code calls cdr_(de)serialize_with_endpoint on nested types, and
+  interface packages built with 3.9.5 do not export it, so any newer
+  interface package depending on this one failed to link (ADR 0014).
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 2.4.5-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

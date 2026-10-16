@@ -287,6 +287,24 @@ else
 fi
 
 #-----------------------------------------------------------------------
+# Section 8, interface type support matches the fastrtps generator
+#-----------------------------------------------------------------------
+# rosidl_typesupport_fastrtps >= 3.9.6 makes generated code call
+# cdr_serialize_with_endpoint on nested message types. Interface packages built
+# with an older generator do not export it, and any newer interface package
+# that depends on them then fails to link (ADR 0014). geometry_msgs is a
+# dependency of nearly every interface package, so check it.
+section "Interface type support (fastrtps generator ABI)"
+
+GEOM_TS="${ROS_PREFIX}/lib/libgeometry_msgs__rosidl_typesupport_fastrtps_cpp.so"
+if [ "${DISTRO}" = "lyrical" ] && [ -f "${GEOM_TS}" ]; then
+    check "geometry_msgs type support exports cdr_serialize_with_endpoint" \
+        grep -qa cdr_serialize_with_endpoint "${GEOM_TS}"
+else
+    skip "fastrtps generator ABI check" "not Lyrical or geometry_msgs not installed"
+fi
+
+#-----------------------------------------------------------------------
 # Summary
 #-----------------------------------------------------------------------
 echo
