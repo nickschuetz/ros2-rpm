@@ -236,6 +236,14 @@ Both `ament_copyright` and `rosidl_runtime_py` had to be packaged as standalone 
 
 **Fix**: package the missing transitive deps and add to `packages.yaml`. The ros2cli plugins themselves don't need any new logic.
 
+### Rebuild every interface package when `rosidl_typesupport_fastrtps` changes its templates
+
+`rosidl_typesupport_fastrtps` 3.9.6 (Lyrical) changed its code templates: every generated message now defines `cdr_serialize_with_endpoint` / `cdr_deserialize_with_endpoint` and calls the same functions on its nested types. The 2026-09-29 drift sync moved the COPR from 3.9.5 to 3.9.7 but rebuilt no interface packages, so `builtin_interfaces`, `geometry_msgs` and the other 24 interface packages kept the old symbol set. Nothing broke until the first interface package was built after the sync (`simulation_interfaces`, 2026-10-16): its type support library referenced `builtin_interfaces::msg::typesupport_fastrtps_cpp::cdr_serialize_with_endpoint` and friends, and any program using it failed to link. A user building their own `.msg` package against the COPR hits the same error.
+
+Found with `nm -D` over `lib*__rosidl_typesupport_fastrtps_c*.so`: every library built before the sync had zero `with_endpoint` symbols defined except for types with `uint8[]` fields, while the new one had 18 undefined. Rebuilding the dependency chain against 3.9.7 fixed the link.
+
+**Lesson**: a `rosidl_typesupport_*` or `rosidl_generator_*` bump is an ABI event for every interface package, not a leaf update. Bump `Release:` on all of them and rebuild in dependency order (`builtin_interfaces` first), and let the smoke test's generator ABI check (section 8) confirm it.
+
 ## Upstream blockers (with how we found and tracked them)
 
 ### `rviz_ogre_vendor` and CMake 4.x

@@ -11,7 +11,7 @@
 
 Name:           ros-%{ros_distro}-ackermann-msgs
 Version:        2.0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Lyrical ackermann_msgs
 
 License:        BSD-3-Clause
@@ -92,5 +92,11 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Fri Oct 16 2026 Nick Schuetz <nschuetz@redhat.com> - 2.0.2-2
+- Rebuild against rosidl_typesupport_fastrtps 3.9.7. Since 3.9.6 the
+  generated code calls cdr_(de)serialize_with_endpoint on nested types, and
+  interface packages built with 3.9.5 do not export it, so any newer
+  interface package depending on this one failed to link (ADR 0014).
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 2.0.2-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

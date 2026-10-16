@@ -59,7 +59,8 @@ Substitute `<distro>` with `lyrical` (from `hellaenergy/ros2`) or `jazzy` (from 
 | One specific package | `ros-<distro>-<pkg>` (e.g. `ros-lyrical-rclcpp`) |
 | Dev tooling (rqt, ros2cli, launch, demo_nodes, Cyclone DDS, **rviz2 on Lyrical**) | `ros-<distro>-ros-desktop` |
 | 3D visualization (`rviz2`) **(Lyrical)** | `ros-lyrical-rviz2` |
-| O3DE Gem optional ContactSensor + Spawner support **(Jazzy)** | `ros-jazzy-gazebo-msgs` |
+| Everything the O3DE ROS 2 Gems need, for O3DE 26.10 and newer **(Lyrical)** | `ros-lyrical-o3de-gem-deps` |
+| O3DE Gem optional ContactSensor + Spawner support, for O3DE 26.05 **(Jazzy)** | `ros-jazzy-gazebo-msgs` |
 | Cyclone DDS as your RMW | `ros-<distro>-rmw-cyclonedds-cpp`, then `export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` |
 
 Setup environment is sourced per-session via `source /opt/ros/<distro>/setup.bash`. To enable shell-wide loading, opt in by sourcing `/etc/profile.d/ros-<distro>.sh` from your login shell. Packages install to `/opt/ros/<distro>/`; see [ADR 0007](docs/adr/0007-install-location-opt-ros-jazzy.md) for why.
