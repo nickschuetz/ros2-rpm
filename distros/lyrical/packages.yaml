@@ -1047,3 +1047,12 @@ ros2launch:
   source_url: https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/lyrical/ros2launch/{version}-1.tar.gz
   source_dir: launch_ros-release-release-lyrical-ros2launch-{version}-1
   noarch: true
+
+# Interfaces for the simulator-agnostic simulation API (ros-simulation). The
+# O3DE SimulationInterfaces Gem links against it (o3de-extras supports 2.1.0
+# since o3de/o3de-extras#1044); part of the ros-lyrical-o3de-gem-deps set.
+simulation_interfaces:
+  source_url: https://github.com/ros2-gbp/simulation_interfaces-release/archive/refs/tags/release/lyrical/simulation_interfaces/{version}-3.tar.gz
+  source_dir: simulation_interfaces-release-release-lyrical-simulation_interfaces-{version}-3
+  noarch: false
+  disable_tests: true

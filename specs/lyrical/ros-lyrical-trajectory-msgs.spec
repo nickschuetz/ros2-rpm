@@ -11,7 +11,7 @@
 
 Name:           ros-%{ros_distro}-trajectory-msgs
 Version:        5.9.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Lyrical trajectory_msgs
 
 License:        Apache-2.0
@@ -96,6 +96,12 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Fri Oct 16 2026 Nick Schuetz <nschuetz@redhat.com> - 5.9.3-2
+- Rebuild against rosidl_typesupport_fastrtps 3.9.7. Since 3.9.6 the
+  generated code calls cdr_(de)serialize_with_endpoint on nested types, and
+  interface packages built with 3.9.5 do not export it, so any newer
+  interface package depending on this one failed to link (ADR 0014).
+
 * Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 5.9.3-1
 - Sync with upstream lyrical: 5.9.3.
 
