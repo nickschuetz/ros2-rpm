@@ -8,8 +8,9 @@ currently building are skipped.
 
 Success is judged PER CHROOT against the target chroot set (the --chroots
 subset, or every project chroot when --chroots is omitted): a package is "done"
-only when it succeeded at the current spec version on every target chroot. So a
-package built on a subset (e.g. the 4 stable chroots with fedora-rawhide skipped)
+only when it succeeded at the current spec version-release on every target
+chroot (a Release: bump alone is drift: rebuilding against a changed generator or
+ABI needs no Version change, see ADR 0014). So a package built on a subset (e.g. the 4 stable chroots with fedora-rawhide skipped)
 reads as not-done for a later run that includes rawhide and is rebuilt there, in
 dependency order, with its deps required green on rawhide first.
 
@@ -81,6 +82,11 @@ def spec_meta(spec: Path, distro: str) -> dict:
         return m.group(1) if m else default
     pkg_name = find(r"^%global pkg_name\s+(\S+)")
     version = find(r"^Version:\s+(\S+)")
+    # Release: is "N%{?dist}" throughout this repo; COPR reports "V-N" without
+    # the dist tag, so strip the macro and compare V-N against pkg_version.
+    release = find(r"^Release:\s+(\S+)")
+    release = release.replace("%{?dist}", "") if release else None
+    evr = f"{version}-{release}" if version and release else version
     name = find(r"^Name:\s+(\S+)")
     # Resolve the RPM Name (ros-<distro>-<x>) by expanding the common macros.
     if name:
@@ -114,18 +120,18 @@ def spec_meta(spec: Path, distro: str) -> dict:
     # _sourcedir so rpmbuild -bs can include them in the SRPM.
     patches = re.findall(r"^Patch\d+:\s+(\S+)", text, re.M)
     return {"spec": spec, "rpm_name": name, "pkg_name": pkg_name,
-            "version": version, "src_url": src_url, "src_name": src_name,
+            "version": version, "evr": evr, "src_url": src_url, "src_name": src_name,
             "topdir": topdir, "patches": patches, "deps": deps}
 
 
 def copr_package_info(project: str) -> dict[str, dict]:
     """Map each COPR package to its latest build's state and upstream version.
 
-    The version is taken from latest_build.source_package.version (e.g.
-    "28.1.18-1") with the trailing "-<release>" stripped, so it can be compared
-    directly against a spec's Version: field. Lets the driver tell a genuinely
-    finished package from one whose COPR build succeeded at a now-stale version
-    (i.e. the spec was bumped since), which must be rebuilt.
+    The version is latest_build.source_package.version as COPR reports it
+    (e.g. "28.1.18-1", Version-Release without the dist tag), compared against
+    the spec's Version-Release. Lets the driver tell a genuinely finished package
+    from one whose COPR build succeeded at a now-stale version or release (i.e.
+    the spec was bumped since), which must be rebuilt.
     """
     r = subprocess.run(["copr-cli", "list-packages", project, "--with-latest-build"],
                        capture_output=True, text=True, check=True)
@@ -136,7 +142,7 @@ def copr_package_info(project: str) -> dict[str, dict]:
         ver = sp.get("version") or ""
         out[p["name"]] = {
             "state": lb.get("state") or "none",
-            "version": ver.split("-")[0] if ver else "",
+            "version": ver,
         }
     return out
 
@@ -153,8 +159,9 @@ def copr_chroot_info(project: str) -> dict[str, dict[str, dict]]:
     chroot SUBSET (e.g. the drift catch-ups drove `--chroots <4 stable>`, leaving
     fedora-rawhide on an older build). `copr-cli monitor` reports one row per
     package per chroot, each carrying that chroot's own latest build state and
-    version, so the driver can tell "green on all target chroots at the current
-    version" from "green on the 4 stable but stale/failed on rawhide".
+    version-release, so the driver can tell "green on all target chroots at the
+    current version-release" from "green on the 4 stable but stale/failed on
+    rawhide".
 
     Returns {name: {chroot: {"state": str, "version": str}}}. Absent (name,
     chroot) pairs mean the package has never built on that chroot.
@@ -166,7 +173,7 @@ def copr_chroot_info(project: str) -> dict[str, dict[str, dict]]:
         ver = row.get("pkg_version") or ""
         out.setdefault(row["name"], {})[row["chroot"]] = {
             "state": row.get("state") or "none",
-            "version": ver.split("-")[0] if ver else "",
+            "version": ver,
         }
     return out
 
@@ -175,11 +182,13 @@ def classify(chroots_for_pkg: dict[str, dict], target: list[str],
              spec_version: str | None) -> str:
     """Per-chroot status of one package over the `target` chroot set.
 
-    - "done":    succeeded at the current spec version on EVERY target chroot.
+    - "done":    succeeded at the current spec version-release on EVERY target
+                 chroot.
     - "active":  in-flight on some target chroot (build it out, don't resubmit).
     - "failed":  failed on some target chroot (and not active anywhere).
     - "drifted": succeeded on every target chroot but at least one is a stale
-                 version (spec bumped, or the chroot never got the rebuild).
+                 version-release (spec bumped, or the chroot never got the
+                 rebuild).
     - "todo":    never built on some target chroot (new pkg / missing chroot).
     """
     entries = [chroots_for_pkg.get(ch) for ch in target]
@@ -326,7 +335,7 @@ def main() -> int:
     build = distros.REPO_ROOT / "build"
     specs = [spec_meta(s, args.distro) for s in sorted(distros.spec_dir(args.distro).glob("*.spec"))]
     by_name = {m["rpm_name"]: m for m in specs if m["rpm_name"]}
-    spec_ver = {m["rpm_name"]: m["version"] for m in specs if m["rpm_name"]}
+    spec_ver = {m["rpm_name"]: m["evr"] for m in specs if m["rpm_name"]}
 
     # Per-chroot build state. "Done" is judged against the target chroot set, so
     # a package built on a subset (e.g. the 4 stable chroots, rawhide skipped)
