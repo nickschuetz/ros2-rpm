@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-cmake-python
-Version:        2.5.6
-Release:        2%{?dist}
+Version:        2.5.7
+Release:        1%{?dist}
 Summary:        ROS 2 Jazzy ament_cmake_python
 
 License:        Apache-2.0
 URL:            https://github.com/ament/ament_cmake
-Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.5.6.tar.gz#/ament_cmake-%{version}.tar.gz
+Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.5.7.tar.gz#/ament_cmake-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -43,7 +43,7 @@ Requires:       python3-setuptools
 The ability to use Python in the ament build system in CMake.
 
 %prep
-%autosetup -p1 -n ament_cmake-2.5.6
+%autosetup -p1 -n ament_cmake-2.5.7
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -85,6 +85,9 @@ popd
 %{install_prefix}/share/ament_index/resource_index/parent_prefix_path/%{pkg_name}
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.7-1
+- Sync with upstream jazzy: 2.5.7.
+
 * Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.6-2
 - Require python3-setuptools. Consumers run setup.py egg_info at build time
   and python3-catkin_pkg 1.1.1 no longer pulls setuptools in transitively.

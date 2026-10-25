@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-demo-nodes-py
-Version:        0.37.9
+Version:        0.37.10
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical demo_nodes_py
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/demos-release
-Source0:        https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/lyrical/demo_nodes_py/0.37.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/demos-release/archive/refs/tags/release/lyrical/demo_nodes_py/0.37.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -44,7 +44,7 @@ Python nodes which were previously in the ros2/examples repository but are
 now just used for demo purposes.
 
 %prep
-%autosetup -p1 -n demos-release-release-lyrical-demo_nodes_py-0.37.9-1
+%autosetup -p1 -n demos-release-release-lyrical-demo_nodes_py-0.37.10-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -97,6 +97,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.37.10-1
+- Sync with upstream lyrical: 0.37.10.
+
 * Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 0.37.9-1
 - Sync with upstream lyrical: 0.37.9.
 

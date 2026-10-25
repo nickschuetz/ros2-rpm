@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-gui
-Version:        1.10.6
+Version:        1.10.7
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rqt_gui
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/rqt_gui
-Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui/1.10.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui/1.10.7-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -46,7 +46,7 @@ rqt_gui provides the main to start an instance of the ROS integrated
 graphical user interface provided by qt_gui.
 
 %prep
-%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui-1.10.6-1
+%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui-1.10.7-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -101,6 +101,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.7-1
+- Sync with upstream lyrical: 1.10.7.
+
 * Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.6-1
 - Sync with upstream lyrical: 1.10.6.
 
