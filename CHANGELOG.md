@@ -4,6 +4,17 @@ All user-visible changes to the COPR packages live here. Per-spec `%changelog` e
 
 The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [SROS2 on Lyrical: Fast DDS security build, sros2 tooling], 2026-10-26
+
+### Added
+
+- **`ros-lyrical-sros2` 0.16.6 and `ros-lyrical-sros2-cmake` 0.16.6** (REP 2001 `ros_core` members), the `ros2 security` verbs for keystores, enclaves, permissions and policies, and the CMake helper that generates them at build time. Both are now `Requires:` of `ros-lyrical-ros-core` (0.13.0-2).
+- **Smoke test section 9** (Lyrical): `ros2 security --help`, the DDS Security plugin strings in `libfastdds`, and a secured `demo_nodes_cpp` talker with `ROS_SECURITY_STRATEGY=Enforce` on `rmw_fastrtps_cpp`.
+
+### Fixed
+
+- **`ros-lyrical-fastdds` 3.6.2-2 is built with `-DSECURITY=ON`.** Earlier builds had no DDS Security plugins, so any node started with `ROS_SECURITY_ENABLE=true` on `rmw_fastrtps_cpp` aborted with "This Fast DDS version doesn't have the security libraries". `HAVE_SECURITY` changes public header layouts, so `rmw_fastrtps_shared_cpp`, `rmw_fastrtps_cpp`, `rmw_fastrtps_dynamic_cpp` (9.4.10-2) and `rosidl_dynamic_typesupport_fastrtps` (0.5.1-2) are rebuilt against it. Jazzy's `fastrtps` 2.14.7 still lacks the flag; a follow-up.
+
 ## [Maintenance tooling and CI hardening], 2026-05-11
 
 No user-visible package changes. Project-side improvements that close the loop on drift detection, spec quality enforcement, SBOM validation, and PR pre-flight.

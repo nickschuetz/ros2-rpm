@@ -11,7 +11,7 @@
 
 Name:           ros-%{ros_distro}-rosidl-dynamic-typesupport-fastrtps
 Version:        0.5.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Lyrical rosidl_dynamic_typesupport_fastrtps
 
 License:        Apache-2.0
@@ -95,5 +95,11 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Oct 26 2026 Nick Schuetz <nschuetz@redhat.com> - 0.5.1-2
+- Rebuild against Fast DDS 3.6.2-2, which is built with -DSECURITY=ON.
+  HAVE_SECURITY changes the layout of public Fast DDS types (participant
+  attributes, listeners, QoS), so binaries built against the earlier
+  headers are not ABI compatible.
+
 * Tue Jun 02 2026 Nick Schuetz <nschuetz@redhat.com> - 0.5.1-1
 - Initial Fedora COPR build for ROS 2 Lyrical.

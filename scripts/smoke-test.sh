@@ -305,6 +305,38 @@ else
 fi
 
 #-----------------------------------------------------------------------
+# Section 9, SROS2 (security tooling present, Fast DDS built with security)
+#-----------------------------------------------------------------------
+# Fast DDS only ships the DDS Security plugins when configured with
+# -DSECURITY=ON; without them a node started with ROS_SECURITY_ENABLE=true
+# aborts ("This Fast DDS version doesn't have the security libraries").
+# ros-<distro>-sros2 supplies the ros2 security verbs that build a keystore.
+section "SROS2 (ros2 security + Fast DDS security build)"
+
+if [ "${DISTRO}" = "lyrical" ] && rpm -q "ros-${DISTRO}-sros2" >/dev/null 2>&1; then
+    check "ros2 security --help runs without error" \
+        bash -c 'source "${ROS_PREFIX}/setup.bash" && ros2 security --help > /dev/null'
+    check "libfastdds carries the DDS Security plugins (built with -DSECURITY=ON)" \
+        bash -c 'grep -qa "DDS:Auth:PKI-DH" "${ROS_PREFIX}"/lib/libfastdds.so*'
+    if rpm -q "ros-${DISTRO}-demo-nodes-cpp" >/dev/null 2>&1; then
+        SROS2_KS="$(mktemp -d)"
+        check "secured talker (ROS_SECURITY_STRATEGY=Enforce) publishes on rmw_fastrtps_cpp" \
+            bash -c 'source "${ROS_PREFIX}/setup.bash" && \
+                     ros2 security create_keystore "'"${SROS2_KS}"'" > /dev/null 2>&1 && \
+                     ros2 security create_enclave "'"${SROS2_KS}"'" /smoke/talker > /dev/null 2>&1 && \
+                     ROS_SECURITY_KEYSTORE="'"${SROS2_KS}"'" ROS_SECURITY_ENABLE=true \
+                     ROS_SECURITY_STRATEGY=Enforce RMW_IMPLEMENTATION=rmw_fastrtps_cpp \
+                     timeout 5 "${ROS_PREFIX}/lib/demo_nodes_cpp/talker" \
+                         --ros-args --enclave /smoke/talker 2>&1 | grep -q "Hello World"'
+        rm -rf "${SROS2_KS}"
+    else
+        skip "secured talker" "ros-${DISTRO}-demo-nodes-cpp not installed"
+    fi
+else
+    skip "SROS2 checks" "not Lyrical or ros-${DISTRO}-sros2 not installed"
+fi
+
+#-----------------------------------------------------------------------
 # Summary
 #-----------------------------------------------------------------------
 echo

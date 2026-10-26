@@ -244,6 +244,14 @@ Found with `nm -D` over `lib*__rosidl_typesupport_fastrtps_c*.so`: every library
 
 **Lesson**: a `rosidl_typesupport_*` or `rosidl_generator_*` bump is an ABI event for every interface package, not a leaf update. Bump `Release:` on all of them and rebuild in dependency order (`builtin_interfaces` first), and let the smoke test's generator ABI check (section 8) confirm it.
 
+### Fast DDS needs `-DSECURITY=ON`, and the flag is an ABI event
+
+Fast DDS defaults to `SECURITY=OFF`. Without it `libfastdds` has no DDS Security plugins and every node started with `ROS_SECURITY_ENABLE=true` on `rmw_fastrtps_cpp` aborts with "Please compile Fast DDS using the -DSECURITY=ON CMake option" (found 2026-10-26 while running an SROS2 test for the O3DE RPM work; nothing in the smoke test had ever enabled security). The upstream ROS 2 binaries build with it on.
+
+Turning it on sets `HAVE_SECURITY 1` in the installed `fastdds/config.hpp`, and that macro adds members and virtual methods to public types (`RTPSParticipantAttributes`, `EndpointAttributes`, the participant listeners, `DomainParticipantQos`, `ParameterTypes`). So the flag flip is a Release bump on `fastdds` **plus** a Release bump and rebuild of every spec that `BuildRequires` it (`grep -l 'BuildRequires:.*ros-<distro>-fastdds' specs/<distro>/*.spec`): the `rmw_fastrtps_*` trio and `rosidl_dynamic_typesupport_fastrtps`. Generated interface packages only use `fastcdr` and are not affected.
+
+**Lesson**: a build option that lands in an installed config header is an ABI change for the consumers, same as the `rosidl_typesupport_fastrtps` template change above. Check `include/` for the macro before deciding the rebuild set.
+
 ## Upstream blockers (with how we found and tracked them)
 
 ### `rviz_ogre_vendor` and CMake 4.x

@@ -11,7 +11,7 @@
 
 Name:           ros-%{ros_distro}-fastdds
 Version:        3.6.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Lyrical fastdds
 
 License:        Apache-2.0
@@ -61,6 +61,11 @@ protocol internals.
 # Make our previously-installed ROS Python packages discoverable to CMake's
 # execute_process invocations of python3.
 export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${PYTHONPATH:+:$PYTHONPATH}
+# SECURITY=ON compiles the DDS Security plugins (DDS:Auth:PKI-DH,
+# DDS:Access:Permissions, DDS:Crypto:AES-GCM-GMAC) into libfastdds, as the
+# upstream ROS 2 binaries do, so SROS2 works on rmw_fastrtps_cpp. It also sets
+# HAVE_SECURITY in the installed config.hpp, which changes public header
+# layouts: every package that builds against Fast DDS must be rebuilt.
 %cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_prefix} \
     -DAMENT_PREFIX_PATH=%{install_prefix} \
@@ -75,7 +80,8 @@ export PYTHONPATH=%{install_prefix}/lib/python%{python3_version}/site-packages${
     -DSYSCONF_INSTALL_DIR=%{install_prefix}/etc \
     -DSHARE_INSTALL_PREFIX=%{install_prefix}/share \
     -DSETUPTOOLS_DEB_LAYOUT=OFF -DBUILD_TESTING=OFF \
-    -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF
+    -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF \
+    -DSECURITY=ON
 %cmake_build
 
 
@@ -103,6 +109,13 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Oct 26 2026 Nick Schuetz <nschuetz@redhat.com> - 3.6.2-2
+- Build with -DSECURITY=ON so the DDS Security plugins are available and
+  SROS2 (ROS_SECURITY_ENABLE=true) works on rmw_fastrtps_cpp, matching the
+  upstream ROS 2 binaries. HAVE_SECURITY changes public header layouts, so
+  the rmw_fastrtps packages and rosidl_dynamic_typesupport_fastrtps are
+  rebuilt against this release.
+
 * Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 3.6.2-1
 - Sync with upstream lyrical: 3.6.2.
 
