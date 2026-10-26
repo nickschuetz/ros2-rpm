@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-gui-cpp
-Version:        1.10.6
+Version:        1.10.7
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rqt_gui_cpp
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/rqt_gui_cpp
-Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui_cpp/1.10.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui_cpp/1.10.7-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -44,7 +44,7 @@ Requires:       ros-lyrical-rclcpp
 rqt_gui_cpp enables GUI plugins to use the C++ client library for ROS.
 
 %prep
-%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui_cpp-1.10.6-1
+%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui_cpp-1.10.7-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -92,6 +92,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.7-1
+- Sync with upstream lyrical: 1.10.7.
+
 * Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.6-1
 - Sync with upstream lyrical: 1.10.6.
 

@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-cmake-target-dependencies
-Version:        2.8.8
+Version:        2.8.9
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical ament_cmake_target_dependencies
 
 License:        Apache-2.0
 URL:            https://github.com/ament/ament_cmake
-Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.8.8.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.8.9.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -42,7 +42,7 @@ The ability to add definitions, include directories and libraries of a
 package to a target in the ament build system in CMake.
 
 %prep
-%autosetup -p1 -n ament_cmake-2.8.8
+%autosetup -p1 -n ament_cmake-2.8.9
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -95,6 +95,9 @@ popd > /dev/null
 
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.8.9-1
+- Sync with upstream lyrical: 2.8.9.
+
 * Tue Aug 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.8.8-1
 - Sync with upstream lyrical: 2.8.8.
 

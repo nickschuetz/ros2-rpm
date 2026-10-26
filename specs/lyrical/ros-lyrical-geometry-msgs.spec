@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-geometry-msgs
-Version:        5.9.3
-Release:        2%{?dist}
+Version:        5.9.4
+Release:        1%{?dist}
 Summary:        ROS 2 Lyrical geometry_msgs
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/common_interfaces-release
-Source0:        https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/geometry_msgs/5.9.3-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/geometry_msgs/5.9.4-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 
 BuildRequires:  cmake
@@ -41,7 +41,7 @@ Requires:       ros-lyrical-std-msgs
 A package containing some geometry related message definitions.
 
 %prep
-%autosetup -p1 -n common_interfaces-release-release-lyrical-geometry_msgs-5.9.3-1
+%autosetup -p1 -n common_interfaces-release-release-lyrical-geometry_msgs-5.9.4-1
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -92,6 +92,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 5.9.4-1
+- Sync with upstream lyrical: 5.9.4.
+
 * Fri Oct 16 2026 Nick Schuetz <nschuetz@redhat.com> - 5.9.3-2
 - Rebuild against rosidl_typesupport_fastrtps 3.9.7. Since 3.9.6 the
   generated code calls cdr_(de)serialize_with_endpoint on nested types, and

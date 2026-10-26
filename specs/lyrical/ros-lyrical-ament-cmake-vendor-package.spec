@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-cmake-vendor-package
-Version:        2.8.8
-Release:        2%{?dist}
+Version:        2.8.9
+Release:        1%{?dist}
 Summary:        ROS 2 Lyrical ament_cmake_vendor_package
 
 License:        Apache-2.0
 URL:            https://github.com/ament/ament_cmake
-Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.8.8.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.8.9.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -51,7 +51,7 @@ Requires:       ros-lyrical-ament-cmake-export-dependencies
 Macros for maintaining a 'vendor' package.
 
 %prep
-%autosetup -p1 -n ament_cmake-2.8.8
+%autosetup -p1 -n ament_cmake-2.8.9
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -101,6 +101,9 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.8.9-1
+- Sync with upstream lyrical: 2.8.9.
+
 * Thu Oct 09 2026 Nick Schuetz <nschuetz@redhat.com> - 2.8.8-2
 - Require python3-pkg-resources on Fedora 45+. vcstool needs pkg_resources,
   which setuptools 83 no longer ships and python3-vcstool does not require.

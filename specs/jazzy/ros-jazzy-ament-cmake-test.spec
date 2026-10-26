@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-cmake-test
-Version:        2.5.6
+Version:        2.5.7
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy ament_cmake_test
 
 License:        Apache-2.0
 URL:            https://github.com/ament/ament_cmake
-Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.5.6.tar.gz#/ament_cmake-%{version}.tar.gz
+Source0:        https://github.com/ament/ament_cmake/archive/refs/tags/2.5.7.tar.gz#/ament_cmake-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -40,7 +40,7 @@ BuildRequires:  ros-jazzy-ament-cmake-python
 The ability to add tests in the ament build system in CMake.
 
 %prep
-%autosetup -p1 -n ament_cmake-2.5.6
+%autosetup -p1 -n ament_cmake-2.5.7
 
 %build
 # Make our previously-installed ROS Python packages discoverable to CMake's
@@ -85,5 +85,8 @@ popd
 
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.7-1
+- Sync with upstream jazzy: 2.5.7.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.6-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

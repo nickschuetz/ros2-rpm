@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-launch-ros
-Version:        0.29.9
+Version:        0.29.10
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical launch_ros
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/launch_ros-release
-Source0:        https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/lyrical/launch_ros/0.29.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/lyrical/launch_ros/0.29.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -46,7 +46,7 @@ Requires:       ros-lyrical-rclpy
 ROS specific extensions to the launch tool.
 
 %prep
-%autosetup -p1 -n launch_ros-release-release-lyrical-launch_ros-0.29.9-1
+%autosetup -p1 -n launch_ros-release-release-lyrical-launch_ros-0.29.10-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -98,6 +98,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.29.10-1
+- Sync with upstream lyrical: 0.29.10.
+
 * Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 0.29.9-1
 - Sync with upstream lyrical: 0.29.9.
 

@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-launch-testing
-Version:        3.9.8
+Version:        3.9.9
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical launch_testing
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/launch-release
-Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/lyrical/launch_testing/3.9.8-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/lyrical/launch_testing/3.9.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -46,7 +46,7 @@ A package to create tests which involve launch files and multiple
 processes.
 
 %prep
-%autosetup -p1 -n launch-release-release-lyrical-launch_testing-3.9.8-1
+%autosetup -p1 -n launch-release-release-lyrical-launch_testing-3.9.9-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -101,6 +101,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 3.9.9-1
+- Sync with upstream lyrical: 3.9.9.
+
 * Mon Jul 27 2026 Nick Schuetz <nschuetz@redhat.com> - 3.9.8-1
 - Sync with upstream lyrical: 3.9.8.
 

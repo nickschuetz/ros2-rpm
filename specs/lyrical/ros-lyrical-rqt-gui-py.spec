@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt-gui-py
-Version:        1.10.6
+Version:        1.10.7
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rqt_gui_py
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/rqt_gui_py
-Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui_py/1.10.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt_gui_py/1.10.7-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -43,7 +43,7 @@ Requires:       ros-lyrical-rqt-gui
 rqt_gui_py enables GUI plugins to use the Python client library for ROS.
 
 %prep
-%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui_py-1.10.6-1
+%autosetup -p1 -n rqt-release-release-lyrical-rqt_gui_py-1.10.7-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -95,6 +95,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.7-1
+- Sync with upstream lyrical: 1.10.7.
+
 * Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.6-1
 - Sync with upstream lyrical: 1.10.6.
 

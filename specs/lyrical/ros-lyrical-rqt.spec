@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-rqt
-Version:        1.10.6
+Version:        1.10.7
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical rqt
 
 License:        BSD-3-Clause
 URL:            http://ros.org/wiki/rqt
-Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt/1.10.6-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/rqt-release/archive/refs/tags/release/lyrical/rqt/1.10.7-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -42,7 +42,7 @@ Requires:       ros-lyrical-rqt-gui-py
 rqt is a Qt-based framework for GUI development for ROS.
 
 %prep
-%autosetup -p1 -n rqt-release-release-lyrical-rqt-1.10.6-1
+%autosetup -p1 -n rqt-release-release-lyrical-rqt-1.10.7-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -94,6 +94,9 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.7-1
+- Sync with upstream lyrical: 1.10.7.
+
 * Thu Jun 25 2026 Nick Schuetz <nschuetz@redhat.com> - 1.10.6-1
 - Sync with upstream lyrical: 1.10.6.
 

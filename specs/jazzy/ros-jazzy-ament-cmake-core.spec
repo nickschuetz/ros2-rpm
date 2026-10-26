@@ -10,7 +10,7 @@
 %endif
 
 Name:           ros-%{ros_distro}-ament-cmake-core
-Version:        2.5.6
+Version:        2.5.7
 Release:        1%{?dist}
 Summary:        ROS 2 Jazzy ament_cmake_core: CMake macros for ament build system
 
@@ -78,5 +78,8 @@ popd
 %{install_prefix}/share/ament_index/resource_index/parent_prefix_path/%{pkg_name}
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.7-1
+- Sync with upstream jazzy: 2.5.7.
+
 * Thu May 07 2026 Nick Schuetz <nschuetz@redhat.com> - 2.5.6-1
 - Initial Fedora COPR build for ROS 2 Jazzy.

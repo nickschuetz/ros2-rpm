@@ -10,13 +10,13 @@
 %endif
 
 Name:           ros-%{ros_distro}-ros2launch
-Version:        0.29.9
+Version:        0.29.10
 Release:        1%{?dist}
 Summary:        ROS 2 Lyrical ros2launch
 
 License:        Apache-2.0
 URL:            https://github.com/ros2-gbp/launch_ros-release
-Source0:        https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/lyrical/ros2launch/0.29.9-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
+Source0:        https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/lyrical/ros2launch/0.29.10-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -48,7 +48,7 @@ The launch command for ROS 2 command line tools: `ros2 launch` runs launch
 files (Python, XML or YAML) through launch_ros.
 
 %prep
-%autosetup -p1 -n launch_ros-release-release-lyrical-ros2launch-0.29.9-1
+%autosetup -p1 -n launch_ros-release-release-lyrical-ros2launch-0.29.10-1
 
 # Reduce setup.py's install_requires to ['setuptools'] before the
 # auto-generated buildrequires step runs. The full list typically references
@@ -100,5 +100,8 @@ PYEOF
 %{install_prefix}/share/%{pkg_name}/
 
 %changelog
+* Sun Oct 25 2026 Nick Schuetz <nschuetz@redhat.com> - 0.29.10-1
+- Sync with upstream lyrical: 0.29.10.
+
 * Thu Oct 15 2026 Nick Schuetz <nschuetz@redhat.com> - 0.29.9-1
 - Initial Fedora COPR build for ROS 2 Lyrical.
