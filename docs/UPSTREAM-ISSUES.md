@@ -32,6 +32,14 @@ The list is checked manually before each Phase milestone, and we'll add a CI wor
 - **Carried locally**: `specs/lyrical/patches/fastdds/0002-openssl4-const-x509-name.patch` (the PKIDH.cpp and FileProvider.cpp hunks of #6487, with plain `const` instead of `OPENSSL_CONST`).
 - **What lands when fixed**: drop the patch once a `release/lyrical/fastdds/...` bloom tag contains the merge.
 
+### Fast DDS security headers test `OPENSSL_VERSION_NUMBER` before any OpenSSL include (always want `openssl/engine.h`)
+
+- **Project**: [`eProsima/Fast-DDS`](https://github.com/eProsima/Fast-DDS)
+- **Issue we filed**: [#6597](https://github.com/eProsima/Fast-DDS/issues/6597) (filed 2026-10-26 by @nickschuetz)
+- **Blocks**: `ros-lyrical-fastdds` built with `-DSECURITY=ON` on Fedora 44, whose OpenSSL 3.5 is configured `no-engine` and ships no `openssl/engine.h`. `Pkcs11Provider.hpp` and `FileProvider.hpp` do `#if OPENSSL_VERSION_NUMBER < 0x30000000L` before including any OpenSSL header, so the macro is 0 and the pre-3.0 branch is always taken. Present on upstream master as of 2026-10-26.
+- **Carried locally**: `specs/lyrical/patches/fastdds/0003-opensslv-before-version-check.patch` (one `#include <openssl/opensslv.h>` per header). A PR with the same change was offered in the issue; open it if the maintainers want one.
+- **What lands when fixed**: drop the patch once a `release/lyrical/fastdds/...` bloom tag contains the merge.
+
 ## Closed (kept for history)
 
 _None yet._
@@ -48,11 +56,6 @@ Upstream contributions that are drafted but **not yet posted** because some cond
   - [`docs/upstream-pr-drafts/o3de-extras-fedora-install.diff`](upstream-pr-drafts/o3de-extras-fedora-install.diff) (proposed README change, 8 lines added under Platform).
   - [`docs/upstream-pr-drafts/o3de-extras-fedora-install-body.md`](upstream-pr-drafts/o3de-extras-fedora-install-body.md) (PR description with What / Why / Verified / Scope sections).
 - **When revisiting**: re-verify the smoke test on the then-current Fedora and the then-current ROS 2 distro, refresh the Lyrical timing reference if relevant, and re-check that `gazebo_msgs` is still in scope (upstream is removing it in Kilted Kaiju per the Gem's own CMakeLists).
-
-### `eProsima/Fast-DDS`, `OPENSSL_VERSION_NUMBER` tested before any OpenSSL include
-
-- **Status**: Found 2026-10-26 building `fastdds` 3.6.2 with `-DSECURITY=ON` on Fedora 44 (OpenSSL 3.5.9, configured `no-engine`, no `openssl/engine.h`). `src/cpp/security/artifact_providers/Pkcs11Provider.hpp` and `FileProvider.hpp` do `#if OPENSSL_VERSION_NUMBER < 0x30000000L` before including any OpenSSL header, so the macro is 0 and the pre-3.0 branch (`openssl/engine.h`) is always taken. Still present on upstream master. **Held back** pending a go to file it; the fix is one `#include <openssl/opensslv.h>` per header and is carried as `specs/lyrical/patches/fastdds/0003-opensslv-before-version-check.patch`.
-- **Unblocks when**: the issue (and a PR with the patch) is filed upstream and merged into a bloom-released Fast DDS; then drop the patch.
 
 ## Maintenance
 

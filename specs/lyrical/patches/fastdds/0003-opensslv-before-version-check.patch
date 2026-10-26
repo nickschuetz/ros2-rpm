@@ -9,7 +9,7 @@ Description: Include opensslv.h before testing OPENSSL_VERSION_NUMBER
  -DSECURITY=ON. Including openssl/opensslv.h first makes the version test
  meaningful: OpenSSL 3.x and 4.x then take the openssl/types.h branch.
 Origin: vendor-specific
-Forwarded: no, upstream issue to be filed; the include-order bug is present on upstream master as of 2026-10-26
+Forwarded: https://github.com/eProsima/Fast-DDS/issues/6597
 Last-Update: 2026-10-26
 ---
 --- a/src/cpp/security/artifact_providers/Pkcs11Provider.hpp	2026-10-26 09:00:35.825697330 -0500
