@@ -10,7 +10,7 @@
 
 Name:           ros-%{ros_distro}-ros-core
 Version:        0.13.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Lyrical core libraries and runtime
 
 # Aggregate of permissive-licensed runtime packages only, Phase 1 license rule.
@@ -41,13 +41,19 @@ Requires:       ros-lyrical-message-filters
 Requires:       ros-lyrical-rcl-logging-spdlog
 Requires:       ros-lyrical-libstatistics-collector
 
+# SROS2 security tooling (REP 2001 ros_core members): the ros2 security verbs
+# and the CMake helper that generates keystore artifacts. Both Apache-2.0.
+Requires:       ros-lyrical-sros2
+Requires:       ros-lyrical-sros2-cmake
+
 # Setup environment
 Provides:       ros-lyrical-setup-env
 
 %description
 Metapackage that pulls in the runtime client library (rclcpp), the default
-RMW implementation (Fast DDS), the core message interfaces, and lifecycle/
-component infrastructure. Equivalent to upstream ROS 2 Lyrical `ros_core`.
+RMW implementation (Fast DDS), the core message interfaces, lifecycle/
+component infrastructure and the SROS2 security tooling. Equivalent to
+upstream ROS 2 Lyrical `ros_core`.
 
 This is the minimal-runtime install. For tf2 + sensor / nav messages,
 install ros-lyrical-ros-base instead.
@@ -67,5 +73,9 @@ echo "ros-lyrical-ros-core %{version} (metapackage)" > %{buildroot}%{install_pre
 %{install_prefix}/.ros-core-version
 
 %changelog
+* Mon Oct 26 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.0-2
+- Require ros-lyrical-sros2 and ros-lyrical-sros2-cmake, the REP 2001
+  ros_core security tooling, now that Fast DDS is built with security on.
+
 * Fri May 08 2026 Nick Schuetz <nschuetz@redhat.com> - 0.13.0-1
 - Initial Phase 1 ros-core metapackage.

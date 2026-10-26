@@ -135,6 +135,7 @@ Once Phase 1's message set is complete, the remaining steps to a usable ROS 2 in
 - **rcl** + **rclcpp** + **rclpy**, the client APIs
 - **tf2** + **tf2_ros**, coordinate-frame transforms
 - **ros2cli** + **ros2run/topic/service/action/...**, the `ros2` command-line tool
+- **sros2** + **sros2_cmake** (after ros2cli and rclpy), the `ros2 security` verbs; needs `fastdds` built with `-DSECURITY=ON`, and any Fast DDS security flag change rebuilds `rmw_fastrtps_shared_cpp`, `rmw_fastrtps_cpp`, `rmw_fastrtps_dynamic_cpp` and `rosidl_dynamic_typesupport_fastrtps`
 - **launch** + **launch_ros**, launch system
 - **Convenience metapackages** (`ros-jazzy-ros-core`, `ros-jazzy-ros-base`) wrapping the above
 

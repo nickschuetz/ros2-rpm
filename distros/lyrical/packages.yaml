@@ -685,6 +685,18 @@ ros2cli:
   source_dir: ros2cli-release-release-lyrical-ros2cli-{version}-1
   noarch: true
   disable_tests: true
+# SROS2 security tooling (REP 2001 ros_core members): the "ros2 security"
+# verbs (pure Python ros2cli extension) and the CMake helper that generates
+# keystore artifacts at build time. Same gbp release repo, same tag.
+sros2:
+  source_url: https://github.com/ros2-gbp/sros2-release/archive/refs/tags/release/lyrical/sros2/{version}-1.tar.gz
+  source_dir: sros2-release-release-lyrical-sros2-{version}-1
+  noarch: true
+  disable_tests: true
+sros2_cmake:
+  source_url: https://github.com/ros2-gbp/sros2-release/archive/refs/tags/release/lyrical/sros2_cmake/{version}-1.tar.gz
+  source_dir: sros2-release-release-lyrical-sros2_cmake-{version}-1
+  disable_tests: true
 ros2pkg:
   source_url: https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2pkg/{version}-1.tar.gz
   source_dir: ros2cli-release-release-lyrical-ros2pkg-{version}-1

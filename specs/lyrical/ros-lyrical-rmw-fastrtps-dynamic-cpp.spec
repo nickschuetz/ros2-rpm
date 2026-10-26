@@ -11,7 +11,7 @@
 
 Name:           ros-%{ros_distro}-rmw-fastrtps-dynamic-cpp
 Version:        9.4.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ROS 2 Lyrical rmw_fastrtps_dynamic_cpp
 
 License:        Apache-2.0
@@ -109,6 +109,12 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Oct 26 2026 Nick Schuetz <nschuetz@redhat.com> - 9.4.10-2
+- Rebuild against Fast DDS 3.6.2-2, which is built with -DSECURITY=ON.
+  HAVE_SECURITY changes the layout of public Fast DDS types (participant
+  attributes, listeners, QoS), so binaries built against the earlier
+  headers are not ABI compatible.
+
 * Tue Sep 29 2026 Nick Schuetz <nschuetz@redhat.com> - 9.4.10-1
 - Sync with upstream lyrical: 9.4.10.
 
