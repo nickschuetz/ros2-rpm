@@ -96,7 +96,7 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 %changelog
 * Mon Oct 26 2026 Nick Schuetz <nschuetz@redhat.com> - 0.5.1-2
-- Rebuild against Fast DDS 3.6.2-2, which is built with -DSECURITY=ON.
+- Rebuild against Fast DDS 3.6.2-3, which is built with -DSECURITY=ON.
   HAVE_SECURITY changes the layout of public Fast DDS types (participant
   attributes, listeners, QoS), so binaries built against the earlier
   headers are not ABI compatible.

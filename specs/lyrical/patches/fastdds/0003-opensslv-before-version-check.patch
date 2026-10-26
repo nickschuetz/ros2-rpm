@@ -1,0 +1,42 @@
+Description: Include opensslv.h before testing OPENSSL_VERSION_NUMBER
+ Pkcs11Provider.hpp and FileProvider.hpp choose their OpenSSL includes with
+ "#if OPENSSL_VERSION_NUMBER < 0x30000000L" before any OpenSSL header has been
+ included, so the macro is undefined, evaluates to 0, and the pre-3.0 branch is
+ always taken. That branch includes openssl/engine.h, which Fedora 44's
+ OpenSSL 3.5 (configured with no-engine) does not ship, so every translation
+ unit that reaches these headers (PKIDH.h, SecurityPluginFactory.cpp) fails
+ with "openssl/engine.h: No such file or directory" when Fast DDS is built with
+ -DSECURITY=ON. Including openssl/opensslv.h first makes the version test
+ meaningful: OpenSSL 3.x and 4.x then take the openssl/types.h branch.
+Origin: vendor-specific
+Forwarded: no, upstream issue to be filed; the include-order bug is present on upstream master as of 2026-10-26
+Last-Update: 2026-10-26
+---
+--- a/src/cpp/security/artifact_providers/Pkcs11Provider.hpp	2026-10-26 09:00:35.825697330 -0500
++++ b/src/cpp/security/artifact_providers/Pkcs11Provider.hpp	2026-10-26 09:00:35.857761746 -0500
+@@ -21,6 +21,11 @@
+ 
+ #include <string>
+ 
++// opensslv.h defines OPENSSL_VERSION_NUMBER; without it the test below sees 0
++// and the pre-3.0 branch (openssl/engine.h, absent from OpenSSL builds
++// configured with no-engine) is always taken.
++#include <openssl/opensslv.h>
++
+ #if OPENSSL_VERSION_NUMBER < 0x30000000L
+ #include <openssl/engine.h>
+ #include <openssl/err.h>
+--- a/src/cpp/security/artifact_providers/FileProvider.hpp	2026-10-26 09:00:35.824079980 -0500
++++ b/src/cpp/security/artifact_providers/FileProvider.hpp	2026-10-26 09:00:35.857806336 -0500
+@@ -22,6 +22,11 @@
+ #include <functional>
+ #include <string>
+ 
++// opensslv.h defines OPENSSL_VERSION_NUMBER; without it the test below sees 0
++// and the pre-3.0 branch (openssl/engine.h, absent from OpenSSL builds
++// configured with no-engine) is always taken.
++#include <openssl/opensslv.h>
++
+ #if OPENSSL_VERSION_NUMBER < 0x30000000L
+ #include <openssl/engine.h>
+ #include <openssl/err.h>

@@ -11,13 +11,18 @@
 
 Name:           ros-%{ros_distro}-fastdds
 Version:        3.6.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        ROS 2 Lyrical fastdds
 
 License:        Apache-2.0
 URL:            https://www.eprosima.com/
 Source0:        https://github.com/ros2-gbp/fastdds-release/archive/refs/tags/release/lyrical/fastdds/3.6.2-1.tar.gz#/%{pkg_name}-%{version}.tar.gz
 Patch0:         fastdds/0001-disable-werror.patch
+# Security plugins vs. Fedora's OpenSSL: const X509_NAME getters in OpenSSL 4.0
+# (Fedora 45, rawhide) and the always-taken pre-3.0 include branch that pulls in
+# openssl/engine.h, which Fedora 44's no-engine OpenSSL 3.5 does not ship.
+Patch1:         fastdds/0002-openssl4-const-x509-name.patch
+Patch2:         fastdds/0003-opensslv-before-version-check.patch
 
 
 BuildRequires:  asio-devel
@@ -109,6 +114,16 @@ echo 'tests skipped (see CLAUDE.md / packages.yaml)'
 
 
 %changelog
+* Mon Oct 26 2026 Nick Schuetz <nschuetz@redhat.com> - 3.6.2-3
+- Carry 0002-openssl4-const-x509-name.patch (backport of upstream PR 6487):
+  OpenSSL 4.0 on Fedora 45 and rawhide returns const X509_NAME* from
+  X509_get_subject_name(), which the security plugins assigned to non-const.
+- Carry 0003-opensslv-before-version-check.patch: Pkcs11Provider.hpp and
+  FileProvider.hpp tested OPENSSL_VERSION_NUMBER before including any OpenSSL
+  header, so they always included openssl/engine.h, absent from Fedora 44's
+  no-engine OpenSSL 3.5. Both only bite with -DSECURITY=ON (3.6.2-2 failed
+  on all six Fedora chroots; CentOS Stream 10 was fine).
+
 * Mon Oct 26 2026 Nick Schuetz <nschuetz@redhat.com> - 3.6.2-2
 - Build with -DSECURITY=ON so the DDS Security plugins are available and
   SROS2 (ROS_SECURITY_ENABLE=true) works on rmw_fastrtps_cpp, matching the
