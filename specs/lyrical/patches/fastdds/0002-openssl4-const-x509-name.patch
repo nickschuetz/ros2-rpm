@@ -1,0 +1,64 @@
+Description: Use const X509_NAME* for X509_get_subject_name() results (OpenSSL 4.0)
+ OpenSSL 4.0 (Fedora 45 and rawhide ship 4.0.3) changed X509_get_subject_name()
+ to return a const X509_NAME*. The security plugins assign the result to a
+ non-const pointer in PKIDH.cpp (four sites) and FileProvider.cpp, which GCC
+ rejects as an invalid conversion. Every consumer of those pointers
+ (X509_NAME_digest, X509_NAME_oneline, X509_NAME_print_ex) already takes a
+ const X509_NAME*, so declaring the locals const is sufficient and compiles
+ against OpenSSL 3.x as well. Same change as upstream PR 6487, which uses the
+ OPENSSL_CONST macro; plain const is used here so the patch does not depend on
+ that macro being defined by the OpenSSL headers in use.
+Origin: backport, https://github.com/eProsima/Fast-DDS/pull/6487
+Forwarded: https://github.com/eProsima/Fast-DDS/pull/6487
+Bug: https://github.com/eProsima/Fast-DDS/issues/6432
+Last-Update: 2026-10-26
+---
+--- a/src/cpp/security/authentication/PKIDH.cpp	2026-10-26 09:00:35.820690935 -0500
++++ b/src/cpp/security/authentication/PKIDH.cpp	2026-10-26 09:00:35.841480181 -0500
+@@ -508,7 +508,7 @@
+ {
+     assert(cert != nullptr);
+ 
+-    X509_NAME* cert_sn = X509_get_subject_name(cert);
++    const X509_NAME* cert_sn = X509_get_subject_name(cert);
+     assert(cert_sn != nullptr);
+ 
+     unsigned char md[SHA256_DIGEST_LENGTH];
+@@ -1204,7 +1204,7 @@
+         if ((*ih)->cert_ != nullptr)
+         {
+             // Get subject name.
+-            X509_NAME* cert_sn = X509_get_subject_name((*ih)->cert_);
++            const X509_NAME* cert_sn = X509_get_subject_name((*ih)->cert_);
+             assert(cert_sn != nullptr);
+             char* cert_sn_str = X509_NAME_oneline(cert_sn, 0, 0);
+             assert(cert_sn_str != nullptr);
+@@ -1507,7 +1507,7 @@
+         return ValidationResult_t::VALIDATION_FAILED;
+     }
+ 
+-    X509_NAME* cert_sn = X509_get_subject_name(rih->cert_);
++    const X509_NAME* cert_sn = X509_get_subject_name(rih->cert_);
+     assert(cert_sn != nullptr);
+     char* cert_sn_str = X509_NAME_oneline(cert_sn, 0, 0);
+     assert(cert_sn_str != nullptr);
+@@ -1932,7 +1932,7 @@
+         return ValidationResult_t::VALIDATION_FAILED;
+     }
+ 
+-    X509_NAME* cert_sn = X509_get_subject_name(rih->cert_);
++    const X509_NAME* cert_sn = X509_get_subject_name(rih->cert_);
+     assert(cert_sn != nullptr);
+     char* cert_sn_str = X509_NAME_oneline(cert_sn, 0, 0);
+     assert(cert_sn_str != nullptr);
+--- a/src/cpp/security/artifact_providers/FileProvider.cpp	2026-10-26 09:00:35.822388549 -0500
++++ b/src/cpp/security/artifact_providers/FileProvider.cpp	2026-10-26 09:00:35.841586185 -0500
+@@ -77,7 +77,7 @@
+                             // Retrieve subject name for future use.
+                             if (ca_sn.empty())
+                             {
+-                                X509_NAME* ca_subject_name = X509_get_subject_name(itmp->x509);
++                                const X509_NAME* ca_subject_name = X509_get_subject_name(itmp->x509);
+                                 assert(ca_subject_name != nullptr);
+                                 char* ca_subject_name_str = X509_NAME_oneline(ca_subject_name, 0, 0);
+                                 assert(ca_subject_name_str != nullptr);

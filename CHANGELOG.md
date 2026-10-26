@@ -13,7 +13,8 @@ The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Fixed
 
-- **`ros-lyrical-fastdds` 3.6.2-2 is built with `-DSECURITY=ON`.** Earlier builds had no DDS Security plugins, so any node started with `ROS_SECURITY_ENABLE=true` on `rmw_fastrtps_cpp` aborted with "This Fast DDS version doesn't have the security libraries". `HAVE_SECURITY` changes public header layouts, so `rmw_fastrtps_shared_cpp`, `rmw_fastrtps_cpp`, `rmw_fastrtps_dynamic_cpp` (9.4.10-2) and `rosidl_dynamic_typesupport_fastrtps` (0.5.1-2) are rebuilt against it. Jazzy's `fastrtps` 2.14.7 still lacks the flag; a follow-up.
+- **`ros-lyrical-fastdds` 3.6.2-3 is built with `-DSECURITY=ON`.** Earlier builds had no DDS Security plugins, so any node started with `ROS_SECURITY_ENABLE=true` on `rmw_fastrtps_cpp` aborted with "This Fast DDS version doesn't have the security libraries". `HAVE_SECURITY` changes public header layouts, so `rmw_fastrtps_shared_cpp`, `rmw_fastrtps_cpp`, `rmw_fastrtps_dynamic_cpp` (9.4.10-2) and `rosidl_dynamic_typesupport_fastrtps` (0.5.1-2) are rebuilt against it. Jazzy's `fastrtps` 2.14.7 still lacks the flag; a follow-up.
+- **Two local patches on `fastdds`** make the security build compile against Fedora's OpenSSL: `0002-openssl4-const-x509-name.patch` (backport of [eProsima/Fast-DDS#6487](https://github.com/eProsima/Fast-DDS/pull/6487) for OpenSSL 4.0 on Fedora 45 and rawhide) and `0003-opensslv-before-version-check.patch` (the headers tested `OPENSSL_VERSION_NUMBER` before defining it and so always included `openssl/engine.h`, which Fedora 44's no-engine OpenSSL 3.5 does not ship). Tracked in `docs/UPSTREAM-ISSUES.md`.
 
 ## [Maintenance tooling and CI hardening], 2026-05-11
 

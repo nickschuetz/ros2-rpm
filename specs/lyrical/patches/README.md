@@ -66,7 +66,8 @@ missing one of these headers. This is enforced in CI.
 
 ## Currently carried
 
-_None._
-
-When the first patch lands, list it here as: `<package>` / `NNNN-name.patch` /
-upstream PR URL / date carried from.
+| Package | Patch | Upstream | Carried since |
+|---|---|---|---|
+| `fastdds` | `0001-disable-werror.patch` | not forwarded (downstream warnings-as-errors relaxation) | 2026-06-03 |
+| `fastdds` | `0002-openssl4-const-x509-name.patch` | backport of [eProsima/Fast-DDS#6487](https://github.com/eProsima/Fast-DDS/pull/6487) (open), fixes [#6432](https://github.com/eProsima/Fast-DDS/issues/6432) | 2026-10-26 |
+| `fastdds` | `0003-opensslv-before-version-check.patch` | upstream issue not yet filed (see `docs/UPSTREAM-ISSUES.md` backlog) | 2026-10-26 |

@@ -23,6 +23,15 @@ The list is checked manually before each Phase milestone, and we'll add a CI wor
 - **Workaround proposed in the issue**: extend `ASSIMP_CXX_FLAGS` in `rviz_assimp_vendor/CMakeLists.txt` to include `-Wno-error=unused-but-set-variable` (and defensively `-Wno-error=array-bounds` and `-Wno-error=dangling-reference`). Real upstream fix belongs in [`assimp/assimp`](https://github.com/assimp/assimp): drop the dead `qu` variable in `code/AssetLib/MS3D/MS3DLoader.cpp:639`, or stop unconditionally adding `-Werror`.
 - **Status**: awaiting maintainer response on whether they want a PR with the proposed approach or prefer a different fix.
 
+### Fast DDS security plugins fail to build against OpenSSL 4.0 (Fedora 45, rawhide)
+
+- **Project**: [`eProsima/Fast-DDS`](https://github.com/eProsima/Fast-DDS)
+- **Issue**: [#6432](https://github.com/eProsima/Fast-DDS/issues/6432) (build failure with OpenSSL 4.0)
+- **PR with fix**: [#6487](https://github.com/eProsima/Fast-DDS/pull/6487) (opened 2026-07-23 by @amrelsh, open as of 2026-10-26)
+- **Blocks**: `ros-lyrical-fastdds` built with `-DSECURITY=ON` (needed for SROS2 on `rmw_fastrtps_cpp`) on `fedora-45` and `fedora-rawhide`, which ship OpenSSL 4.0.3.
+- **Carried locally**: `specs/lyrical/patches/fastdds/0002-openssl4-const-x509-name.patch` (the PKIDH.cpp and FileProvider.cpp hunks of #6487, with plain `const` instead of `OPENSSL_CONST`).
+- **What lands when fixed**: drop the patch once a `release/lyrical/fastdds/...` bloom tag contains the merge.
+
 ## Closed (kept for history)
 
 _None yet._
@@ -39,6 +48,11 @@ Upstream contributions that are drafted but **not yet posted** because some cond
   - [`docs/upstream-pr-drafts/o3de-extras-fedora-install.diff`](upstream-pr-drafts/o3de-extras-fedora-install.diff) (proposed README change, 8 lines added under Platform).
   - [`docs/upstream-pr-drafts/o3de-extras-fedora-install-body.md`](upstream-pr-drafts/o3de-extras-fedora-install-body.md) (PR description with What / Why / Verified / Scope sections).
 - **When revisiting**: re-verify the smoke test on the then-current Fedora and the then-current ROS 2 distro, refresh the Lyrical timing reference if relevant, and re-check that `gazebo_msgs` is still in scope (upstream is removing it in Kilted Kaiju per the Gem's own CMakeLists).
+
+### `eProsima/Fast-DDS`, `OPENSSL_VERSION_NUMBER` tested before any OpenSSL include
+
+- **Status**: Found 2026-10-26 building `fastdds` 3.6.2 with `-DSECURITY=ON` on Fedora 44 (OpenSSL 3.5.9, configured `no-engine`, no `openssl/engine.h`). `src/cpp/security/artifact_providers/Pkcs11Provider.hpp` and `FileProvider.hpp` do `#if OPENSSL_VERSION_NUMBER < 0x30000000L` before including any OpenSSL header, so the macro is 0 and the pre-3.0 branch (`openssl/engine.h`) is always taken. Still present on upstream master. **Held back** pending a go to file it; the fix is one `#include <openssl/opensslv.h>` per header and is carried as `specs/lyrical/patches/fastdds/0003-opensslv-before-version-check.patch`.
+- **Unblocks when**: the issue (and a PR with the patch) is filed upstream and merged into a bloom-released Fast DDS; then drop the patch.
 
 ## Maintenance
 
