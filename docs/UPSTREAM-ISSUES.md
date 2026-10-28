@@ -6,15 +6,6 @@ The list is checked manually before each Phase milestone, and we'll add a CI wor
 
 ## Open
 
-### `rviz_ogre_vendor` fails on Fedora 44 / CMake 4.x
-
-- **Project**: [`ros2/rviz`](https://github.com/ros2/rviz)
-- **Issue**: [#1637](https://github.com/ros2/rviz/issues/1637) (opened 2025-12-04 by @zumbi)
-- **PR with fix**: [#1708](https://github.com/ros2/rviz/pull/1708) (opened by @ahcorde, awaiting merge from @mjcarroll)
-- **Our comment**: [#1708 comment](https://github.com/ros2/rviz/pull/1708#issuecomment-4408710231) (confirmed Fedora 44 reproduction, +1'd the merge)
-- **Blocks**: P-4 rviz2 chain in this COPR (`rviz_ogre_vendor` is the first vendor build in the rviz2 chain).
-- **What lands when fixed**: `rviz_ogre_vendor` builds cleanly under CMake 4.x by adding `-DCMAKE_POLICY_VERSION_MINIMUM=3.20` to the inner ExternalProject's CMAKE_ARGS. After the next `release/jazzy/rviz_ogre_vendor/...` bloom tag, this COPR can resume P-4.
-
 ### `rviz_assimp_vendor` fails on Fedora 44 / GCC 15.1.1 (`-Werror=unused-but-set-variable`)
 
 - **Project**: [`ros2/rviz`](https://github.com/ros2/rviz)
@@ -42,7 +33,11 @@ The list is checked manually before each Phase milestone, and we'll add a CI wor
 
 ## Closed (kept for history)
 
-_None yet._
+### `rviz_ogre_vendor` fails on Fedora 44 / CMake 4.x (closed upstream 2026-05-26)
+
+- **Project**: [`ros2/rviz`](https://github.com/ros2/rviz)
+- **Issue**: [#1637](https://github.com/ros2/rviz/issues/1637), closed 2026-05-26. **Fix**: [#1708](https://github.com/ros2/rviz/pull/1708), merged to rolling 2026-05-15 and backported to lyrical ([#1736](https://github.com/ros2/rviz/pull/1736)) and kilted ([#1737](https://github.com/ros2/rviz/pull/1737)) only. Our comment: [#1708 comment](https://github.com/ros2/rviz/pull/1708#issuecomment-4408710231).
+- **Outcome for this repo**: Lyrical's `rviz_ogre_vendor` 15.2.x carries the fix and builds on all 8 chroot/arch pairs (since 2026-10-09). The fix is the same one-line `CMAKE_POLICY_VERSION_MINIMUM` the Jazzy spec already passes, and it was never backported to the jazzy branch, so no Jazzy release tag will carry it. The Jazzy rviz2 chain stays deferred (the Ogre build hits further issues behind that flag, and `rviz_assimp_vendor` is blocked on #1730 above); see [`docs/SCOPE.md`](SCOPE.md#rviz2-deferral-side-effects). Moved here 2026-10-28 so the nightly tracker stops reporting it.
 
 ## Backlog (drafts ready, gated on conditions)
 
