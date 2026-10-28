@@ -2,8 +2,9 @@ name: upstream-issues
 
 # Nightly check of the upstream issues / PRs we're tracking in
 # docs/UPSTREAM-ISSUES.md. When something we were waiting on closes,
-# post a comment on (or open) a tracking issue in this repo so the
-# corresponding deferral can be revisited.
+# open (or update in place) a sticky tracking issue in this repo so the
+# corresponding deferral can be revisited. Once every closed item has been
+# moved to the "Closed" section of the doc, close the sticky issue again.
 
 on:
   schedule:
@@ -91,4 +92,19 @@ jobs:
             gh issue create --repo "$REPO" --title "$TITLE" \
               --label upstream-tracker,maintenance \
               --body-file /tmp/upstream-state.txt
+          fi
+
+      - name: Close tracker issue when nothing watched has closed
+        if: steps.tracker.outputs.closed == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          EXISTING=$(gh issue list --repo "$REPO" --state open --label upstream-tracker \
+                       --json number --jq '.[0].number' || echo "")
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --repo "$REPO" \
+              --body "Every watched item that closed upstream has been recorded in docs/UPSTREAM-ISSUES.md, closing. Next check: nightly cron."
+            gh issue close "$EXISTING" --repo "$REPO"
           fi
