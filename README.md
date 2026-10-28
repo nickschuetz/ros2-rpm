@@ -2,9 +2,9 @@
 
 > **Not the official ROS 2 packages for Fedora.**
 >
-> This is a **development-only** package set. Open Robotics is taking on official Fedora support starting with **Lyrical Luth** (the 2026 LTS). For production deployments, robotics fleets, or any work that needs vendor-supported, CVE-tracked, official ROS 2 builds, use Open Robotics's official Fedora packages once those land.
+> This is a **development-only** package set. Open Robotics publishes the official ROS 2 packages for Fedora starting with **Lyrical Luth** (the 2026 LTS): see the [official RHEL / Fedora install guide](https://docs.ros.org/en/lyrical/Get-Started/Installation/RHEL-Install-RPMs.html). For production deployments, robotics fleets, or any work that needs vendor-supported, CVE-tracked, official ROS 2 builds, use those.
 >
-> These COPRs exist for developers who want to compile and experiment against ROS 2 on **Fedora 44+** or **CentOS Stream 10** today, while the official packages are still in progress.
+> As of 2026-10-28 the official Fedora build covers Fedora 43 on x86_64 and is still in the `ros2-testing` tier. These COPRs exist for developers who want to compile and experiment against ROS 2 on **Fedora 44, 45 and rawhide** or **CentOS Stream 10**, on x86_64 and aarch64, today. Status details and how to re-check them: [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md).
 
 This repo builds two COPRs, both development-only:
 
@@ -120,8 +120,8 @@ Each package carries its own SPDX `License:` field. The default metapackages (`r
 
 ## Related work
 
-- **[Open Robotics official Fedora packages](https://docs.ros.org/)** (production path): starting with Lyrical Luth (the 2026 LTS).
+- **[Open Robotics official Fedora packages](https://docs.ros.org/en/lyrical/Get-Started/Installation/RHEL-Install-RPMs.html)** (production path): starting with Lyrical Luth (the 2026 LTS); Fedora 43 x86_64 in the testing tier as of 2026-10-28.
 - **[Fedora Robotics SIG](https://gitlab.com/fedora/sigs/robotics)**: pursuing FHS-compliant ROS in Fedora's main repos via `fedros` / `rosfed` on a longer timeline.
 - **[`packages.ros.org`](https://docs.ros.org/en/jazzy/Installation/RHEL-Install-RPMs.html)**: Open Robotics's existing RHEL 9 Jazzy RPMs, today's production path on RHEL.
 
-These COPRs sit between those: a development-only sandbox for ROS 2 on Fedora until the official Lyrical packages arrive. See [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md) for the full landscape.
+These COPRs sit between those: a development-only sandbox for ROS 2 on current Fedora releases, aarch64 and CentOS Stream 10 until the official Lyrical packages cover those targets. See [`docs/RELATED-WORK.md`](docs/RELATED-WORK.md) for the full landscape.

@@ -4,15 +4,17 @@ This page documents the broader Fedora-ROS packaging ecosystem so contributors a
 
 ## Open Robotics official Fedora packages (the production path)
 
-**For production use, this is the answer.** Open Robotics is taking on official Fedora support starting with **Lyrical Luth** (the 2026 LTS). When those packages ship, they will be:
+**For production use, this is the answer.** Open Robotics publishes official ROS 2 RPMs for Fedora starting with **Lyrical Luth** (the 2026 LTS). The install guide is [Installing on RHEL / Fedora (RPM packages)](https://docs.ros.org/en/lyrical/Get-Started/Installation/RHEL-Install-RPMs.html); the packages come from `packages.ros.org` through the official `ros2-release` package. They are:
 
-- Vendor-supported by Open Robotics with the same tooling and SLA as their existing `packages.ros.org` RHEL builds.
+- Vendor-supported by Open Robotics with the same tooling and SLA as their `packages.ros.org` RHEL builds.
 - CVE-tracked and security-advisory-eligible.
 - The recommended install path for any robotics fleet, regulated environment, or product shipping ROS 2 on Fedora.
 
-This repo (`hellaenergy/ros2`) **does not compete with that effort**. ADR 0010 captures the pivot: as soon as we learned Open Robotics was taking this on, we cancelled the Phase 2 desktop expansion and dropped the Phase 3 main-repo aspiration. This repo is now intentionally a development-only sandbox for Jazzy on Fedora, useful only until the official Lyrical packages arrive.
+**Status as of 2026-10-28** (re-check before quoting): the Lyrical docs list Fedora (amd64) as a supported binary platform, but the released `ros2` tier for Fedora 43 and 44 holds only the bootstrap packages (`ros2-release`, `ros-build-essential`, `ros-dev-tools`, `bloom-rpm-macros`). The Lyrical package set itself (about 2900 package names) is in the `ros2-testing` tier for Fedora 43 x86_64 only. There is no aarch64 build and no Fedora 44 or 45 Lyrical build yet. To re-check, fetch `http://packages.ros.org/ros2/fedora/<ver>/<arch>/repodata/repomd.xml` (and the `ros2-testing` equivalent), follow its `primary.xml` entry and count `ros-lyrical-*` names, or watch the status page linked from the install guide.
 
-If you are reading this because you landed on the COPR page looking for a production solution: **wait for Open Robotics's Lyrical packages**, or use the existing `packages.ros.org` RHEL 9 builds in a RHEL container today. Do not deploy `hellaenergy/ros2` to production.
+This repo (`hellaenergy/ros2`) **does not compete with that effort**. ADR 0010 captures the pivot: as soon as we learned Open Robotics was taking this on, we cancelled the Phase 2 desktop expansion and dropped the Phase 3 main-repo aspiration. This repo is intentionally a development-only sandbox for ROS 2 on Fedora, useful only until the official Lyrical packages cover the targets it covers: current Fedora releases (44, 45, rawhide), aarch64, and CentOS Stream 10.
+
+If you are reading this because you landed on the COPR page looking for a production solution: **use Open Robotics's Lyrical packages where they cover your platform** (Fedora 43 x86_64 today), or the `packages.ros.org` RHEL builds in a RHEL container. Do not deploy `hellaenergy/ros2` to production.
 
 ## Fedora Robotics SIG (Fedora-main-repo effort)
 
@@ -53,11 +55,11 @@ The SIG has called out concrete pain points that affect us too, `python3-flake8-
 
 ## Upstream ROS RPM packaging
 
-- **`packages.ros.org` RHEL builds**, https://docs.ros.org/en/jazzy/Installation/RHEL-Install-RPMs.html. Built against RHEL 9 with Python 3.9; do not run cleanly on Fedora's Python 3.14 ABI. Today they are the production path on RHEL; with Lyrical they are expected to extend to Fedora.
+- **`packages.ros.org` RHEL builds**, https://docs.ros.org/en/jazzy/Installation/RHEL-Install-RPMs.html. Built against RHEL 9 with Python 3.9; do not run cleanly on Fedora's Python 3.14 ABI. Today they are the production path on RHEL; with Lyrical the same channel extends to Fedora (see the first section above for what is published so far).
 - **bloom-rpm generator**, https://github.com/ros-infrastructure/bloom/tree/master/bloom/generators/rpm. The upstream tool that produces bloom's RHEL spec output. Both `fedros` and this repo use bloom's output as a starting point and post-process it for Fedora compatibility.
 
 ## Why "yet another COPR" was the right call (briefly)
 
-In the short window between "no Fedora-native ROS 2 today" and "Open Robotics ships official Fedora packages with Lyrical," it is useful to have a development-grade ROS 2 Jazzy on Fedora available. That window is what `hellaenergy/ros2` covers. Once the official Lyrical packages ship, this repo's value drops sharply, by design.
+In the window between "no Fedora-native ROS 2 today" and "Open Robotics ships official Fedora packages with Lyrical for the platforms you run," it is useful to have a development-grade ROS 2 on Fedora available. That window is what `hellaenergy/ros2` covers. Once the official Lyrical packages cover current Fedora releases and aarch64, this repo's value drops sharply, by design.
 
 If you have any ROS COPR enabled before installing from `hellaenergy/ros2`, disable it first or expect file conflicts. All ROS COPRs install under `/opt/ros/jazzy/`, so a mixed install will fight at the filesystem level.

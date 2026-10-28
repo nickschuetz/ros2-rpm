@@ -4,6 +4,12 @@ All user-visible changes to the COPR packages live here. Per-spec `%changelog` e
 
 The format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Docs: link the official Fedora packages], 2026-10-28
+
+### Docs
+
+- The README banner, the related-work doc and both COPR project texts now link to Open Robotics's [official RHEL / Fedora install guide](https://docs.ros.org/en/lyrical/Get-Started/Installation/RHEL-Install-RPMs.html) for Lyrical, and state where the official Fedora build stands (Fedora 43 x86_64, `ros2-testing` tier, as of 2026-10-28) next to what these COPRs cover (Fedora 44, 45, rawhide and CentOS Stream 10 on x86_64 and aarch64). The disclaimer wording is unchanged.
+
 ## [SROS2 on Lyrical: Fast DDS security build, sros2 tooling], 2026-10-26
 
 ### Added
