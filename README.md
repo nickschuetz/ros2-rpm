@@ -29,7 +29,7 @@ Verify the install (~20s, no root, no GUI):
 bash <(curl -fsSL https://raw.githubusercontent.com/nickschuetz/ros2-rpm/main/scripts/smoke-test.sh) lyrical
 ```
 
-Lyrical ships the **minimal headless set** (`rclcpp`, `rclpy`, the common message packages such as `std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `control_msgs`, Fast DDS as the RMW, `tf2_ros`, and the `ros-lyrical-ros-core` / `ros-lyrical-ros-base` metapackages) plus the full **developer sandbox**: `rqt`, `ros2cli`, `launch`, demo nodes, the alternate Cyclone DDS RMW, and **`rviz2`**, all rolled up in the `ros-lyrical-ros-desktop` metapackage. The `rqt`, `ros2cli`, `launch`, demo, and Cyclone DDS parts of the sandbox build on all four targets (both arches); `rviz2` and the `ros-lyrical-ros-desktop` metapackage that rolls it up build on Fedora 44 and CentOS Stream 10 (both arches), not on the Python 3.15 targets (Fedora 45 and fedora-rawhide). See [Supported targets](#supported-targets).
+Lyrical ships the **minimal headless set** (`rclcpp`, `rclpy`, the common message packages such as `std_msgs`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `tf2_msgs`, `control_msgs`, Fast DDS as the RMW, `tf2_ros`, and the `ros-lyrical-ros-core` / `ros-lyrical-ros-base` metapackages) plus the full **developer sandbox**: `rqt`, `ros2cli`, `launch`, demo nodes, the alternate Cyclone DDS RMW, and **`rviz2`**, all rolled up in the `ros-lyrical-ros-desktop` metapackage. Everything in the sandbox, `rviz2` included, builds on all four targets (both arches). Lyrical also ships **SROS2**: Fast DDS is built with DDS Security, and the `sros2` tooling (`ros2 security`) comes with `ros-lyrical-ros-core`. See [Supported targets](#supported-targets).
 
 ```bash
 sudo dnf install ros-lyrical-ros-desktop   # rqt + ros2cli + launch + rviz2 + Cyclone DDS + demos
@@ -59,6 +59,7 @@ Substitute `<distro>` with `lyrical` (from `hellaenergy/ros2`) or `jazzy` (from 
 | One specific package | `ros-<distro>-<pkg>` (e.g. `ros-lyrical-rclcpp`) |
 | Dev tooling (rqt, ros2cli, launch, demo_nodes, Cyclone DDS, **rviz2 on Lyrical**) | `ros-<distro>-ros-desktop` |
 | 3D visualization (`rviz2`) **(Lyrical)** | `ros-lyrical-rviz2` |
+| ROS 2 security (SROS2: keystores, enclaves, DDS Security on Fast DDS and Cyclone DDS) **(Lyrical)** | included in `ros-lyrical-ros-core`; `ros2 security create_keystore <dir>` to start |
 | Everything the O3DE ROS 2 Gems need, for O3DE 26.10 and newer **(Lyrical)** | `ros-lyrical-o3de-gem-deps` |
 | O3DE Gem optional ContactSensor + Spawner support, for O3DE 26.05 **(Jazzy)** | `ros-jazzy-gazebo-msgs` |
 | Cyclone DDS as your RMW | `ros-<distro>-rmw-cyclonedds-cpp`, then `export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` |
@@ -86,6 +87,7 @@ Per-distro GUI / sandbox availability differs:
 ## Known limitations
 
 - **`rviz2` (3D visualizer):** packaged on **Lyrical** on all four targets (both arches) via `ros-lyrical-rviz2` / `ros-lyrical-ros-desktop`. **Not packaged on Jazzy**: its Ogre and Assimp vendor builds hit [ros2/rviz#1708](https://github.com/ros2/rviz/pull/1708) (Ogre / CMake 4.x) and [ros2/rviz#1730](https://github.com/ros2/rviz/issues/1730) (Assimp / Fedora's stricter GCC); on Jazzy, `rqt` covers non-3D debugging (graph, topic echo, console, plot), or run a RHEL 9 container with [packages.ros.org's RPMs](https://docs.ros.org/en/jazzy/Installation/RHEL-Install-RPMs.html). Full impact analysis: [`docs/SCOPE.md`](docs/SCOPE.md).
+- **SROS2 is Lyrical only.** Jazzy's Fast DDS (`fastrtps` 2.14) is built without DDS Security and the `sros2` tooling is not packaged there. Turning security on for Jazzy changes public Fast DDS headers and would mean rebuilding most of the Jazzy tree, which is not planned for a maintenance distro; use Lyrical for secured ROS 2 work. Details: [`docs/SCOPE.md`](docs/SCOPE.md).
 - **`nav2_*`, `ros2control`, simulation bridges** are out of scope. Production-shaped surfaces; users belong on Open Robotics's Lyrical packages once they ship.
 - **Long-term posture is undecided.** Upstream EOLs Jazzy in May 2029. Whether the Jazzy COPR sunsets, freezes as a historical archive, or is retired once the official Lyrical packages ship is a future-ADR decision; see [`docs/UPGRADING.md`](docs/UPGRADING.md#approaching-upstream-eol).
 

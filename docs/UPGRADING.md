@@ -6,6 +6,8 @@ Procedures for moving between ROS 2 distros and Fedora / CentOS Stream releases.
 
 ROS 2 distros are not API-compatible. A user moving from Jazzy to Lyrical replaces the entire `/opt/ros/jazzy` install path with `/opt/ros/lyrical`. This COPR ships parallel package trees per distro, so the transition is install-side-by-side, then uninstall the old.
 
+SROS2 (DDS Security on Fast DDS, the `sros2` tooling) is available on Lyrical only. A Jazzy workspace that needs secured nodes moves to Lyrical rather than waiting for Jazzy parity, which is not planned (see [`docs/SCOPE.md`](SCOPE.md)).
+
 ### Adding a new distro to the COPR
 
 Gated by the readiness checklist tracked in the pinned GitHub issue (see `CLAUDE.md` → Distro lifecycle policy). Summary of the steps:

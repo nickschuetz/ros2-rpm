@@ -26,6 +26,7 @@ Each ROS 2 distro is supported in this COPR while upstream Open Robotics support
 
 - Built with Fedora's hardening flags inherited from `redhat-rpm-config`: `_FORTIFY_SOURCE=3`, full RELRO, PIE, stack-clash protection, control-flow integrity.
 - Dependencies link against system libraries provided by Fedora / CentOS Stream, no vendored copies of `tinyxml2`, `console_bridge`, `libyaml`, `spdlog`, `pybind11`, etc. CVEs in those deps flow to users via the OS's normal patch pipeline.
+- On Lyrical, Fast DDS is built with DDS Security (`-DSECURITY=ON`) and the `sros2` tooling ships in `ros-lyrical-ros-core`, so `ROS_SECURITY_ENABLE=true` works on both RMWs. That is a feature being present, not a statement about any deployment's security; keystores, permissions and enclave design are the user's.
 - Source pins are recorded per-package in `manifest.yaml` (commit SHA or git tag, never a moving branch). Builds are reproducible-build-friendly via `source_date_epoch_from_changelog`.
 - A CycloneDX SBOM is generated at build time (via `syft` in `%install`) and shipped at `%{_datadir}/doc/<package>/sbom.cdx.json`. Subscribed CVE feeds:
   - `ros-security@lists.ros.org`
